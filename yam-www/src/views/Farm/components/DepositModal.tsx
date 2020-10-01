@@ -18,6 +18,7 @@ interface DepositModalProps extends ModalProps {
 
 const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, tokenName = '' }) => {
   const [val, setVal] = useState('')
+  const [pendingTx, setPendingTx] = useState(false)
 
   const fullBalance = useMemo(() => {
     return getFullDisplayBalance(max)
@@ -43,7 +44,16 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
       />
       <ModalActions>
         <Button text="Cancel" variant="secondary" onClick={onDismiss} />
-        <Button text="Confirm" onClick={() => onConfirm(val)} />
+          <Button
+              disabled={pendingTx}
+              text={pendingTx ? 'Pending Confirmation' : 'Confirm'}
+              onClick={async () => {
+                  setPendingTx(true)
+                  await onConfirm(val)
+                  setPendingTx(false)
+                  onDismiss()
+              }}
+          />
       </ModalActions>
     </Modal>
   )

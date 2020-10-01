@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
@@ -95,13 +96,15 @@ const Stake: React.FC<StakeProps> = ({
               />
             ) : (
               <>
-                <Button text="Unstake" onClick={onPresentWithdraw} />
+                <Button
+                    disabled={stakedBalance.eq(new BigNumber(0))}
+                    text="Unstake"
+                    onClick={onPresentWithdraw}
+                />
                 <StyledActionSpacer />
-                {false && (
                   <IconButton onClick={onPresentDeposit}>
                     <AddIcon />
                   </IconButton>
-                )}
               </>
             )}
           </StyledCardActions>
