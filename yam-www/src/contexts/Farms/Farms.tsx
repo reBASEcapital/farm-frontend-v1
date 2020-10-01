@@ -94,6 +94,7 @@ const Farms: React.FC = ({ children }) => {
   }, [yam, fetchPools])
 
   useEffect(() => {
+    /*
     async function fetchUnharvested () {
       const unharvestedBalances = await Promise.all(farms.map(async (farm: Farm) => {
         const earnings = await getEarned(yam, farm.contract, account)
@@ -105,6 +106,7 @@ const Farms: React.FC = ({ children }) => {
     if (account && farms.length && yam) {
       fetchUnharvested()
     }
+    */
   }, [account, farms, setUnharvested, yam])
 
   return (
