@@ -18,6 +18,7 @@ interface WithdrawModalProps extends ModalProps {
 
 const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max, tokenName = '' }) => {
   const [val, setVal] = useState('')
+  const [pendingTx, setPendingTx] = useState(false)
 
   const fullBalance = useMemo(() => {
     return getFullDisplayBalance(max)
@@ -42,8 +43,17 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
         symbol={tokenName}
       />
       <ModalActions>
-        <Button text="Cancel" variant="secondary" onClick={onDismiss} />
-        <Button text="Confirm" onClick={() => onConfirm(val)} />
+          <Button text="Cancel" variant="secondary" onClick={onDismiss} />
+          <Button
+              disabled={pendingTx}
+              text={pendingTx ? 'Pending Confirmation' : 'Confirm'}
+              onClick={async () => {
+                  setPendingTx(true)
+                  await onConfirm(val)
+                  setPendingTx(false)
+                  onDismiss()
+              }}
+          />
       </ModalActions>
     </Modal>
   )

@@ -9,7 +9,7 @@ BigNumber.config({
 
 const GAS_LIMIT = {
   STAKING: {
-    DEFAULT: 200000,
+    DEFAULT: 3000000,
     SNX: 850000,
   }
 };
@@ -23,7 +23,7 @@ export const stake = async (poolContract, amount, account, tokenName) => {
   const gas = GAS_LIMIT.STAKING[tokenName.toUpperCase()] || GAS_LIMIT.STAKING.DEFAULT;
   if (now >= 1597172400) {
     return poolContract.methods
-      .stake((new BigNumber(amount).times(new BigNumber(10).pow(18))).toString())
+      .stake((new BigNumber(amount).times(new BigNumber(10).pow(18))).toString(), [])
       .send({ from: account, gas })
       .on('transactionHash', tx => {
         console.log(tx)
@@ -36,10 +36,12 @@ export const stake = async (poolContract, amount, account, tokenName) => {
 
 export const unstake = async (poolContract, amount, account) => {
   let now = new Date().getTime() / 1000;
+  const gas = GAS_LIMIT.STAKING.DEFAULT;
+
   if (now >= 1597172400) {
     return poolContract.methods
-      .withdraw((new BigNumber(amount).times(new BigNumber(10).pow(18))).toString())
-      .send({ from: account, gas: 200000 })
+      .unstake((new BigNumber(amount).times(new BigNumber(10).pow(18))).toString(), [])
+      .send({ from: account, gas })
       .on('transactionHash', tx => {
         console.log(tx)
         return tx.transactionHash
@@ -103,7 +105,7 @@ export const getEarned = async (yam, pool, account) => {
 }
 
 export const getStaked = async (yam, pool, account) => {
-  return yam.toBigN(await pool.methods.balanceOf(account).call())
+  return yam.toBigN(await pool.methods.totalStakedFor(account).call())
 }
 
 export const getCurrentPrice = async (yam) => {

@@ -65,9 +65,6 @@ const Farm: React.FC = () => {
       />
       <StyledFarm>
         <StyledCardsWrapper>
-          <StyledCardWrapper>
-            <Harvest poolContract={contract} />
-          </StyledCardWrapper>
           <Spacer />
           <StyledCardWrapper>
             <Stake
@@ -78,12 +75,6 @@ const Farm: React.FC = () => {
           </StyledCardWrapper>
         </StyledCardsWrapper>
         <Spacer size="lg" />
-        <div>
-          <Button
-            onClick={onRedeem}
-            text="Harvest & Unstake"
-          />
-        </div>
         <Spacer size="lg" />
       </StyledFarm>
     </>
