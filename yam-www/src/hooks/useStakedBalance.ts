@@ -7,7 +7,7 @@ import { Contract } from "web3-eth-contract"
 import { getStaked } from '../yamUtils'
 import useYam from './useYam'
 
-const useStakedBalance = (pool: Contract) => {
+const useStakedBalance = (pool: Contract, trigger: boolean) => {
   const [balance, setBalance] = useState(new BigNumber(0))
   const { account }: { account: string } = useWallet()
   const yam = useYam()
@@ -21,7 +21,7 @@ const useStakedBalance = (pool: Contract) => {
     if (account && pool && yam) {
       fetchBalance()
     }
-  }, [account, pool, setBalance, yam])
+  }, [account, pool, setBalance, yam, trigger])
 
   return balance
 }
