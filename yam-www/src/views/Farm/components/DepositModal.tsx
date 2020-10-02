@@ -7,7 +7,7 @@ import Modal, { ModalProps } from '../../../components/Modal'
 import ModalActions from '../../../components/ModalActions'
 import ModalTitle from '../../../components/ModalTitle'
 import TokenInput from '../../../components/TokenInput'
-
+import { default as iziToast } from 'izitoast';
 import { getFullDisplayBalance } from '../../../utils/formatBalance'
 
 interface DepositModalProps extends ModalProps {
@@ -17,7 +17,7 @@ interface DepositModalProps extends ModalProps {
 }
 
 const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, tokenName = '' }) => {
-  const [val, setVal] = useState('')
+  const [val, setVal] = useState('');
   const [pendingTx, setPendingTx] = useState(false)
 
   const fullBalance = useMemo(() => {
@@ -32,6 +32,20 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
     setVal(fullBalance)
   }, [fullBalance, setVal])
 
+    const requestTx = async () => {
+        if(!val || !parseFloat(val)){
+            return iziToast.error({
+                message: 'Insert a value greater than 0',
+                position: 'bottomLeft',
+                displayMode: 2,
+                closeOnClick: true
+            });
+        }
+        setPendingTx(true)
+        await onConfirm(val)
+        setPendingTx(false)
+        onDismiss()
+    };
   return (
     <Modal>
       <ModalTitle text={`Deposit ${tokenName}`} />
@@ -47,12 +61,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
           <Button
               disabled={pendingTx}
               text={pendingTx ? 'Pending Confirmation' : 'Confirm'}
-              onClick={async () => {
-                  setPendingTx(true)
-                  await onConfirm(val)
-                  setPendingTx(false)
-                  onDismiss()
-              }}
+              onClick={requestTx}
           />
       </ModalActions>
     </Modal>
