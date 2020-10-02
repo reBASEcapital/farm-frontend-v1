@@ -32,20 +32,20 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
     setVal(fullBalance)
   }, [fullBalance, setVal])
 
-    const requestTx = async () => {
-        if(!val || !parseFloat(val)){
-            return iziToast.error({
-                message: 'Insert a value greater than 0',
-                position: 'bottomLeft',
-                displayMode: 2,
-                closeOnClick: true
-            });
-        }
-        setPendingTx(true)
-        await onConfirm(val)
-        setPendingTx(false)
-        onDismiss()
-    };
+  const requestStake = async () => {
+      if(!val || !parseFloat(val)){
+          return iziToast.error({
+              message: 'Insert a value greater than 0',
+              position: 'bottomLeft',
+              displayMode: 2,
+              closeOnClick: true
+          });
+      }
+      setPendingTx(true)
+      await onConfirm(val)
+      setPendingTx(false)
+      onDismiss()
+};
   return (
     <Modal>
       <ModalTitle text={`Deposit ${tokenName}`} />
@@ -61,7 +61,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
           <Button
               disabled={pendingTx}
               text={pendingTx ? 'Pending Confirmation' : 'Confirm'}
-              onClick={requestTx}
+              onClick={requestStake}
           />
       </ModalActions>
     </Modal>

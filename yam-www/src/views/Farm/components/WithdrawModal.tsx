@@ -9,6 +9,7 @@ import ModalTitle from '../../../components/ModalTitle'
 import TokenInput from '../../../components/TokenInput'
 
 import { getFullDisplayBalance } from '../../../utils/formatBalance'
+import {default as iziToast} from "izitoast";
 
 interface WithdrawModalProps extends ModalProps {
   max: BigNumber,
@@ -32,6 +33,21 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
     setVal(fullBalance)
   }, [fullBalance, setVal])
 
+  const requestUnstake = async () => {
+    if(!val || !parseFloat(val)){
+      return iziToast.error({
+        message: 'Insert a value greater than 0',
+        position: 'bottomLeft',
+        displayMode: 2,
+        closeOnClick: true
+      });
+    }
+    setPendingTx(true)
+    await onConfirm(val)
+    setPendingTx(false)
+    onDismiss()
+  };
+
   return (
     <Modal>
       <ModalTitle text={`Withdraw ${tokenName}`} />
@@ -47,12 +63,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
           <Button
               disabled={pendingTx}
               text={pendingTx ? 'Pending Confirmation' : 'Confirm'}
-              onClick={async () => {
-                  setPendingTx(true)
-                  await onConfirm(val)
-                  setPendingTx(false)
-                  onDismiss()
-              }}
+              onClick={requestUnstake}
           />
       </ModalActions>
     </Modal>
