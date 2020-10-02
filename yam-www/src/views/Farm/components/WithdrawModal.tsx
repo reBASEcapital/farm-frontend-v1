@@ -62,7 +62,8 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
           <Button text="Cancel" variant="secondary" onClick={onDismiss} />
           <Button
               disabled={pendingTx}
-              text={pendingTx ? 'Pending Confirmation' : 'Confirm'}
+              text={pendingTx ? '' : 'Confirm'}
+              spinner={<span className="spinner-border"/>}
               onClick={requestUnstake}
           />
       </ModalActions>

@@ -60,7 +60,8 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
         <Button text="Cancel" variant="secondary" onClick={onDismiss} />
           <Button
               disabled={pendingTx}
-              text={pendingTx ? 'Pending Confirmation' : 'Confirm'}
+              text={pendingTx ? '' : 'confirm'}
+              spinner={<span className="spinner-border"/>}
               onClick={requestStake}
           />
       </ModalActions>

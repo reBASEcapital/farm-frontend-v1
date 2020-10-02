@@ -10,6 +10,7 @@ interface ButtonProps {
   onClick?: () => void,
   size?: 'sm' | 'md' | 'lg',
   text?: string,
+  spinner?: React.ReactNode,
   to?: string,
   variant?: 'default' | 'secondary' | 'tertiary'
 }
@@ -21,6 +22,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   size,
   text,
+  spinner,
   to,
   variant,
 }) => {
@@ -65,7 +67,9 @@ const Button: React.FC<ButtonProps> = ({
   }
 
   const ButtonChild = useMemo(() => {
-    if (to) {
+    if(!text && spinner){
+      return spinner
+    } else if (to) {
       return <StyledLink to={to}>{text}</StyledLink>
     } else if (href) {
       return <StyledExternalLink href={href} target="__blank">{text}</StyledExternalLink>

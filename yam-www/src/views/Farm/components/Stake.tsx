@@ -39,12 +39,12 @@ const Stake: React.FC<StakeProps> = ({
 }) => {
 
   const [requestedApproval, setRequestedApproval] = useState(false)
-
+  const [trigger, setTrigger] = useState(true);
   const allowance = useAllowance(tokenContract, poolContract)
   const { onApprove } = useApprove(tokenContract, poolContract)
 
   const tokenBalance = useTokenBalance(tokenContract.options.address)
-  const stakedBalance = useStakedBalance(poolContract)
+  const stakedBalance = useStakedBalance(poolContract, trigger)
 
   const { onStake } = useStake(poolContract, tokenName);
   const { onUnstake } = useUnstake(poolContract)
@@ -52,7 +52,10 @@ const Stake: React.FC<StakeProps> = ({
   const [onPresentDeposit] = useModal(
     <DepositModal
       max={tokenBalance}
-      onConfirm={onStake}
+      onConfirm={async (val: string) =>{
+        await onStake(val);
+        setTrigger((old) => !old);
+      }}
       tokenName={tokenName}
     />
   )
@@ -60,7 +63,10 @@ const Stake: React.FC<StakeProps> = ({
   const [onPresentWithdraw] = useModal(
     <WithdrawModal
       max={stakedBalance}
-      onConfirm={onUnstake}
+      onConfirm={async (val: string) =>{
+          await onUnstake(val);
+          setTrigger((old) => !old);
+        }}
       tokenName={tokenName}
     />
   )
