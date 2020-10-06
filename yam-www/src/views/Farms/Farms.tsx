@@ -31,7 +31,7 @@ const Farms: React.FC = () => {
           <Route exact path={path}>
             <PageHeader
               icon={<img src={farmer} height="96" />}
-              subtitle="Earn reBASE tokens by providing liquidity."
+              subtitle="Earn REB∆SE tokens by providing liquidity."
               title="Select a farm."
             />
             <FarmCards />
