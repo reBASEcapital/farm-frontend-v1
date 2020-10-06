@@ -16,6 +16,7 @@ import ModalTitle from '../../ModalTitle'
 import Separator from '../../Separator'
 import Spacer from '../../Spacer'
 import Value from '../../Value'
+import farm from "../../../assets/img/farm-icon.png";
 
 const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
 
@@ -38,7 +39,7 @@ const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
         <div style={{ display: 'flex' }}>
           <StyledBalanceWrapper>
             <CardIcon>
-              <span>🍠</span>
+              <span><img src={farm} height="42" style={{ marginTop: -4 }} /></span>
             </CardIcon>
             <StyledBalance>
               <Value value={getDisplayBalance(yamV2Balance, 9)} />

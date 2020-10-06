@@ -2,6 +2,7 @@ import React from 'react'
 import styled, { keyframes } from 'styled-components'
 
 import CardIcon from '../CardIcon'
+import farm from "../../assets/img/farm-icon.png";
 
 interface LoaderProps {
   text?: string
@@ -11,7 +12,7 @@ const Loader: React.FC<LoaderProps> = ({ text }) => {
   return (
     <StyledLoader>
       <CardIcon>
-      <StyledYam>🍠</StyledYam>
+      <StyledIcon><span><img src={farm} height="42" style={{ marginTop: -4 }} /></span></StyledIcon>
       </CardIcon>
       {!!text && <StyledText>{text}</StyledText>}
     </StyledLoader>
@@ -34,7 +35,7 @@ const StyledLoader = styled.div`
   justify-content: center;
 `
 
-const StyledYam = styled.div`
+const StyledIcon = styled.div`
   font-size: 32px;
   position: relative;
   animation: 1s ${spin} infinite;

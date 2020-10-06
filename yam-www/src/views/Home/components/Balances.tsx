@@ -8,7 +8,7 @@ import CardContent from '../../../components/CardContent'
 import Label from '../../../components/Label'
 import Spacer from '../../../components/Spacer'
 import Value from '../../../components/Value'
-import YamIcon from '../../../components/YamIcon'
+import RebaseIcon from '../../../components/RebaseIcon'
 
 import { yam as yamAddress, yamv2 as yamV2Address } from '../../../constants/tokenAddresses'
 
@@ -42,7 +42,7 @@ const Balances: React.FC = () => {
         <CardContent>
           <StyledBalances>
             <StyledBalance>
-              <YamIcon />
+              <RebaseIcon />
               <Spacer />
               <div style={{ flex: 1 }}>
                 <Value value={!!account ? numeral(bnToDec(v2Balance, 9)).format('0.00a') : '--'} />
