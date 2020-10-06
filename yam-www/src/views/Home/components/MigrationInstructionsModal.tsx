@@ -172,7 +172,7 @@ const StyledStep = styled.div`
 `
 
 const StyledStepValue = styled.div`
-  color: ${props => props.theme.color.grey[600]};
+  color: ${props => props.theme.color.grey[100]};
   font-size: 18px;
   font-weight: 700;
 `

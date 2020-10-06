@@ -192,7 +192,7 @@ const Vote: React.FC<VoteProps> = () => {
 const StyledDelegatedCount = styled.div`
   text-align: center;
   font-size: 24px;
-  color: ${props => props.theme.color.grey[600]};
+  color: ${props => props.theme.color.grey[100]};
   font-weight: 700;
   margin: 0 auto;
 `
@@ -212,7 +212,7 @@ const StyledThankYou = styled.div`
 const StyledDenominator = styled.div`
   margin-left: 8px;
   font-size: 18px;
-  color: ${props => props.theme.color.grey[600]};
+  color: ${props => props.theme.color.grey[100]};
 `
 
 const StyledCountdown = styled.div`
@@ -261,7 +261,7 @@ const StyledCheckpoint = styled.div<StyledCheckpointProps>`
   left: ${props => props.left}%;
   z-index: 1;
   top: ${props => props.reverse ? 20 : 0}px;
-  color: ${props => props.acheived ? props.theme.color.secondary.main : props.theme.color.grey[600]};
+  color: ${props => props.acheived ? props.theme.color.secondary.main : props.theme.color.grey[100]};
   &:after {
     content: "";
     position: absolute;
@@ -303,7 +303,7 @@ const StyledMeterInner = styled.div<StyledMeterInnerProps>`
 `
 
 const StyledLink = styled.a`
-  color: ${props => props.theme.color.grey[600]};
+  color: ${props => props.theme.color.grey[100]};
   text-decoration: none;
   font-weight: 700;
 `

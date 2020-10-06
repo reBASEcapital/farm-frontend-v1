@@ -31,7 +31,7 @@ const Button: React.FC<ButtonProps> = ({
   let buttonColor: string
   switch (variant) {
     case 'secondary':
-      buttonColor = color.grey[500]
+      buttonColor = color.grey[100]
       break
     case 'default':
     default:
@@ -44,23 +44,23 @@ const Button: React.FC<ButtonProps> = ({
   let fontSize: number
   switch (size) {
     case 'sm':
-      boxShadow = `4px 4px 8px ${color.grey[300]},
-        -8px -8px 16px ${color.grey[200]}FF;`
+      /*boxShadow = `4px 4px 8px ${color.grey[600]},
+        -8px -8px 16px ${color.grey[500]}FF;`*/
       buttonPadding = spacing[3]
       buttonSize = 36
       fontSize = 14
       break
     case 'lg':
-      boxShadow = `6px 6px 12px ${color.grey[300]},
-        -12px -12px 24px ${color.grey[200]}ff;`
+      /*boxShadow = `6px 6px 12px ${color.grey[600]},
+        -12px -12px 24px ${color.grey[500]}ff;`*/
       buttonPadding = spacing[4]
       buttonSize = 72
       fontSize = 16
       break
     case 'md':
     default:
-      boxShadow = `6px 6px 12px ${color.grey[300]},
-        -12px -12px 24px -2px ${color.grey[200]}ff;`
+      /*boxShadow = `6px 6px 12px ${color.grey[600]},
+        -12px -12px 24px -2px ${color.grey[500]}ff;`*/
       buttonPadding = spacing[4]
       buttonSize = 56
       fontSize = 16
@@ -105,11 +105,10 @@ interface StyledButtonProps {
 
 const StyledButton = styled.button<StyledButtonProps>`
   align-items: center;
-  background-color: ${props => props.theme.color.grey[200]};
-  border: 0;
+  background-color: ${props => props.theme.color.grey[900]};
+  border: 1px solid ${props => props.theme.color.grey[500]};
   border-radius: 12px;
-  box-shadow: ${props => props.boxShadow};
-  color: ${props => !props.disabled ? props.color : `${props.color}55`};
+  color: ${props => !props.disabled ? props.color : props.theme.color.grey[500]};
   cursor: pointer;
   display: flex;
   font-size: ${props => props.fontSize}px;
@@ -122,7 +121,7 @@ const StyledButton = styled.button<StyledButtonProps>`
   pointer-events: ${props => !props.disabled ? undefined : 'none'};
   width: 100%;
   &:hover {
-    background-color: ${props => props.theme.color.grey[100]};
+    background-color: ${props => props.theme.color.grey[800]};
   }
 `
 

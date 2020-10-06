@@ -38,7 +38,7 @@ interface StyledSeparatorProps {
 }
 
 const StyledSeparator = styled.div<StyledSeparatorProps>`
-  background-color: ${props => props.theme.color.grey[100]};
+  background-color: ${props => props.theme.color.grey[800]};
   box-shadow: ${props => props.boxShadow};
   height: ${props => props.orientation === 'vertical' ? '100%' : '1px'};
   width: ${props => props.orientation === 'vertical' ? '1px' : '100%'};
