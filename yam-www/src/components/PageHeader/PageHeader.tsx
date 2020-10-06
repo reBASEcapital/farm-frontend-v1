@@ -40,7 +40,7 @@ const StyledIcon = styled.div`
 `
 
 const StyledTitle = styled.h1`
-  color: ${props => props.theme.color.grey[600]};
+  color: ${props => props.theme.color.white};
   font-size: 36px;
   font-weight: 700;
   margin: 0;
@@ -48,7 +48,8 @@ const StyledTitle = styled.h1`
 `
 
 const StyledSubtitle = styled.h3`
-  color: ${props => props.theme.color.grey[400]};
+  color: ${props => props.theme.color.white};
+  opacity: 0.7;
   font-size: 18px;
   font-weight: 400;
   margin: 0;

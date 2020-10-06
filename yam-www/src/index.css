@@ -1,6 +1,8 @@
 @import "~izitoast/dist/css/iziToast.min.css";
 body {
-  background: #F0E7EA;
+  background: #191B28;
+  background-image: url("https://www.rebase.capital/assets/rebasefarm.jpg");
+  background-size: cover;
   margin: 0;
   font-family: 'Nunito', sans-serif;
   font-size: 16px;
