@@ -14,6 +14,7 @@ import useEarnings from '../../../hooks/useEarnings'
 import useReward from '../../../hooks/useReward'
 
 import { getDisplayBalance } from '../../../utils/formatBalance'
+import farm from "../../../assets/img/farm-icon.png";
 
 interface HarvestProps {
   poolContract: Contract
@@ -29,7 +30,7 @@ const Harvest: React.FC<HarvestProps> = ({ poolContract }) => {
       <CardContent>
         <StyledCardContentInner>
           <StyledCardHeader>
-            <CardIcon>🍠</CardIcon>
+            <CardIcon><span><img src={farm} height="42" style={{ marginTop: -4 }} /></span></CardIcon>
             <Value value={getDisplayBalance(earnings)} />
             <Label text="reB∆SE earned" />
           </StyledCardHeader>
