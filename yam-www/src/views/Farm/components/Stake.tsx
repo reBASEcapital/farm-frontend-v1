@@ -25,6 +25,7 @@ import { getDisplayBalance } from '../../../utils/formatBalance'
 
 import DepositModal from './DepositModal'
 import WithdrawModal from './WithdrawModal'
+import farm from "../../../assets/img/farm-icon.png";
 
 interface StakeProps {
   poolContract: Contract,
@@ -89,7 +90,7 @@ const Stake: React.FC<StakeProps> = ({
       <CardContent>
         <StyledCardContentInner>
           <StyledCardHeader>
-            <CardIcon>🌱</CardIcon>
+            <CardIcon><span><img src={farm} height="42" style={{ marginTop: -4 }} /></span></CardIcon>
             <Value value={getDisplayBalance(stakedBalance)} />
             <Label text={`${tokenName} Staked`} />
           </StyledCardHeader>
