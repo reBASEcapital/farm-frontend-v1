@@ -1,2 +1,5 @@
-# farm-frontend-v1
-the frontend to the first version of the farm
+# f∆RM
+
+The frontend website to the first version of the farm for the reB∆SE project.
+
+Helps farmers stake liquidity pool shares.
