@@ -6,14 +6,16 @@ import Container from '../../components/Container'
 import Page from '../../components/Page'
 import PageHeader from '../../components/PageHeader'
 import Spacer from '../../components/Spacer'
+import Triangle from '../../components/TriangleSVG/Triangle'
 
 import Balances from './components/Balances'
 
 const Home: React.FC = () => {
   return (
     <Page>
+      <Triangle/>
       <PageHeader
-        icon="🗣"
+        icon=""
         subtitle="Check out our farms."
         title="reB∆SE is live."
       />
