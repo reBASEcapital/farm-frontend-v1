@@ -9,6 +9,7 @@ const theme = {
     black,
     grey,
     dark,
+    blue,
     primary: {
       light: blue[200],
       main: white,

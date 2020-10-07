@@ -42,7 +42,7 @@ const StyledIcon = styled.div`
 `
 
 const StyledText = styled.div`
-  color: ${props => props.theme.color.grey[400]};
+  color: ${props => props.theme.color.blue[200]};
 `
 
 export default Loader
