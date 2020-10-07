@@ -90,7 +90,7 @@ const Stake: React.FC<StakeProps> = ({
       <CardContent>
         <StyledCardContentInner>
           <StyledCardHeader>
-            <CardIcon><span><img src={farm} height="42" style={{ marginTop: -4 }} /></span></CardIcon>
+            <CardIcon>🌱</CardIcon>
             <Value value={getDisplayBalance(stakedBalance)} />
             <Label text={`${tokenName} Staked`} />
           </StyledCardHeader>
