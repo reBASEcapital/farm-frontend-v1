@@ -22,7 +22,7 @@ const NAME_FOR_POOL: { [key: string]: string } = {
 
 const ICON_FOR_POOL: { [key: string]: string } = {
 //  ampl_pool: '🌷',
-  rebase_pool: '🌷'
+  rebase_pool: '🌾'
 }
 
 const SORT_FOR_POOL: { [key: string]: number } = {

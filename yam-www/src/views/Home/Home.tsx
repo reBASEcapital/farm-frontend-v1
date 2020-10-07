@@ -13,7 +13,7 @@ const Home: React.FC = () => {
   return (
     <Page>
       <PageHeader
-        icon="🗣"
+        icon="🧺"
         subtitle="Check out our farms."
         title="reB∆SE is live."
       />
