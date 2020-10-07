@@ -28,6 +28,7 @@ const Farms: React.FC = () => {
         <>
           <Route exact path={path}>
             <PageHeader
+              icon=""
               subtitle="Earn REB∆SE tokens by providing liquidity."
               title="Select a farm."
             />
