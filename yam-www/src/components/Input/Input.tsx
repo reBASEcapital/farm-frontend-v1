@@ -34,6 +34,7 @@ const StyledInputWrapper = styled.div`
   display: flex;
   height: 72px;
   padding: 0 ${props => props.theme.spacing[3]}px;
+  margin: 0 ${props => props.theme.spacing[4]}px;
 `
 
 const StyledInput = styled.input`

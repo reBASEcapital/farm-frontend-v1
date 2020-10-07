@@ -61,6 +61,7 @@ const StyledMaxText = styled.div`
   align-items: center;
   color: ${props => props.theme.color.blue[200]};
   display: flex;
+  margin-right: ${props => props.theme.spacing[4]}px;
   font-size: 14px;
   font-weight: 700;
   height: 44px;
