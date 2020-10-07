@@ -12,25 +12,17 @@ body {
 
 
  .rect {
-   fill: #0085c4;
+   fill: #00C700;
    stroke: #fff;
  }
-
-.blue {
-  color: #09A0E7;
-}
-
-.white {
-  color: #FFFFFF;
-}
 
 .svg-container {
   display: inline-block;
   position: relative;
-  width: 100%;
+  width: inherit;
   vertical-align: middle;
   overflow: hidden;
-  fill: #0085c4;
+  fill: #00C700;
   stroke: #fff;
 }
 
@@ -57,10 +49,6 @@ p.logo > img {
     overflow: hidden;
   }
 
-  .svg-content {
-    width: 330px;
-    height: 208px;
-  }
 }
 
 @media (min-width: 768px){
@@ -72,10 +60,6 @@ p.logo > img {
     overflow: hidden;
   }
 
-  .svg-content {
-    width: 330px;
-    height: 400px;
-  }
 
   .mobile{
     width: 200px;
@@ -89,10 +73,6 @@ p.logo > img {
     width: 100%;
     vertical-align: middle;
     overflow: hidden;
-  }
-  .svg-content {
-    width: 768px;
-    height: 400px;
   }
 }
 
