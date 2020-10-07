@@ -18,12 +18,14 @@ const StyledNav = styled.nav`
 `
 
 const StyledLink = styled.a`
-  color: ${props => props.theme.color.grey[800]};
+  color: ${props => props.theme.color.white};
+  text-shadow: 1px 1px ${props => props.theme.color.black};
   padding-left: ${props => props.theme.spacing[3]}px;
   padding-right: ${props => props.theme.spacing[3]}px;
   text-decoration: none;
   &:hover {
-    color: ${props => props.theme.color.grey[500]};
+    color: ${props => props.theme.color.blue[500]};
+    text-shadow: 0px 0px;
   }
 `
 
