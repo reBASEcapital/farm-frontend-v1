@@ -1,8 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import farmer from '../../assets/img/farmer.png'
-
 import Button from '../../components/Button'
 import Container from '../../components/Container'
 import Page from '../../components/Page'
