@@ -10,6 +10,97 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+ .rect {
+   fill: #0085c4;
+   stroke: #fff;
+ }
+
+.blue {
+  color: #09A0E7;
+}
+
+.white {
+  color: #FFFFFF;
+}
+
+.svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  vertical-align: middle;
+  overflow: hidden;
+  fill: #0085c4;
+  stroke: #fff;
+}
+
+p.logo > img {
+  width: 75px;
+  height: 75px;
+  margin: 2px;
+}
+
+
+.svg-content {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  margin: auto;
+}
+
+@media (min-width: 0px){
+  .svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    vertical-align: middle;
+    overflow: hidden;
+  }
+
+  .svg-content {
+    width: 330px;
+    height: 208px;
+  }
+}
+
+@media (min-width: 768px){
+  .svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    vertical-align: middle;
+    overflow: hidden;
+  }
+
+  .svg-content {
+    width: 330px;
+    height: 400px;
+  }
+
+  .mobile{
+    width: 200px;
+  }
+}
+
+@media (min-width: 1200px){
+  .svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    vertical-align: middle;
+    overflow: hidden;
+  }
+  .svg-content {
+    width: 768px;
+    height: 400px;
+  }
+}
+
+.row {
+  padding: 10px;
+}
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
