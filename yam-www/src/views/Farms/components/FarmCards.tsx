@@ -85,6 +85,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
     }
   }, [farm, getStartTime])
 
+  /*
   useEffect(() => {
     async function fetchEarned () {
       const earned = await getEarned(yam, contract, account)
@@ -94,7 +95,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
       fetchEarned()
     }
   }, [yam, contract, account, setHarvestable])
-  
+*/
   const poolActive = startTime * 1000 - Date.now() <= 0
   return (
     <StyledCardWrapper>

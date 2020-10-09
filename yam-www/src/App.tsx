@@ -61,9 +61,9 @@ const Providers: React.FC = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <UseWalletProvider
-        chainId={3}
+        chainId={1}
         connectors={{
-          walletconnect: { rpcUrl: 'https://ropsten.infura.io/v3/442d79a8a4a9491e90ae8b324a366c2b'}
+          walletconnect: { rpcUrl: 'https://mainnet.eth.aragon.network/' },
         }}
       >
         <YamProvider>
