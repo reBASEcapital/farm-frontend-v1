@@ -7,7 +7,7 @@ import {
 import { ThemeProvider } from 'styled-components'
 import { UseWalletProvider } from 'use-wallet'
 
-import DisclaimerModal from './components/DisclaimerModal'
+import TutorialModal from './components/TutorialModal'
 import MobileMenu from './components/MobileMenu'
 import TopBar from './components/TopBar'
 
@@ -52,7 +52,7 @@ const App: React.FC = () => {
           </Route>
         </Switch>
       </Router>
-      <Disclaimer />
+      <Tutorial />
     </Providers>
   )
 }
@@ -80,18 +80,18 @@ const Providers: React.FC = ({ children }) => {
   )
 }
 
-const Disclaimer: React.FC = () => {
+const Tutorial: React.FC = () => {
 
   const markSeen = useCallback(() => {
-    localStorage.setItem('disclaimer', 'seen')
+    localStorage.setItem('tutorial', 'seen')
   }, [])
 
-  const [onPresentDisclaimerModal] = useModal(<DisclaimerModal onConfirm={markSeen} />)
+  const [onPresentTutorialModal] = useModal(<TutorialModal onConfirm={markSeen} />)
 
   useEffect(() => {
-    const seenDisclaimer = localStorage.getItem('disclaimer')
+    const seenDisclaimer = localStorage.getItem('tutorial')
     if (!seenDisclaimer) {
-      onPresentDisclaimerModal()
+      onPresentTutorialModal()
     }
   }, [])
 

@@ -14,7 +14,7 @@ import useEarnings from '../../../hooks/useEarnings'
 import useReward from '../../../hooks/useReward'
 
 import { getDisplayBalance } from '../../../utils/formatBalance'
-import farm from "../../../assets/img/farm-icon.png";
+import farm from "../../../assets/img/rebase-icon.png";
 
 interface HarvestProps {
   poolContract: Contract

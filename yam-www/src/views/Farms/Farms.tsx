@@ -10,6 +10,7 @@ import Button from '../../components/Button'
 import Page from '../../components/Page'
 import PageHeader from '../../components/PageHeader'
 import WalletProviderModal from '../../components/WalletProviderModal'
+import Triangle from '../../components/TriangleSVG/Triangle'
 
 import useModal from '../../hooks/useModal'
 
@@ -27,9 +28,10 @@ const Farms: React.FC = () => {
       {!!account ? (
         <>
           <Route exact path={path}>
+
             <PageHeader
               icon=""
-              subtitle="Earn REB∆SE tokens by providing liquidity."
+              subtitle="Earn REBASE tokens by providing liquidity."
               title="Select a farm."
             />
             <FarmCards />

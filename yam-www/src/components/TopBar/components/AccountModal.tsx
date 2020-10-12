@@ -16,7 +16,7 @@ import ModalTitle from '../../ModalTitle'
 import Separator from '../../Separator'
 import Spacer from '../../Spacer'
 import Value from '../../Value'
-import farm from "../../../assets/img/farm-icon.png";
+import farm from "../../../assets/img/rebase-icon.png";
 
 const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
 
@@ -43,7 +43,7 @@ const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
             </CardIcon>
             <StyledBalance>
               <Value value={getDisplayBalance(yamV2Balance, 9)} />
-              <Label text="reB∆SE Balance" />
+              <Label text="REBASE Balance" />
             </StyledBalance>
           </StyledBalanceWrapper>
         </div>
