@@ -1,8 +1,6 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { useWallet } from 'use-wallet'
-
-import { yam as yamAddress, yamv2 as yamV2Address } from '../../../constants/tokenAddresses'
 import useTokenBalance from '../../../hooks/useTokenBalance'
 import { getDisplayBalance } from '../../../utils/formatBalance'
 
@@ -17,6 +15,7 @@ import Separator from '../../Separator'
 import Spacer from '../../Spacer'
 import Value from '../../Value'
 import farm from "../../../assets/img/farm-icon.png";
+import Environment from '../../../Environment'
 
 const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
 
@@ -27,8 +26,8 @@ const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
     reset()
   }, [onDismiss, reset])
 
-  const yamBalance = useTokenBalance(yamAddress)
-  const yamV2Balance = useTokenBalance(yamV2Address)
+  const yamBalance = useTokenBalance(Environment.yam)
+  const yamV2Balance = useTokenBalance(Environment.yamv2)
 
   return (
     <Modal>
@@ -50,8 +49,7 @@ const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
 
         <Spacer />
         <Button
-          href={`https://etherscan.io/address/${account}`}
-          //href={`https://ropsten.etherscan.io/address/${account}`}
+          href={`${Environment.accountUrl}${account}`}
           text="View on Etherscan"
           variant="secondary"
         />

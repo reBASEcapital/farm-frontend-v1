@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js/bignumber';
+import Environment from '../../Environment';
 
 export const SUBTRACT_GAS_LIMIT = 100000;
 
@@ -36,5 +37,5 @@ export const addressMap = {
   COMP: "0xc00e94Cb662C3520282E6f5717214004A7f26888",
   LEND: "0x80fB784B7eD66730e8b1DBd9820aFD29931aab03",
   YAMYCRV: "0x2C7a51A357d5739C5C74Bf3C96816849d2c9F726",
-  UNIRebase: "0x373483108f1f0aeaf1b56a73796f9dfa9824963c"
+  UNIRebase: Environment.uniRebase
 }

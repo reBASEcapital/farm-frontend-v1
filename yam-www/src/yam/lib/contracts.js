@@ -17,9 +17,7 @@ import SNXJson from './snx.json';
 import UNIFactJson from './unifact2.json';
 import UNIPairJson from './uni2.json';
 import UNIRouterJson from './uniR.json';
-
-import { rebase_ropsten } from '../../constants/tokenAddresses'
-import { tokengeyser_ropsten } from '../../constants/tokenAddresses'
+import Environment from '../../Environment';
 
 //TODO:Hacking out all of the pools except for AMPL
 import AMPLPoolJson from '../clean_build/contracts/YAMAMPLPool.json';
@@ -61,7 +59,7 @@ export class Contracts {
 
   //TODO:Hacking out all of the pools except for AMPL
     //this.ampl_pool = new this.web3.eth.Contract(AMPLPoolJson.abi);
-    this.rebase_pool = new this.web3.eth.Contract(RebasePoolJson.abi, tokengeyser_ropsten);
+    this.rebase_pool = new this.web3.eth.Contract(RebasePoolJson.abi, Environment.tokengeyser_ropsten);
     /*
       this.yfi_pool = new this.web3.eth.Contract(YFIPoolJson.abi);
       this.eth_pool = new this.web3.eth.Contract(WETHPoolJson.abi);
@@ -85,7 +83,7 @@ export class Contracts {
     //TODO:Hacking out all of the pools except for AMPL
     //this.pool = new this.web3.eth.Contract(LENDPoolJson.abi);
 
-    this.rebase = new this.web3.eth.Contract(RebaseJson.abi, rebase_ropsten);
+    this.rebase = new this.web3.eth.Contract(RebaseJson.abi, Environment.rebase_ropsten);
 
     this.yamV2 = new this.web3.eth.Contract(YAMv2Json.abi);
     this.yamV2migration = new this.web3.eth.Contract(YAMv2MigrationJson.abi);

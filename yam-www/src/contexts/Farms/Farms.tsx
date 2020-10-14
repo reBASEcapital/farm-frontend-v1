@@ -3,8 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useWallet } from 'use-wallet'
 import { Contract } from 'web3-eth-contract'
 
-import { yam as yamAddress } from '../../constants/tokenAddresses'
-import { rebase_ropsten, rebase_usd_lp_pair_ropsten } from '../../constants/tokenAddresses'
+import Environment from '../../Environment'
 
 import useYam from '../../hooks/useYam'
 
@@ -69,7 +68,7 @@ const Farms: React.FC = ({ children }) => {
         } else if (tokenKey === 'ycrv_yam_uni_lp') {
           tokenAddress = '0xdf5e0e81dff6faf3a7e52ba697820c5e32d806a8'
         } else if ( tokenKey == 'rebase_usd_uni_lp') {
-          tokenAddress = rebase_usd_lp_pair_ropsten
+          tokenAddress = Environment.rebase_usd_lp_pair_ropsten
         }
         farmsArr.push({
           contract: pool,
@@ -77,7 +76,7 @@ const Farms: React.FC = ({ children }) => {
           depositToken: tokenKey,
           depositTokenAddress: tokenAddress,
           earnToken: 'reB∆SE',
-          earnTokenAddress: rebase_ropsten,
+          earnTokenAddress: Environment.rebase_ropsten,
           icon: ICON_FOR_POOL[poolKey],
           id: tokenKey,
           sort: SORT_FOR_POOL[poolKey]

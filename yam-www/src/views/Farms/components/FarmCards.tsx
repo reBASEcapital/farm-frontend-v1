@@ -18,28 +18,44 @@ import { Farm } from '../../../contexts/Farms'
 
 import { bnToDec } from '../../../utils'
 import { getEarned, getPoolStartTime } from '../../../yamUtils'
+import { KECCAK256_NULL_S } from 'ethereumjs-util'
 
 const FarmCards: React.FC = () => {
   const [farms] = useFarms()
   const { account } = useWallet()
-  const rows = farms.reduce<Farm[][]>((farmRows, farm) => {
-    const newFarmRows = [...farmRows]
-    if (newFarmRows[newFarmRows.length - 1].length === 3) {
-      newFarmRows.push([farm])
-    } else {
-      newFarmRows[newFarmRows.length - 1].push(farm)
+  const [rows, setRows] = useState<Array<Array<Farm|null>>>([[]]);
+  useEffect(() => {
+    if(farms){
+      setRows(farms.reduce<Farm[][]>((farmRows, farm) => {
+        const newFarmRows = [...farmRows]
+        if (newFarmRows[newFarmRows.length - 1].length === 3) {
+          newFarmRows.push([farm])
+        } else {
+          newFarmRows[newFarmRows.length - 1].push(farm)
+        }
+        return newFarmRows
+      }, [[]]));
+      setRows((prev)=> {
+        if(prev[prev.length-1][prev[prev.length-1].length -1] !== null){
+          if(prev[prev.length-1].length < 3){
+            prev[prev.length-1].push(null);
+          } else {
+            prev.push([null]);
+          }
+        }
+        return prev
+      });
     }
-    return newFarmRows
-  }, [[]])
+  }, [farms]);
 
   return (
     <StyledCards>
-      {!!rows[0].length ? rows.map((farmRow, i) => (
+      {!!rows[0]?.length ? rows.map((farmRow, i) => (
         <StyledRow key={i}>
           {farmRow.map((farm, j) => (
             <React.Fragment key={j}>
               <FarmCard farm={farm} />
-              {(j === 0 || j === 1) && <StyledSpacer />}
+              {<StyledSpacer />}
             </React.Fragment>
           ))}
         </StyledRow>
@@ -60,7 +76,6 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
   const [startTime, setStartTime] = useState(0)
   const [harvestable, setHarvestable] = useState(0)
 
-  const { contract } = farm
   const { account } = useWallet()
   const yam = useYam()
 
@@ -99,29 +114,33 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
   const poolActive = startTime * 1000 - Date.now() <= 0
   return (
     <StyledCardWrapper>
-      {farm.id === 'ycrv_yam_uni_lp' && (
+      {farm?.id && farm.id === 'ycrv_yam_uni_lp' && (
         <StyledCardAccent />
       )}
       <Card>
         <CardContent>
           <StyledContent>
-            <CardIcon>{farm.icon}</CardIcon>
-            <StyledTitle>{farm.name}</StyledTitle>
+            <CardIcon>{farm?.icon || "🌷"}</CardIcon>
+            <StyledTitle>{farm?.name || "Coming soon"}</StyledTitle>
+            {farm && 
             <StyledDetails>
-              <StyledDetail>Deposit {farm.depositToken.toUpperCase()}</StyledDetail>
-              <StyledDetail>Earn {farm.earnToken.toUpperCase()}</StyledDetail>
+              <StyledDetail>{farm?.depositToken && `Deposit ${farm.depositToken.toUpperCase()}`}</StyledDetail>
+              <StyledDetail>{farm?.earnToken && `Earn ${farm.earnToken.toUpperCase()}`}</StyledDetail>
             </StyledDetails>
+            }
             <Spacer />
             <StyledHarvestable>
               {harvestable ? `${numeral(harvestable).format('0.00a')} YAMs ready to harvest.` : undefined}
             </StyledHarvestable>
-            <Button
-              disabled={!poolActive}
-              text={poolActive ? 'Select' : undefined}
-              to={`/farms/${farm.id}`}
-            >
-              {!poolActive && <Countdown date={new Date(startTime * 1000)} renderer={renderer} />}
-            </Button>
+            {farm?.id &&
+              <Button
+                disabled={!poolActive}
+                text={poolActive ? 'Select' : undefined}
+                to={`/farms/${farm.id}`}
+              >
+                {!poolActive && <Countdown date={new Date(startTime * 1000)} renderer={renderer} />}
+              </Button>
+            }
           </StyledContent>
         </CardContent>
       </Card>
