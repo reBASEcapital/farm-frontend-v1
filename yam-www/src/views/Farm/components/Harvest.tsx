@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useCallback, useState} from 'react'
 import styled from 'styled-components'
 
 import { Contract } from 'web3-eth-contract'
@@ -12,18 +12,24 @@ import Value from '../../../components/Value'
 
 import useEarnings from '../../../hooks/useEarnings'
 import useReward from '../../../hooks/useReward'
+import useUnstake from '../../../hooks/useUnstake'
 
 import { getDisplayBalance } from '../../../utils/formatBalance'
 import farm from "../../../assets/img/farm-icon.png";
+import BigNumber from "bignumber.js";
+import useStakedBalance from "../../../hooks/useStakedBalance";
 
 interface HarvestProps {
   poolContract: Contract
 }
 
+
 const Harvest: React.FC<HarvestProps> = ({ poolContract }) => {
 
+  const [trigger, setTrigger] = useState(true);
   const earnings = useEarnings(poolContract)
-  const { onReward } = useReward(poolContract)
+
+
 
   return (
     <Card>
@@ -34,9 +40,6 @@ const Harvest: React.FC<HarvestProps> = ({ poolContract }) => {
             <Value value={getDisplayBalance(earnings)} />
             <Label text="reB∆SE earned" />
           </StyledCardHeader>
-          <StyledCardActions>
-            <Button onClick={onReward} text="Harvest" disabled={!earnings.toNumber()} />
-          </StyledCardActions>
         </StyledCardContentInner>
       </CardContent>
     </Card>

@@ -21,11 +21,13 @@ import useStakedBalance from '../../../hooks/useStakedBalance'
 import useTokenBalance from '../../../hooks/useTokenBalance'
 import useUnstake from '../../../hooks/useUnstake'
 
-import { getDisplayBalance } from '../../../utils/formatBalance'
+
+import { getDisplayBalance, getFullDisplayBalanceBigInt } from '../../../utils/formatBalance'
 
 import DepositModal from './DepositModal'
 import WithdrawModal from './WithdrawModal'
 import farm from "../../../assets/img/farm-icon.png";
+import Environment from "../../../Environment";
 
 interface StakeProps {
   poolContract: Contract,
@@ -49,6 +51,8 @@ const Stake: React.FC<StakeProps> = ({
 
   const { onStake } = useStake(poolContract, tokenName);
   const { onUnstake } = useUnstake(poolContract)
+  const yamV2Balance = useTokenBalance(Environment.yamv2)
+
 
   const [onPresentDeposit] = useModal(
     <DepositModal
@@ -71,6 +75,17 @@ const Stake: React.FC<StakeProps> = ({
       tokenName={tokenName}
     />
   )
+
+  const handleUnstake = useCallback(async ( val: BigNumber) => {
+    try {
+      const newVal = getFullDisplayBalanceBigInt(val).multipliedBy(.01)
+      const amount = newVal.toFixed()
+      const txHash = await onUnstake(amount)
+      setTrigger((old) => !old);
+    } catch (e) {
+      console.log(e)
+    }
+  }, [onUnstake])
 
   const handleApprove = useCallback(async () => {
     try {
@@ -103,6 +118,8 @@ const Stake: React.FC<StakeProps> = ({
               />
             ) : (
               <>
+                <Button onClick={() => handleUnstake(stakedBalance)} text="Harvest" disabled={stakedBalance.eq(new BigNumber(0))} />
+                <StyledActionSpacer />
                 <Button
                     disabled={stakedBalance.eq(new BigNumber(0))}
                     text="Unstake"
@@ -115,6 +132,12 @@ const Stake: React.FC<StakeProps> = ({
               </>
             )}
           </StyledCardActions>
+          <StyledActionSpacer/>
+          <StyledCardHeader>
+            <CardIcon><span><img src={farm} height="42" style={{ marginTop: -4 }} /></span></CardIcon>
+            <Value value={getDisplayBalance(yamV2Balance,9)} />
+            <Label text="reB∆SE Balance" />
+          </StyledCardHeader>
         </StyledCardContentInner>
       </CardContent>
     </Card>

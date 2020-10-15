@@ -75,7 +75,6 @@ const Farm: React.FC = () => {
           </StyledCardWrapper>
         </StyledCardsWrapper>
         <Spacer size="lg" />
-        <Spacer size="lg" />
       </StyledFarm>
     </>
   )
