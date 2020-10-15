@@ -73,6 +73,11 @@ const Farm: React.FC = () => {
               tokenName={depositToken.toUpperCase()}
             />
           </StyledCardWrapper>
+          <StyledCardWrapper>
+            <Harvest
+                poolContract={contract}
+            />
+          </StyledCardWrapper>
         </StyledCardsWrapper>
         <Spacer size="lg" />
         <Spacer size="lg" />

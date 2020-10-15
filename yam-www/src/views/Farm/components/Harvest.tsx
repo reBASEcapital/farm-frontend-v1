@@ -22,7 +22,7 @@ interface HarvestProps {
 
 const Harvest: React.FC<HarvestProps> = ({ poolContract }) => {
 
-  const earnings = useEarnings(poolContract)
+  const earnings = 0;//useEarnings(poolContract)
   const { onReward } = useReward(poolContract)
 
   return (
@@ -31,11 +31,11 @@ const Harvest: React.FC<HarvestProps> = ({ poolContract }) => {
         <StyledCardContentInner>
           <StyledCardHeader>
             <CardIcon><span><img src={farm} height="42" style={{ marginTop: -4 }} /></span></CardIcon>
-            <Value value={getDisplayBalance(earnings)} />
+            {/* <Value value={getDisplayBalance(earnings)} /> */}
             <Label text="reB∆SE earned" />
           </StyledCardHeader>
           <StyledCardActions>
-            <Button onClick={onReward} text="Harvest" disabled={!earnings.toNumber()} />
+            {/*<Button onClick={onReward} text="Harvest" disabled={!earnings.toNumber()} />*/}
           </StyledCardActions>
         </StyledCardContentInner>
       </CardContent>
