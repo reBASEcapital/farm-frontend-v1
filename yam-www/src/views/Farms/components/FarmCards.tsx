@@ -23,7 +23,7 @@ import { KECCAK256_NULL_S } from 'ethereumjs-util'
 const FarmCards: React.FC = () => {
   const [farms] = useFarms()
   const { account } = useWallet()
-  const [rows, setRows] = useState<Array<Array<Farm|null>>>([[]]);
+  const [rows, setRows] = useState<Array<Array<Farm|any>>>([[]]);
   useEffect(() => {
     if(farms){
       setRows(farms.reduce<Farm[][]>((farmRows, farm) => {
@@ -36,11 +36,12 @@ const FarmCards: React.FC = () => {
         return newFarmRows
       }, [[]]));
       setRows((prev)=> {
-        if(prev[prev.length-1][prev[prev.length-1].length -1] !== null){
+        while(!prev[prev.length-1][prev[prev.length-1].length -1]?.dummy || 
+          prev[prev.length-1][prev[prev.length-1].length -1].dummy < 3){
           if(prev[prev.length-1].length < 3){
-            prev[prev.length-1].push(null);
+            prev[prev.length-1].push({dummy: prev[prev.length-1][prev[prev.length-1].length -1]?.dummy + 1 || 1});
           } else {
-            prev.push([null]);
+            prev.push([{dummy: prev[prev.length-1][prev[prev.length-1].length -1].dummy + 1 || 1}]);
           }
         }
         return prev
@@ -54,7 +55,7 @@ const FarmCards: React.FC = () => {
         <StyledRow key={i}>
           {farmRow.map((farm, j) => (
             <React.Fragment key={j}>
-              <FarmCard farm={farm} />
+              <FarmCard farm={farm}/>
               {<StyledSpacer />}
             </React.Fragment>
           ))}
@@ -69,7 +70,7 @@ const FarmCards: React.FC = () => {
 }
 
 interface FarmCardProps {
-  farm: Farm,
+  farm: Farm|any,
 }
 
 const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
@@ -112,6 +113,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
   }, [yam, contract, account, setHarvestable])
 */
   const poolActive = startTime * 1000 - Date.now() <= 0
+  const dummyEmojis = ["","🌷", "🌹", "🌻"]
   return (
     <StyledCardWrapper>
       {farm?.id && farm.id === 'ycrv_yam_uni_lp' && (
@@ -120,7 +122,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
       <Card>
         <CardContent>
           <StyledContent>
-            <CardIcon>{farm?.icon || "🌷"}</CardIcon>
+            <CardIcon>{farm?.icon || dummyEmojis[farm?.dummy]}</CardIcon>
             <StyledTitle>{farm?.name || "Coming soon"}</StyledTitle>
             {farm && 
             <StyledDetails>
