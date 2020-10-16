@@ -15,17 +15,14 @@ import { Farm } from './types'
 
 //TODO:Super Hack got rid of all pools except for Ampl. We will use Ampl for Rebase
 const NAME_FOR_POOL: { [key: string]: string } = {
-//  ampl_pool: 'reB∆SE Soils',
-  rebase_pool: 'reB∆SE Farm'
+  rebase_pool: 'REBASE-USDC'
 }
 
 const ICON_FOR_POOL: { [key: string]: string } = {
-//  ampl_pool: '🌷',
-  rebase_pool: '🌾'
+  rebase_pool: '🎖'
 }
 
 const SORT_FOR_POOL: { [key: string]: number } = {
-//  ampl_pool: 1,
   rebase_pool: 1
 }
 
@@ -54,7 +51,7 @@ const Farms: React.FC = ({ children }) => {
       }
       */
       } else if (tokenKey === 'rebase') {
-        tokenKey = 'rebase_usd_uni_lp'
+        tokenKey = 'rebase_usdc_uni_v2_lp'
       }
       else if (tokenKey === 'ycrv') {
         tokenKey = 'ycrv_yam_uni_lp'
@@ -67,7 +64,7 @@ const Farms: React.FC = ({ children }) => {
           tokenAddress = await method().call()
         } else if (tokenKey === 'ycrv_yam_uni_lp') {
           tokenAddress = '0xdf5e0e81dff6faf3a7e52ba697820c5e32d806a8'
-        } else if ( tokenKey == 'rebase_usd_uni_lp') {
+        } else if ( tokenKey == 'rebase_usdc_uni_v2_lp') {
           tokenAddress = Environment.rebase_usd_lp_pair_ropsten
         }
         farmsArr.push({
@@ -75,7 +72,7 @@ const Farms: React.FC = ({ children }) => {
           name: NAME_FOR_POOL[poolKey],
           depositToken: tokenKey,
           depositTokenAddress: tokenAddress,
-          earnToken: 'reB∆SE',
+          earnToken: 'REBASE',
           earnTokenAddress: Environment.rebase_ropsten,
           icon: ICON_FOR_POOL[poolKey],
           id: tokenKey,

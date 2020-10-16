@@ -26,7 +26,7 @@ import { getDisplayBalance, getFullDisplayBalanceBigInt } from '../../../utils/f
 
 import DepositModal from './DepositModal'
 import WithdrawModal from './WithdrawModal'
-import farm from "../../../assets/img/farm-icon.png";
+import farm from "../../../assets/img/rebase-icon.png";
 import Environment from "../../../Environment";
 
 interface StakeProps {

@@ -16,8 +16,8 @@ const Home: React.FC = () => {
       <Triangle/>
       <PageHeader
         icon=""
-        subtitle="Check out our farms."
-        title="reB∆SE is live."
+        subtitle="The farm for the reB∆SE protocol is live!"
+        title="f∆RM"
       />
       <Container>
         <Balances />

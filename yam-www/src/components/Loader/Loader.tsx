@@ -2,7 +2,7 @@ import React from 'react'
 import styled, { keyframes } from 'styled-components'
 
 import CardIcon from '../CardIcon'
-import farm from "../../assets/img/farm-icon.png";
+import farm from "../../assets/img/rebase-icon.png";
 
 interface LoaderProps {
   text?: string

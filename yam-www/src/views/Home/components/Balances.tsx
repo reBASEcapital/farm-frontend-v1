@@ -45,7 +45,7 @@ const Balances: React.FC = () => {
               <Spacer />
               <div style={{ flex: 1 }}>
                 <Value value={!!account ? numeral(bnToDec(v2Balance, 9)).format('0.00a') : '--'} />
-                <Label text="reB∆SE Balance" />
+                <Label text="REBASE Balance" />
               </div>
             </StyledBalance>
           </StyledBalances>
