@@ -9,7 +9,7 @@ BigNumber.config({
 
 const GAS_LIMIT = {
   STAKING: {
-    DEFAULT: 350000,
+    DEFAULT: 600000,
     SNX: 850000,
   }
 };
@@ -39,8 +39,9 @@ export const unstake = async (poolContract, amount, account) => {
   const gas = GAS_LIMIT.STAKING.DEFAULT;
 
   if (now >= 1597172400) {
+    const newAmount = (new BigNumber(amount).times(new BigNumber(10).pow(18))).toFixed(0)
     return poolContract.methods
-      .unstake((new BigNumber(amount).times(new BigNumber(10).pow(18))).toString(), [])
+      .unstake( newAmount, [])
       .send({ from: account, gas })
       .on('transactionHash', tx => {
         console.log(tx)

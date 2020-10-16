@@ -37,7 +37,7 @@ switch (process.env.REACT_APP_ENVIRONMENT) {
     Environment = PROD;
     break;
   default:
-    Environment = DEV;
+    Environment = PROD;
 }
 
 export default Environment;
