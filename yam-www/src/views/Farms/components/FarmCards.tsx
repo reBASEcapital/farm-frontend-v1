@@ -28,7 +28,7 @@ const FarmCards: React.FC = () => {
     if(farms){
       setRows(farms.reduce<Farm[][]>((farmRows, farm) => {
         const newFarmRows = [...farmRows]
-        if (newFarmRows[newFarmRows.length - 1].length === 3) {
+        if (newFarmRows[newFarmRows.length - 1].length === 2) {
           newFarmRows.push([farm])
         } else {
           newFarmRows[newFarmRows.length - 1].push(farm)
@@ -37,7 +37,7 @@ const FarmCards: React.FC = () => {
       }, [[]]));
       setRows((prev)=> {
         while(!prev[prev.length-1][prev[prev.length-1].length -1]?.dummy || 
-          prev[prev.length-1][prev[prev.length-1].length -1].dummy < 3){
+          prev[prev.length-1][prev[prev.length-1].length -1].dummy < 2){
           if(prev[prev.length-1].length < 3){
             prev[prev.length-1].push({dummy: prev[prev.length-1][prev[prev.length-1].length -1]?.dummy + 1 || 1});
           } else {
@@ -113,7 +113,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
   }, [yam, contract, account, setHarvestable])
 */
   const poolActive = startTime * 1000 - Date.now() <= 0
-  const dummyEmojis = ["","🌷", "🌹", "🌻"]
+  const dummyEmojis = ["🌱","🌾","🌻"]
   return (
     <StyledCardWrapper>
       {farm?.id && farm.id === 'ycrv_yam_uni_lp' && (
@@ -123,7 +123,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
         <CardContent>
           <StyledContent>
             <CardIcon>{farm?.icon || dummyEmojis[farm?.dummy]}</CardIcon>
-            <StyledTitle>{farm?.name || "Coming soon"}</StyledTitle>
+            <StyledTitle>{farm?.name || "COMING SOON"}</StyledTitle>
             {farm && 
             <StyledDetails>
               <StyledDetail>{farm?.depositToken && `Deposit ${farm.depositToken.toUpperCase()}`}</StyledDetail>
