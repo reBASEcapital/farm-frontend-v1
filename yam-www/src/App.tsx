@@ -23,6 +23,7 @@ import Farms from './views/Farms'
 import Home from './views/Home'
 
 import theme from './theme'
+import Environment from './Environment'
 
 const App: React.FC = () => {
   const [mobileMenu, setMobileMenu] = useState(false)
@@ -61,9 +62,9 @@ const Providers: React.FC = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <UseWalletProvider
-        chainId={1}
+        chainId={Environment.chainId}
         connectors={{
-          walletconnect: { rpcUrl: 'https://mainnet.eth.aragon.network/' },
+          walletconnect: { rpcUrl: Environment.rpcUrl },
         }}
       >
         <YamProvider>

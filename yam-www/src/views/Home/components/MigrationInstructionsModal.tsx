@@ -12,8 +12,7 @@ import ModalTitle from '../../../components/ModalTitle'
 import Separator from '../../../components/Separator'
 import Spacer from '../../../components/Spacer'
 import WalletProviderModal from '../../../components/WalletProviderModal'
-
-import { yam as yamV1Address } from '../../../constants/tokenAddresses'
+import Environment from '../../../Environment'
 
 import useAllowance from '../../../hooks/useAllowance'
 import useApprove from '../../../hooks/useApprove'
@@ -33,7 +32,7 @@ const MigrationInstructionsModal: React.FC<ModalProps> = ({ onDismiss }) => {
   const hasHarvested = !!account && !harvested
 
   const yam = useYam()
-  const yamTokenContract = useMemo(() => getContract(ethereum as provider, yamV1Address), [])
+  const yamTokenContract = useMemo(() => getContract(ethereum as provider, Environment.yam), [])
   const migrationContract = yam ? (yam as any).contracts.yamV2migration : undefined
 
   const allowance = useAllowance(yamTokenContract, migrationContract)

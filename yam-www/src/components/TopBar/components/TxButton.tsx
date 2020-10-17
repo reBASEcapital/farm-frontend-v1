@@ -6,6 +6,7 @@ import { useWallet } from 'use-wallet'
 import usePendingTransactions from '../../../hooks/usePendingTransactions'
 
 import Button from '../../Button'
+import Environment from '../../../Environment';
 
 interface TxButtonProps {}
 
@@ -19,7 +20,7 @@ const TxButton: React.FC<TxButtonProps> = () => {
           <Button
             size="sm"
             text={`${pendingTransactions.length} Transaction(s)`}
-            href={`https://etherscan.io/address/${account}`}
+            href={`${Environment.accountUrl}${account}`}
           />
         </StyledTxButton>
       ) : null}

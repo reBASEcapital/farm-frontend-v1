@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useCallback, useState} from 'react'
 import styled from 'styled-components'
 
 import { Contract } from 'web3-eth-contract'
