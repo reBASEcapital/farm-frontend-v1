@@ -61,16 +61,31 @@ const Stake: React.FC<StakeProps> = ({
   const { onRebaseHarvest } = useRebaseHarvest(poolContract)
   const rebaseBalance = useTokenBalance(Environment.yamv2)
 
+  //acquiring the total amount of rebase in a the uniswap liquidity pool on UniSwap. This is not the Geyser.
   const rebaseUniswapPairBalance = useTokenBalanceLP(Environment.yamv2, tokenContract)
+
+  //acquiring the total amount of usdc in a the uniswap liquidity pool on UniSwap. This is not the Geyser.
   const usdcUniswapPairBalance = useTokenBalanceLP(Environment.usdc_ropsten, tokenContract)
+
+  //values obtained from the rebase uniswap pool is not formatted correctly. use 9 decimails
   const rebaseUniswapPairBalanceDisplay= getDisplayBalance( rebaseUniswapPairBalance, 9)
+
+  //values obtained from the usdc uniswap pool is not formatted correctly. use 6 decimails
   const usdcUniswapPairBalanceDisplay= getDisplayBalance( usdcUniswapPairBalance, 6)
+
+  //generate the price from Uniswap.
   const rebasePriceDisplay = getPrice (usdcUniswapPairBalanceDisplay,rebaseUniswapPairBalanceDisplay )
 
+  //get the total value using the amount of rebase and usdc in the uniswap liquidity pool and times by the price
   const totalValueLP = getTotalValue( rebaseUniswapPairBalanceDisplay, usdcUniswapPairBalanceDisplay, rebasePriceDisplay)
+
+  //get the Total Supply of Uniswap tokens
   const uniswapTotalSupply = getTotalSupply(tokenContract )
+
+  //get the total supply of uniswap tokens in the geyser
   const geyserTotalSupply = getTotalStaked(poolContract )
 
+  //get the total staked value by taking the total value and multiplying by the ratio of geyser over uniwsap total
   const totalStakedValue = getTotalStakedValue( totalValueLP, uniswapTotalSupply, geyserTotalSupply)
   //const rebaseGeyserBalance = useTokenBalanceLP(Environment.yamv2, tokenContract)
   //const usdcUniswapPairBalance = useTokenBalanceLP(Environment.usdc_ropsten, tokenContract)
