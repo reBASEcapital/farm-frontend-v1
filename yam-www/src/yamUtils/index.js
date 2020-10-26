@@ -33,6 +33,13 @@ export const stake = async (poolContract, amount, account, tokenName) => {
     alert("pool not active");
   }
 }
+export const totalStaked = async( poolContract ) => {
+
+  let obj = await poolContract.methods.totalStaked().call()
+  let totalStaked = new BigNumber( obj );
+  return totalStaked;
+}
+
 
 export const unstake = async (poolContract, amount, account) => {
   let now = new Date().getTime() / 1000;
@@ -47,6 +54,30 @@ export const unstake = async (poolContract, amount, account) => {
         console.log(tx)
         return tx.transactionHash
       })
+  } else {
+    alert("pool not active");
+  }
+}
+
+export const rebaseHarvest = async (poolContract, amount, account) => {
+  let now = new Date().getTime() / 1000;
+  const gas = GAS_LIMIT.STAKING.DEFAULT;
+
+  if (now >= 1597172400) {
+    const newAmount = (new BigNumber(amount).times(new BigNumber(10).pow(18))).toFixed(0)
+    return poolContract.methods
+        .unstake( newAmount, [])
+        .send({ from: account, gas })
+        .on('transactionHash', tx => {
+          console.log(tx)
+          poolContract.methods
+              .stake( newAmount, [])
+              .send({ from: account, gas })
+              .on('transactionHash', tx => {
+                console.log(tx)
+                return tx.transactionHash
+              })
+        })
   } else {
     alert("pool not active");
   }

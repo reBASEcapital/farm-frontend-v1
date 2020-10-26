@@ -20,9 +20,16 @@ import useStake from '../../../hooks/useStake'
 import useStakedBalance from '../../../hooks/useStakedBalance'
 import useTokenBalance from '../../../hooks/useTokenBalance'
 import useUnstake from '../../../hooks/useUnstake'
+import useRebaseHarvest from '../../../hooks/useRebaseHarvest'
+import useTokenBalanceLP from '../../../hooks/useTokenBalanceLP'
+import getTotalSupply from '../../../hooks/useTotalSupply'
 
 
+import getTotalStaked from '../../../hooks/useTotalStaked'
 import { getDisplayBalance, getFullDisplayBalanceBigInt } from '../../../utils/formatBalance'
+import {getPrice, getTotalStakedValue} from  '../../../utils/formatPrice'
+import {getTotalValue} from  '../../../utils/formatTotalValue'
+
 
 import DepositModal from './DepositModal'
 import WithdrawModal from './WithdrawModal'
@@ -51,8 +58,22 @@ const Stake: React.FC<StakeProps> = ({
 
   const { onStake } = useStake(poolContract, tokenName);
   const { onUnstake } = useUnstake(poolContract)
-  const yamV2Balance = useTokenBalance(Environment.yamv2)
+  const { onRebaseHarvest } = useRebaseHarvest(poolContract)
+  const rebaseBalance = useTokenBalance(Environment.yamv2)
 
+  const rebaseUniswapPairBalance = useTokenBalanceLP(Environment.yamv2, tokenContract)
+  const usdcUniswapPairBalance = useTokenBalanceLP(Environment.usdc_ropsten, tokenContract)
+  const rebaseUniswapPairBalanceDisplay= getDisplayBalance( rebaseUniswapPairBalance, 9)
+  const usdcUniswapPairBalanceDisplay= getDisplayBalance( usdcUniswapPairBalance, 6)
+  const rebasePriceDisplay = getPrice (usdcUniswapPairBalanceDisplay,rebaseUniswapPairBalanceDisplay )
+
+  const totalValueLP = getTotalValue( rebaseUniswapPairBalanceDisplay, usdcUniswapPairBalanceDisplay, rebasePriceDisplay)
+  const uniswapTotalSupply = getTotalSupply(tokenContract )
+  const geyserTotalSupply = getTotalStaked(poolContract )
+
+  const totalStakedValue = getTotalStakedValue( totalValueLP, uniswapTotalSupply, geyserTotalSupply)
+  //const rebaseGeyserBalance = useTokenBalanceLP(Environment.yamv2, tokenContract)
+  //const usdcUniswapPairBalance = useTokenBalanceLP(Environment.usdc_ropsten, tokenContract)
 
   const [onPresentDeposit] = useModal(
     <DepositModal
@@ -76,16 +97,18 @@ const Stake: React.FC<StakeProps> = ({
     />
   )
 
-  const handleUnstake = useCallback(async ( val: BigNumber) => {
+  const handleRebaseHarvest = useCallback(async ( val: BigNumber) => {
     try {
-      const newVal = getFullDisplayBalanceBigInt(val).multipliedBy(.01)
+      const newVal = getFullDisplayBalanceBigInt(val)
       const amount = newVal.toFixed()
-      const txHash = await onUnstake(amount)
+      //const newVal = getFullDisplayBalanceBigInt(val).multipliedBy(.01)
+      //const amount = newVal.toFixed()
+      const txHash = await onRebaseHarvest(amount)
       setTrigger((old) => !old);
     } catch (e) {
       console.log(e)
     }
-  }, [onUnstake])
+  }, [onRebaseHarvest])
 
   const handleApprove = useCallback(async () => {
     try {
@@ -118,7 +141,7 @@ const Stake: React.FC<StakeProps> = ({
               />
             ) : (
               <>
-                <Button onClick={() => handleUnstake(stakedBalance)} text="Harvest" disabled={stakedBalance.eq(new BigNumber(0))} />
+                <Button onClick={() => handleRebaseHarvest(stakedBalance)} text="Harvest" disabled={stakedBalance.eq(new BigNumber(0))} />
                 <StyledActionSpacer />
                 <Button
                     disabled={stakedBalance.eq(new BigNumber(0))}
@@ -135,8 +158,14 @@ const Stake: React.FC<StakeProps> = ({
           <StyledActionSpacer/>
           <StyledCardHeader>
             <CardIcon><span><img src={farm} height="42" style={{ marginTop: -4 }} /></span></CardIcon>
-            <Value value={getDisplayBalance(yamV2Balance,9)} />
+            <Value value={getDisplayBalance(rebaseBalance,9)} />
             <Label text="reB∆SE Balance" />
+            <Value value={rebasePriceDisplay} />
+            <Label text="reB∆SE Price" />
+            <Value value={totalStakedValue} />
+            <Label text="Total Staked Value" />
+
+
           </StyledCardHeader>
         </StyledCardContentInner>
       </CardContent>
