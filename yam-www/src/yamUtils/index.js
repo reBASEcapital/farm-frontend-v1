@@ -253,3 +253,38 @@ export const getMigrationEndTime = async (yam) => {
 export const getV2Supply = async (yam) => {
   return new BigNumber(await yam.contracts.rebase.methods.totalSupply().call())
 }
+
+
+export const getTotalLocked = async (yam) => {
+  return new BigNumber(await yam.contracts.rebase_pool.methods.totalLocked().call()).div(10**9)
+}
+
+export const getTotalLockedShares = async (yam) => {
+  return new BigNumber(await yam.contracts.rebase_pool.methods.totalLockedShares().call())
+}
+
+export const getUnlockSchedulesCount = async (yam) => {
+  return  await yam.contracts.rebase_pool.methods.unlockScheduleCount().call()
+}
+
+export const getUnlockSchedules = async (yam, index) => {
+  return  await yam.contracts.rebase_pool.methods.unlockSchedules(index).call()
+}
+
+
+export const getUnlockRate = async (yam, seconds) => {
+  const totalLocked = await getTotalLocked(yam);
+  const totalLockedShares = await getTotalLockedShares(yam);
+  const unlockScheduleCount = await getUnlockSchedulesCount(yam);
+  const now = parseInt(Date.now() /1000);
+  const p = [];
+  for (let i=0;i<unlockScheduleCount;i++){
+    p.push(await getUnlockSchedules(yam,i))
+  }
+  return  p.reduce((t, e) => (t += Math.min(Math.max(e.endAtSec - now, 0), seconds) / e.durationSec * e.initialLockedShares) && t, 0) / totalLockedShares * totalLocked;
+
+}
+
+
+
+
