@@ -10,6 +10,7 @@ import CardIcon from '../../../components/CardIcon'
 
 import useTokenBalance from '../../../hooks/useTokenBalance'
 import useTokenBalanceLP from '../../../hooks/useTokenBalanceLP'
+import useAPY from '../../../hooks/useAPY'
 import getTotalSupply from '../../../hooks/useTotalSupply'
 
 import getTotalStaked from '../../../hooks/useTotalStaked'
@@ -33,7 +34,7 @@ const FarmStats: React.FC<StakeProps> = ({
   poolContract,
   tokenContract,
 }) => {
-  
+
   const rebaseBalance = useTokenBalance(Environment.yamv2)
 
   //acquiring the total amount of rebase in a the uniswap liquidity pool on UniSwap. This is not the Geyser.
@@ -67,20 +68,9 @@ const FarmStats: React.FC<StakeProps> = ({
 
   // Get the unlock rate
 
-  const [apy, setApy] = useState<string>("");
+  const apy = useAPY(poolContract, tokenContract);
 
-  
-  useEffect(() => {
-    const fetch = async () => {
-        if(!apy && rebasePriceDisplay && totalStakedValue) {
-            const unlockRate = await getUnlockRate(poolContract, 5184000);
-            const roi = unlockRate * parseFloat(rebasePriceDisplay) / parseFloat(totalStakedValue)
-            const apyyy = ((Math.pow(1+roi,365/60) - 1) * 100)
-            setApy(((Math.pow(1+roi,365/60) - 1) * 100).toFixed(2));
-        }
-    }
-    fetch()
-  }, [apy, rebasePriceDisplay, totalStakedValue])
+
   return (
     <Card>
       <CardContent>
