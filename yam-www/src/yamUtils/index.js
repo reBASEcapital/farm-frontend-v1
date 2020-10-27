@@ -255,33 +255,33 @@ export const getV2Supply = async (yam) => {
 }
 
 
-export const getTotalLocked = async (yam) => {
-  return new BigNumber(await yam.contracts.rebase_pool.methods.totalLocked().call()).div(10**9)
+export const getTotalLocked = async (rebasePool) => {
+  return new BigNumber(await rebasePool.methods.totalLocked().call()).div(10**9)
 }
 
-export const getTotalLockedShares = async (yam) => {
-  return new BigNumber(await yam.contracts.rebase_pool.methods.totalLockedShares().call())
+export const getTotalLockedShares = async (rebasePool) => {
+  return new BigNumber(await rebasePool.methods.totalLockedShares().call())
 }
 
-export const getUnlockSchedulesCount = async (yam) => {
-  return  await yam.contracts.rebase_pool.methods.unlockScheduleCount().call()
+export const getUnlockSchedulesCount = async (rebasePool) => {
+  return  await rebasePool.methods.unlockScheduleCount().call()
 }
 
-export const getUnlockSchedules = async (yam, index) => {
-  return  await yam.contracts.rebase_pool.methods.unlockSchedules(index).call()
+export const getUnlockSchedules = async (rebasePool, index) => {
+  return  await rebasePool.methods.unlockSchedules(index).call()
 }
 
 
-export const getUnlockRate = async (yam, seconds) => {
-  const totalLocked = await getTotalLocked(yam);
-  const totalLockedShares = await getTotalLockedShares(yam);
-  const unlockScheduleCount = await getUnlockSchedulesCount(yam);
+export const getUnlockRate = async (rebasePool, seconds) => {
+  const totalLocked = await getTotalLocked(rebasePool);
+  const totalLockedShares = await getTotalLockedShares(rebasePool);
+  const unlockScheduleCount = await getUnlockSchedulesCount(rebasePool);
   const now = parseInt(Date.now() /1000);
   const p = [];
   for (let i=0;i<unlockScheduleCount;i++){
-    p.push(await getUnlockSchedules(yam,i))
+    p.push(await getUnlockSchedules(rebasePool,i))
   }
-  return  new BigNumber(p.reduce((t, e) => (t += Math.min(Math.max(e.endAtSec - now, 0), seconds) / e.durationSec * e.initialLockedShares) && t, 0)).div( totalLockedShares).mul( totalLocked);
+  return  new BigNumber(p.reduce((t, e) => (t += Math.min(Math.max(e.endAtSec - now, 0), seconds) / e.durationSec * e.initialLockedShares) && t, 0)).div( totalLockedShares).multipliedBy( totalLocked).toNumber();
 
 }
 

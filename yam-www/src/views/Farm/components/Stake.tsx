@@ -8,7 +8,7 @@ import Button from '../../../components/Button'
 import Card from '../../../components/Card'
 import CardContent from '../../../components/CardContent'
 import CardIcon from '../../../components/CardIcon'
-import { AddIcon, RemoveIcon } from '../../../components/icons'
+import { AddIcon } from '../../../components/icons'
 import IconButton from '../../../components/IconButton'
 import Label from '../../../components/Label'
 import Value from '../../../components/Value'
@@ -21,20 +21,13 @@ import useStakedBalance from '../../../hooks/useStakedBalance'
 import useTokenBalance from '../../../hooks/useTokenBalance'
 import useUnstake from '../../../hooks/useUnstake'
 import useRebaseHarvest from '../../../hooks/useRebaseHarvest'
-import useTokenBalanceLP from '../../../hooks/useTokenBalanceLP'
-import getTotalSupply from '../../../hooks/useTotalSupply'
 
 
-import getTotalStaked from '../../../hooks/useTotalStaked'
 import { getDisplayBalance, getFullDisplayBalanceBigInt } from '../../../utils/formatBalance'
-import {getPrice, getTotalStakedValue} from  '../../../utils/formatPrice'
-import {getTotalValue} from  '../../../utils/formatTotalValue'
 
 
 import DepositModal from './DepositModal'
 import WithdrawModal from './WithdrawModal'
-import farm from "../../../assets/img/rebase-icon.png";
-import Environment from "../../../Environment";
 
 interface StakeProps {
   poolContract: Contract,
@@ -59,36 +52,6 @@ const Stake: React.FC<StakeProps> = ({
   const { onStake } = useStake(poolContract, tokenName);
   const { onUnstake } = useUnstake(poolContract)
   const { onRebaseHarvest } = useRebaseHarvest(poolContract)
-  const rebaseBalance = useTokenBalance(Environment.yamv2)
-
-  //acquiring the total amount of rebase in a the uniswap liquidity pool on UniSwap. This is not the Geyser.
-  const rebaseUniswapPairBalance = useTokenBalanceLP(Environment.yamv2, tokenContract)
-
-  //acquiring the total amount of usdc in a the uniswap liquidity pool on UniSwap. This is not the Geyser.
-  const usdcUniswapPairBalance = useTokenBalanceLP(Environment.usdc_ropsten, tokenContract)
-
-  //values obtained from the rebase uniswap pool is not formatted correctly. use 9 decimails
-  const rebaseUniswapPairBalanceDisplay= getDisplayBalance( rebaseUniswapPairBalance, 9)
-
-  //values obtained from the usdc uniswap pool is not formatted correctly. use 6 decimails
-  const usdcUniswapPairBalanceDisplay= getDisplayBalance( usdcUniswapPairBalance, 6)
-
-  //generate the price from Uniswap.
-  const rebasePriceDisplay = getPrice (usdcUniswapPairBalanceDisplay,rebaseUniswapPairBalanceDisplay )
-
-  //get the total value using the amount of rebase and usdc in the uniswap liquidity pool and times by the price
-  const totalValueLP = getTotalValue( rebaseUniswapPairBalanceDisplay, usdcUniswapPairBalanceDisplay, rebasePriceDisplay)
-
-  //get the Total Supply of Uniswap tokens
-  const uniswapTotalSupply = getTotalSupply(tokenContract )
-
-  //get the total supply of uniswap tokens in the geyser
-  const geyserTotalSupply = getTotalStaked(poolContract )
-
-  //get the total staked value by taking the total value and multiplying by the ratio of geyser over uniwsap total
-  const totalStakedValue = getTotalStakedValue( totalValueLP, uniswapTotalSupply, geyserTotalSupply)
-  //const rebaseGeyserBalance = useTokenBalanceLP(Environment.yamv2, tokenContract)
-  //const usdcUniswapPairBalance = useTokenBalanceLP(Environment.usdc_ropsten, tokenContract)
 
   const [onPresentDeposit] = useModal(
     <DepositModal
@@ -171,17 +134,6 @@ const Stake: React.FC<StakeProps> = ({
             )}
           </StyledCardActions>
           <StyledActionSpacer/>
-          <StyledCardHeader>
-            <CardIcon><span><img src={farm} height="42" style={{ marginTop: -4 }} /></span></CardIcon>
-            <Value value={getDisplayBalance(rebaseBalance,9)} />
-            <Label text="reB∆SE Balance" />
-            <Value value={rebasePriceDisplay} />
-            <Label text="reB∆SE Price" />
-            <Value value={totalStakedValue} />
-            <Label text="Total Staked Value" />
-
-
-          </StyledCardHeader>
         </StyledCardContentInner>
       </CardContent>
     </Card>

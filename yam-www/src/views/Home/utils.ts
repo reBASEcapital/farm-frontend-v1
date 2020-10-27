@@ -8,7 +8,6 @@ import {
   getCirculatingSupply as gCS,
   getNextRebaseTimestamp as gNRT,
   getTotalSupply as gTS,
-  getUnlockRate as gUR,
   getScalingFactor,
 } from '../../yamUtils'
 
@@ -38,10 +37,6 @@ const getTotalSupply = async (yam: typeof Yam): Promise<string> => {
   return gTS(yam)
 }
 
-const getUnlockRate = async (yam: typeof Yam): Promise<string> => {
-  // FORBROCK: get  unlock rate 60 days
-  return  gUR(yam, 5184000)
-}
 
 export const getStats = async (yam: typeof Yam) => {
   const curPrice = await getCurrentPrice(yam)
