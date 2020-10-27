@@ -281,7 +281,7 @@ export const getUnlockRate = async (yam, seconds) => {
   for (let i=0;i<unlockScheduleCount;i++){
     p.push(await getUnlockSchedules(yam,i))
   }
-  return  p.reduce((t, e) => (t += Math.min(Math.max(e.endAtSec - now, 0), seconds) / e.durationSec * e.initialLockedShares) && t, 0) / totalLockedShares * totalLocked;
+  return  new BigNumber(p.reduce((t, e) => (t += Math.min(Math.max(e.endAtSec - now, 0), seconds) / e.durationSec * e.initialLockedShares) && t, 0)).div( totalLockedShares).mul( totalLocked);
 
 }
 
