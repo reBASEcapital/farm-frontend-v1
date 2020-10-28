@@ -19,6 +19,10 @@ const Nav: React.FC = () => {
 const StyledNav = styled.nav`
   align-items: center;
   display: flex;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 `
 
 const StyledLink = styled.a`
