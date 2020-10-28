@@ -20,8 +20,7 @@ import useStake from '../../../hooks/useStake'
 import useStakedBalance from '../../../hooks/useStakedBalance'
 import useTokenBalance from '../../../hooks/useTokenBalance'
 import useUnstake from '../../../hooks/useUnstake'
-import useRebaseHarvest from '../../../hooks/useRebaseHarvest'
-
+import useAPY from '../../../hooks/useAPY'
 
 import { getDisplayBalance, getFullDisplayBalanceBigInt } from '../../../utils/formatBalance'
 
@@ -51,7 +50,7 @@ const Stake: React.FC<StakeProps> = ({
 
   const { onStake } = useStake(poolContract, tokenName);
   const { onUnstake } = useUnstake(poolContract)
-  const { onRebaseHarvest } = useRebaseHarvest(poolContract)
+  const apy = useAPY(poolContract, tokenContract)
 
   const [onPresentDeposit] = useModal(
     <DepositModal
@@ -75,18 +74,7 @@ const Stake: React.FC<StakeProps> = ({
     />
   )
 
-  const handleRebaseHarvest = useCallback(async ( val: BigNumber) => {
-    try {
-      const newVal = getFullDisplayBalanceBigInt(val)
-      const amount = newVal.toFixed()
-      //const newVal = getFullDisplayBalanceBigInt(val).multipliedBy(.01)
-      //const amount = newVal.toFixed()
-      const txHash = await onRebaseHarvest(amount)
-      setTrigger((old) => !old);
-    } catch (e) {
-      console.log(e)
-    }
-  }, [onRebaseHarvest])
+
 
   const handleApprove = useCallback(async () => {
     try {
@@ -109,6 +97,9 @@ const Stake: React.FC<StakeProps> = ({
             <CardIcon>🌱</CardIcon>
             <Value value={getDisplayBalance(stakedBalance)} />
             <Label text={`${tokenName} Staked`} />
+            {!apy && <Value value={`--.--%`} />}
+            {apy && <Value value={`${apy}%`} />}
+            <Label text={`APY`} />
           </StyledCardHeader>
           <StyledCardActions>
             {!allowance.toNumber() ? (
@@ -119,21 +110,25 @@ const Stake: React.FC<StakeProps> = ({
               />
             ) : (
               <>
-                <Button onClick={() => handleRebaseHarvest(stakedBalance)} text="Harvest" disabled={stakedBalance.eq(new BigNumber(0))} />
+
+                <StyledActionSpacer />
+                <Button
+                    disabled={stakedBalance.eq(new BigNumber(0))}
+                    text="Stake"
+                    onClick={onPresentDeposit}
+                />
                 <StyledActionSpacer />
                 <Button
                     disabled={stakedBalance.eq(new BigNumber(0))}
                     text="Unstake"
                     onClick={onPresentWithdraw}
                 />
-                <StyledActionSpacer />
-                  <IconButton onClick={onPresentDeposit}>
-                    <AddIcon />
-                  </IconButton>
               </>
             )}
           </StyledCardActions>
           <StyledActionSpacer/>
+          <StyledDisclaimer>APY is estimated for a new deposit over the next 60 days, and does not account for gains or
+            losses from holding liquidity tokens</StyledDisclaimer>
         </StyledCardContentInner>
       </CardContent>
     </Card>
@@ -167,5 +162,11 @@ const StyledCardContentInner = styled.div`
   flex-direction: column;
   justify-content: space-between;
 `
+
+const StyledDisclaimer = styled.div`
+  color: ${props => props.theme.color.grey[100]};
+  font-size: 0.6em;
+`
+
 
 export default Stake

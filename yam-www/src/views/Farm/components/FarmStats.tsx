@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import styled from 'styled-components'
 
 import { Contract } from 'web3-eth-contract'
@@ -14,7 +14,7 @@ import useAPY from '../../../hooks/useAPY'
 import getTotalSupply from '../../../hooks/useTotalSupply'
 
 import getTotalStaked from '../../../hooks/useTotalStaked'
-import { getDisplayBalance } from '../../../utils/formatBalance'
+import {getDisplayBalance, getFullDisplayBalanceBigInt} from '../../../utils/formatBalance'
 import {getPrice, getTotalStakedValue} from  '../../../utils/formatPrice'
 import {getTotalValue} from  '../../../utils/formatTotalValue'
 
@@ -26,6 +26,10 @@ import Label from '../../../components/Label'
 import { getUnlockRate } from '../../../yamUtils'
 import ReactTooltip from 'react-tooltip'
 import { currencyMap } from '../../../utils'
+import BigNumber from "bignumber.js";
+import Button from "../../../components/Button";
+import useRebaseHarvest from '../../../hooks/useRebaseHarvest'
+import useStakedBalance from '../../../hooks/useStakedBalance'
 
 interface StakeProps {
   poolContract: Contract,
@@ -71,6 +75,21 @@ const FarmStats: React.FC<StakeProps> = ({
   // Get the unlock rate
 
   const apy = useAPY(poolContract, tokenContract);
+  const { onRebaseHarvest } = useRebaseHarvest(poolContract)
+  const handleRebaseHarvest = useCallback(async ( val: BigNumber) => {
+        try {
+            const newVal = getFullDisplayBalanceBigInt(val)
+            const amount = newVal.toFixed()
+            //const newVal = getFullDisplayBalanceBigInt(val).multipliedBy(.01)
+            //const amount = newVal.toFixed()
+            const txHash = await onRebaseHarvest(amount)
+            setTrigger((old) => !old);
+        } catch (e) {
+            console.log(e)
+        }
+    }, [onRebaseHarvest]);
+  const [trigger, setTrigger] = useState(true);
+  const stakedBalance = useStakedBalance(poolContract, trigger)
 
 
   return (
@@ -80,15 +99,15 @@ const FarmStats: React.FC<StakeProps> = ({
             <StyledCardHeader>
                 <CardIcon><span><img src={farm} height="42" style={{ marginTop: -4 }} /></span></CardIcon>
                 <Value value={getDisplayBalance(rebaseBalance,9)} />
-                <Label text="reB∆SE Balance" />
-                <Value value={rebasePriceDisplay && "$ " + rebasePriceDisplay} />
-                <Label text="reB∆SE Price" />
-                <Value value={totalStakedValue && `${currencyMap[poolContract.options.address]} ${totalStakedValue}`} />
-                <Label text="Total Staked Value" />
+                <Label text="REBASE Balance" />
+                {/*<Value value={rebasePriceDisplay && "$ " + rebasePriceDisplay} />
+                <Label text="REBASE Price" />*/}
+                {/*<Value value={totalStakedValue && `$ ${totalStakedValue}`} />
+                <Label text="Total Staked Value" />*/}
             </StyledCardHeader>
           <StyledCardActions>
-            <StyledInfoCard>
-              <StyledInfoCardContent>
+              {/*<StyledInfoCard>
+                <StyledInfoCardContent>
                 <InfoCardTitle>
                     <div>APY</div>
                     <div>
@@ -109,32 +128,14 @@ const FarmStats: React.FC<StakeProps> = ({
                 <Spacer size="sm"/>
                 <b>{apy && apy + " %"}</b>
               </StyledInfoCardContent>
-            </StyledInfoCard>
+            </StyledInfoCard> */}
             <StyledActionSpacer />
-            <StyledInfoCard>
-              <StyledInfoCardContent>
-              <InfoCardTitle>
-                    <div>Reward Multiplier</div>
-                    <div>
-                        <a data-for="tooltip2" data-tip data-iscapture="true">
-                            <Info >
-                                i
-                            </Info>
-                        </a>
-                        <ReactTooltip id="tooltip2" place="top" effect="solid">
-                            <div>
-                            Deposit liquidity tokens for 60 days to achieve  <br />
-                            a 3x reward multiplier. 
-                            </div>
-                        </ReactTooltip>
-                    </div>
-                </InfoCardTitle>
-                <Spacer size="sm"/>
-                <b>1.0x</b>
-              </StyledInfoCardContent>
-            </StyledInfoCard>
           </StyledCardActions>
+            &nbsp;
+            <StyledActionSpacer />
+            <Button onClick={() => handleRebaseHarvest(stakedBalance)} text="Harvest" disabled={stakedBalance.eq(new BigNumber(0))} />
         <StyledActionSpacer/>
+            <StyledDisclaimer>&nbsp;<br/>&nbsp;</StyledDisclaimer>
         </StyledCardContentInner>
       </CardContent>
     </Card>
@@ -212,6 +213,11 @@ width: 18px;
 height: 18px;
 align-items: center;
 justify-content: center;
+`
+
+const StyledDisclaimer = styled.div`
+  color: ${props => props.theme.color.grey[100]};
+  font-size: 0.6em;
 `
 
 export default FarmStats

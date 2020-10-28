@@ -21,6 +21,7 @@ import { getEarned, getPoolStartTime } from '../../../yamUtils'
 import { KECCAK256_NULL_S } from 'ethereumjs-util'
 import useAPY from '../../../hooks/useAPY'
 import { getContract } from '../../../utils/erc20'
+import ReactTooltip from 'react-tooltip'
 
 const FarmCards: React.FC = () => {
   const [farms] = useFarms()
@@ -130,26 +131,42 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, ethereum }) => {
           <StyledContent>
             <CardIcon>{farm?.icon || dummyEmojis[farm?.dummy]}</CardIcon>
             <StyledTitle>{farm?.name || "COMING SOON"}</StyledTitle>
-            {farm && 
+            {/*{farm &&
             <StyledDetails>
-              <StyledDetail>{farm?.depositToken && `Deposit ${farm.depositToken.toUpperCase()}`}</StyledDetail>
-              <StyledDetail>{farm?.earnToken && `Earn ${farm.earnToken.toUpperCase()}`}</StyledDetail>
-              <StyledDetail>{apy && `APY: ${apy}%`}</StyledDetail>
+              <StyledDetail>{`Deposit`}</StyledDetail>
+              <StyledDetail>{farm?.depositToken && `${farm.depositToken.toUpperCase()}`}</StyledDetail>
+              <StyledDetail>{`and earn`}</StyledDetail>
+              <StyledDetail>{farm?.earnToken && `${farm.earnToken.toUpperCase()}`}</StyledDetail>
             </StyledDetails>
-            }
+            }*/}
             <Spacer />
-            <StyledHarvestable>
+            <StyledApy>{farm?.depositToken && !apy && `APY: --.--%`}</StyledApy>
+            <StyledApy>{farm && apy && `APY: ${apy}%`}</StyledApy>
+            <StyledDetail>{farm?.earnToken && `Earn ${farm.earnToken.toUpperCase()}`}</StyledDetail>
+            <Spacer />
+            {/*<StyledHarvestable>
               {harvestable ? `${numeral(harvestable).format('0.00a')} YAMs ready to harvest.` : undefined}
-            </StyledHarvestable>
+            </StyledHarvestable>*/}
             {farm?.id &&
               <Button
                 disabled={!poolActive}
-                text={poolActive ? 'Select' : undefined}
+                text={poolActive ? 'FARM' : undefined}
                 to={`/farms/${farm.id}`}
               >
                 {!poolActive && <Countdown date={new Date(startTime * 1000)} renderer={renderer} />}
               </Button>
             }
+            <Spacer />
+            {farm?.id &&
+              <Button
+                  disabled={!poolActive}
+                  text={poolActive ? 'TRADE' : undefined}
+                  href={`https://uniswap.info/pair/${farm.depositTokenAddress}`}
+              >
+                {console.log(farm)}
+                {!poolActive && <Countdown date={new Date(startTime * 1000)} renderer={renderer} />}
+              </Button>
+          }
           </StyledContent>
         </CardContent>
       </Card>
@@ -238,11 +255,27 @@ const StyledDetail = styled.div`
   color: ${props => props.theme.color.grey[300]};
 `
 
+const StyledApy = styled.div`
+  color: ${props => props.theme.color.grey[100]};
+  font-size: 1.5em;
+  font-weight: 600;
+`
+
 const StyledHarvestable = styled.div`
   color: ${props => props.theme.color.secondary.main};
   font-size: 16px;
   height: 48px;
   text-align: center;
+`
+
+const Info = styled.div`
+display: flex;
+border: 1px solid ${props => props.theme.color.white};
+border-radius: 50%;
+width: 18px;
+height: 18px;
+align-items: center;
+justify-content: center;
 `
 
 export default FarmCards
