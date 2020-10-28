@@ -8,7 +8,7 @@ import Button from '../../../components/Button'
 import Card from '../../../components/Card'
 import CardContent from '../../../components/CardContent'
 import CardIcon from '../../../components/CardIcon'
-import { AddIcon, RemoveIcon } from '../../../components/icons'
+import { AddIcon } from '../../../components/icons'
 import IconButton from '../../../components/IconButton'
 import Label from '../../../components/Label'
 import Value from '../../../components/Value'
@@ -20,14 +20,14 @@ import useStake from '../../../hooks/useStake'
 import useStakedBalance from '../../../hooks/useStakedBalance'
 import useTokenBalance from '../../../hooks/useTokenBalance'
 import useUnstake from '../../../hooks/useUnstake'
+import useRebaseHarvest from '../../../hooks/useRebaseHarvest'
 
 
 import { getDisplayBalance, getFullDisplayBalanceBigInt } from '../../../utils/formatBalance'
 
+
 import DepositModal from './DepositModal'
 import WithdrawModal from './WithdrawModal'
-import farm from "../../../assets/img/rebase-icon.png";
-import Environment from "../../../Environment";
 
 interface StakeProps {
   poolContract: Contract,
@@ -51,8 +51,7 @@ const Stake: React.FC<StakeProps> = ({
 
   const { onStake } = useStake(poolContract, tokenName);
   const { onUnstake } = useUnstake(poolContract)
-  const yamV2Balance = useTokenBalance(Environment.yamv2)
-
+  const { onRebaseHarvest } = useRebaseHarvest(poolContract)
 
   const [onPresentDeposit] = useModal(
     <DepositModal
@@ -76,16 +75,18 @@ const Stake: React.FC<StakeProps> = ({
     />
   )
 
-  const handleUnstake = useCallback(async ( val: BigNumber) => {
+  const handleRebaseHarvest = useCallback(async ( val: BigNumber) => {
     try {
-      const newVal = getFullDisplayBalanceBigInt(val).multipliedBy(.01)
+      const newVal = getFullDisplayBalanceBigInt(val)
       const amount = newVal.toFixed()
-      const txHash = await onUnstake(amount)
+      //const newVal = getFullDisplayBalanceBigInt(val).multipliedBy(.01)
+      //const amount = newVal.toFixed()
+      const txHash = await onRebaseHarvest(amount)
       setTrigger((old) => !old);
     } catch (e) {
       console.log(e)
     }
-  }, [onUnstake])
+  }, [onRebaseHarvest])
 
   const handleApprove = useCallback(async () => {
     try {
@@ -118,7 +119,7 @@ const Stake: React.FC<StakeProps> = ({
               />
             ) : (
               <>
-                <Button onClick={() => handleUnstake(stakedBalance)} text="Harvest" disabled={stakedBalance.eq(new BigNumber(0))} />
+                <Button onClick={() => handleRebaseHarvest(stakedBalance)} text="Harvest" disabled={stakedBalance.eq(new BigNumber(0))} />
                 <StyledActionSpacer />
                 <Button
                     disabled={stakedBalance.eq(new BigNumber(0))}
@@ -133,11 +134,6 @@ const Stake: React.FC<StakeProps> = ({
             )}
           </StyledCardActions>
           <StyledActionSpacer/>
-          <StyledCardHeader>
-            <CardIcon><span><img src={farm} height="42" style={{ marginTop: -4 }} /></span></CardIcon>
-            <Value value={getDisplayBalance(yamV2Balance,9)} />
-            <Label text="reB∆SE Balance" />
-          </StyledCardHeader>
         </StyledCardContentInner>
       </CardContent>
     </Card>
@@ -148,6 +144,9 @@ const StyledCardHeader = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
+  @media (max-width: 768px) {
+    word-break: break-all
+  }
 `
 const StyledCardActions = styled.div`
   display: flex;

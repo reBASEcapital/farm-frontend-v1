@@ -19,7 +19,7 @@ const PROD: EnvironmentModel = {
   accountUrl: "https://etherscan.io/address/",
   rpcUrl: "https://mainnet.eth.aragon.network/",
   chainId: 1,
-  uniRpebase: "0x373483108f1f0aeaf1b56a73796f9dfa9824963c",
+  UNIRebase: "0x373483108f1f0aeaf1b56a73796f9dfa9824963c",
   yam: "0x0e2298e3b3390e3b945a5456fbf59ecc3f55da16",
   yamv2: "0x4208D8d500B1643DcA98dD27bA6C0060BcA311c5",
   rebase_ropsten: "0x4208D8d500B1643DcA98dD27bA6C0060BcA311c5",

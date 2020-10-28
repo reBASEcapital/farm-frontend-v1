@@ -33,6 +33,13 @@ export const stake = async (poolContract, amount, account, tokenName) => {
     alert("pool not active");
   }
 }
+export const totalStaked = async( poolContract ) => {
+
+  let obj = await poolContract.methods.totalStaked().call()
+  let totalStaked = new BigNumber( obj );
+  return totalStaked;
+}
+
 
 export const unstake = async (poolContract, amount, account) => {
   let now = new Date().getTime() / 1000;
@@ -47,6 +54,30 @@ export const unstake = async (poolContract, amount, account) => {
         console.log(tx)
         return tx.transactionHash
       })
+  } else {
+    alert("pool not active");
+  }
+}
+
+export const rebaseHarvest = async (poolContract, amount, account) => {
+  let now = new Date().getTime() / 1000;
+  const gas = GAS_LIMIT.STAKING.DEFAULT;
+
+  if (now >= 1597172400) {
+    const newAmount = (new BigNumber(amount).times(new BigNumber(10).pow(18))).toFixed(0)
+    return poolContract.methods
+        .unstake( newAmount, [])
+        .send({ from: account, gas })
+        .on('transactionHash', tx => {
+          console.log(tx)
+          poolContract.methods
+              .stake( newAmount, [])
+              .send({ from: account, gas })
+              .on('transactionHash', tx => {
+                console.log(tx)
+                return tx.transactionHash
+              })
+        })
   } else {
     alert("pool not active");
   }
@@ -222,3 +253,38 @@ export const getMigrationEndTime = async (yam) => {
 export const getV2Supply = async (yam) => {
   return new BigNumber(await yam.contracts.rebase.methods.totalSupply().call())
 }
+
+
+export const getTotalLocked = async (rebasePool) => {
+  return new BigNumber(await rebasePool.methods.totalLocked().call()).div(10**9)
+}
+
+export const getTotalLockedShares = async (rebasePool) => {
+  return new BigNumber(await rebasePool.methods.totalLockedShares().call())
+}
+
+export const getUnlockSchedulesCount = async (rebasePool) => {
+  return  await rebasePool.methods.unlockScheduleCount().call()
+}
+
+export const getUnlockSchedules = async (rebasePool, index) => {
+  return  await rebasePool.methods.unlockSchedules(index).call()
+}
+
+
+export const getUnlockRate = async (rebasePool, seconds) => {
+  const totalLocked = await getTotalLocked(rebasePool);
+  const totalLockedShares = await getTotalLockedShares(rebasePool);
+  const unlockScheduleCount = await getUnlockSchedulesCount(rebasePool);
+  const now = parseInt(Date.now() /1000);
+  const p = [];
+  for (let i=0;i<unlockScheduleCount;i++){
+    p.push(await getUnlockSchedules(rebasePool,i))
+  }
+  return  new BigNumber(p.reduce((t, e) => (t += Math.min(Math.max(e.endAtSec - now, 0), seconds) / e.durationSec * e.initialLockedShares) && t, 0)).div( totalLockedShares).multipliedBy( totalLocked).toNumber();
+
+}
+
+
+
+

@@ -37,6 +37,7 @@ const getTotalSupply = async (yam: typeof Yam): Promise<string> => {
   return gTS(yam)
 }
 
+
 export const getStats = async (yam: typeof Yam) => {
   const curPrice = await getCurrentPrice(yam)
   const circSupply = '' // await getCirculatingSupply(yam)

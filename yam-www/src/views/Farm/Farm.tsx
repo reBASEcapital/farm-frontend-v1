@@ -15,6 +15,8 @@ import { getContract } from '../../utils/erc20'
 
 import Harvest from './components/Harvest'
 import Stake from './components/Stake'
+import Stats from '../Home/components/Stats'
+import FarmStats from './components/FarmStats'
 
 const Farm: React.FC = () => {
   interface ParamTypes {
@@ -65,7 +67,13 @@ const Farm: React.FC = () => {
       />
       <StyledFarm>
         <StyledCardsWrapper>
-          <Spacer />
+          <StyledCardWrapper>
+            <FarmStats
+              poolContract={contract}
+              tokenContract={tokenContract}
+            />
+          </StyledCardWrapper>
+            <Spacer />
           <StyledCardWrapper>
             <Stake
               poolContract={contract}
@@ -85,26 +93,26 @@ const StyledFarm = styled.div`
   display: flex;
   flex-direction: column;
   @media (max-width: 768px) {
-    width: 100%;
+    width: 98vw;
+    align-items: center;
   }
 `
 
 const StyledCardsWrapper = styled.div`
   display: flex;
-  width: 600px;
+  width: 70vw;
   @media (max-width: 768px) {
-    width: 100%;
-    flex-flow: column nowrap;
-    align-items: center;
+    width: 90vw;
+    align-items: flex-start;
   }
 `
 
 const StyledCardWrapper = styled.div`
   display: flex;
   flex: 1;
-  flex-direction: column;
+  flex-direction: row;
   @media (max-width: 768px) {
-    width: 80%;
+    width: 50vw;
   }
 `
 
