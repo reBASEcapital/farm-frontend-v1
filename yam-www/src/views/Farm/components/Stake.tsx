@@ -144,6 +144,9 @@ const StyledCardHeader = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
+  @media (max-width: 768px) {
+    word-break: break-all
+  }
 `
 const StyledCardActions = styled.div`
   display: flex;

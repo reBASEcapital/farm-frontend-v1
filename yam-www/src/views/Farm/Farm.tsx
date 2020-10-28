@@ -72,7 +72,9 @@ const Farm: React.FC = () => {
               poolContract={contract}
               tokenContract={tokenContract}
             />
+          </StyledCardWrapper>
             <Spacer />
+          <StyledCardWrapper>
             <Stake
               poolContract={contract}
               tokenContract={tokenContract}
@@ -91,7 +93,8 @@ const StyledFarm = styled.div`
   display: flex;
   flex-direction: column;
   @media (max-width: 768px) {
-    width: 100%;
+    width: 98vw;
+    align-items: center;
   }
 `
 
@@ -99,9 +102,8 @@ const StyledCardsWrapper = styled.div`
   display: flex;
   width: 70vw;
   @media (max-width: 768px) {
-    width: 100%;
-    flex-flow: column nowrap;
-    align-items: center;
+    width: 90vw;
+    align-items: flex-start;
   }
 `
 
@@ -110,7 +112,7 @@ const StyledCardWrapper = styled.div`
   flex: 1;
   flex-direction: row;
   @media (max-width: 768px) {
-    width: 80%;
+    width: 50vw;
   }
 `
 

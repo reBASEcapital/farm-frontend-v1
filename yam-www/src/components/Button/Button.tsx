@@ -123,6 +123,11 @@ const StyledButton = styled.button<StyledButtonProps>`
   &:hover {
     background-color: ${props => props.theme.color.grey[800]};
   }
+  @media (max-width: 768px) {
+    padding: ${props => props.theme.spacing[2]}px;
+    word-break: break-all;
+    height: auto;
+  }
 `
 
 const StyledLink = styled(Link)`

@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useMemo, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Countdown, { CountdownRenderProps} from 'react-countdown'
 import { useWallet } from 'use-wallet'
 import numeral from 'numeral'
-
+import { provider } from 'web3-core'
 import Button from '../../../components/Button'
 import Card from '../../../components/Card'
 import CardContent from '../../../components/CardContent'
@@ -19,10 +19,12 @@ import { Farm } from '../../../contexts/Farms'
 import { bnToDec } from '../../../utils'
 import { getEarned, getPoolStartTime } from '../../../yamUtils'
 import { KECCAK256_NULL_S } from 'ethereumjs-util'
+import useAPY from '../../../hooks/useAPY'
+import { getContract } from '../../../utils/erc20'
 
 const FarmCards: React.FC = () => {
   const [farms] = useFarms()
-  const { account } = useWallet()
+  const { account, ethereum } = useWallet()
   const [rows, setRows] = useState<Array<Array<Farm|any>>>([[]]);
   useEffect(() => {
     if(farms){
@@ -55,7 +57,7 @@ const FarmCards: React.FC = () => {
         <StyledRow key={i}>
           {farmRow.map((farm, j) => (
             <React.Fragment key={j}>
-              <FarmCard farm={farm}/>
+              <FarmCard farm={farm} ethereum={ethereum as provider}/>
               {<StyledSpacer />}
             </React.Fragment>
           ))}
@@ -71,15 +73,19 @@ const FarmCards: React.FC = () => {
 
 interface FarmCardProps {
   farm: Farm|any,
+  ethereum: provider
 }
 
-const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
+const FarmCard: React.FC<FarmCardProps> = ({ farm, ethereum }) => {
   const [startTime, setStartTime] = useState(0)
   const [harvestable, setHarvestable] = useState(0)
 
   const { account } = useWallet()
   const yam = useYam()
-
+  const tokenContract = useMemo(() => {
+    return getContract(ethereum as provider, farm?.depositTokenAddress)
+  }, [ethereum, farm.depositTokenAddress]);
+  const apy = useAPY(farm?.contract, tokenContract)
   const getStartTime = useCallback(async () => {
     const startTime = await getPoolStartTime(farm.contract)
     setStartTime(startTime)
@@ -128,6 +134,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
             <StyledDetails>
               <StyledDetail>{farm?.depositToken && `Deposit ${farm.depositToken.toUpperCase()}`}</StyledDetail>
               <StyledDetail>{farm?.earnToken && `Earn ${farm.earnToken.toUpperCase()}`}</StyledDetail>
+              <StyledDetail>{apy && `APY: ${apy}%`}</StyledDetail>
             </StyledDetails>
             }
             <Spacer />
@@ -228,7 +235,7 @@ const StyledDetails = styled.div`
 `
 
 const StyledDetail = styled.div`
-  color: ${props => props.theme.color.grey[500]};
+  color: ${props => props.theme.color.grey[300]};
 `
 
 const StyledHarvestable = styled.div`

@@ -24,6 +24,8 @@ import Spacer from '../../../components/Spacer'
 import Value from '../../../components/Value'
 import Label from '../../../components/Label'
 import { getUnlockRate } from '../../../yamUtils'
+import ReactTooltip from 'react-tooltip'
+import { currencyMap } from '../../../utils'
 
 interface StakeProps {
   poolContract: Contract,
@@ -81,13 +83,29 @@ const FarmStats: React.FC<StakeProps> = ({
                 <Label text="reB∆SE Balance" />
                 <Value value={rebasePriceDisplay && "$ " + rebasePriceDisplay} />
                 <Label text="reB∆SE Price" />
-                <Value value={totalStakedValue} />
+                <Value value={totalStakedValue && `${currencyMap[poolContract.options.address]} ${totalStakedValue}`} />
                 <Label text="Total Staked Value" />
             </StyledCardHeader>
           <StyledCardActions>
             <StyledInfoCard>
               <StyledInfoCardContent>
-                APY
+                <InfoCardTitle>
+                    <div>APY</div>
+                    <div>
+                        <a data-for="tooltip1" data-tip data-iscapture="true">
+                            <Info >
+                                i
+                            </Info>
+                        </a>
+                        <ReactTooltip id="tooltip1" place="top" effect="solid">
+                            <div>
+                            APY is estimated for a new deposit over the next <br />
+                            60 days, and does not account for gains or losses <br />
+                            from holding liquidity tokens
+                            </div>
+                        </ReactTooltip>
+                    </div>
+                </InfoCardTitle>
                 <Spacer size="sm"/>
                 <b>{apy && apy + " %"}</b>
               </StyledInfoCardContent>
@@ -95,7 +113,22 @@ const FarmStats: React.FC<StakeProps> = ({
             <StyledActionSpacer />
             <StyledInfoCard>
               <StyledInfoCardContent>
-                Reward Multiplier
+              <InfoCardTitle>
+                    <div>Reward Multiplier</div>
+                    <div>
+                        <a data-for="tooltip2" data-tip data-iscapture="true">
+                            <Info >
+                                i
+                            </Info>
+                        </a>
+                        <ReactTooltip id="tooltip2" place="top" effect="solid">
+                            <div>
+                            Deposit liquidity tokens for 60 days to achieve  <br />
+                            a 3x reward multiplier. 
+                            </div>
+                        </ReactTooltip>
+                    </div>
+                </InfoCardTitle>
                 <Spacer size="sm"/>
                 <b>1.0x</b>
               </StyledInfoCardContent>
@@ -118,6 +151,10 @@ const StyledCardActions = styled.div`
   justify-content: center;
   margin-top: ${props => props.theme.spacing[6]}px;
   width: 100%;
+  @media (max-width: 768px) {
+    padding: ${props => props.theme.spacing[2]}px;
+    flex-direction: column
+  }
 `
 
 const StyledActionSpacer = styled.div`
@@ -135,13 +172,18 @@ const StyledCardContentInner = styled.div`
 
 const StyledInfoCard = styled.div`
 display: flex;
-border: 1px solid ${props => props.theme.color.black};
-box-shadow: inset 1px 1px 0px ${props => props.theme.color.grey[500]};
+background-color: ${props => props.theme.color.grey[900]};
+border: 1px solid ${props => props.theme.color.grey[500]};
+border-radius: 12px;
+color: ${props => props.theme.color.grey[500]};
+cursor: pointer;
 flex: 1;
 flex-direction: column;
 justify-content: space-between;
-background: ${props => props.theme.color.grey[900]};
 border-radius: 12px;
+&:hover {
+    background-color: ${props => props.theme.color.grey[800]};
+  }
 `
 
 const StyledInfoCardContent =  styled.div`
@@ -149,7 +191,27 @@ display: flex;
 flex: 1;
 flex-direction: column;
 color: ${props => props.theme.color.grey[100]};
-padding: ${props => props.theme.spacing[1]}px ${props => props.theme.spacing[3]}px;
+padding: ${props => props.theme.spacing[1]}px ${props => props.theme.spacing[2]}px;
+@media (max-width: 768px) {
+    padding: ${props => props.theme.spacing[1]}px ${props => props.theme.spacing[1]}px;
+  }
+`
+
+const InfoCardTitle =  styled.div`
+display: flex;
+flex: 1;
+flex-direction: row;
+justify-content: space-between;
+`
+
+const Info = styled.div`
+display: flex;
+border: 1px solid ${props => props.theme.color.white};
+border-radius: 50%;
+width: 18px;
+height: 18px;
+align-items: center;
+justify-content: center;
 `
 
 export default FarmStats

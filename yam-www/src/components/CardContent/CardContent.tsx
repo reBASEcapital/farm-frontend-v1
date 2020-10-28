@@ -12,6 +12,9 @@ const StyledCardContent = styled.div`
   flex: 1;
   flex-direction: column;
   padding: ${props => props.theme.spacing[4]}px;
+  @media (max-width: 768px) {
+    padding: ${props => props.theme.spacing[2]}px;
+  }
 `
 
 export default CardContent
