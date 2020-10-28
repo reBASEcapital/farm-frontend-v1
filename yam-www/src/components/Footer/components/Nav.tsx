@@ -9,9 +9,7 @@ const Nav: React.FC = () => {
       <StyledLink href="https://www.rebase.capital">About</StyledLink>
       <StyledLink href="https://medium.com/rebase-capital">Newsroom</StyledLink>
       <StyledLink href="https://t.me/rebasechat">Telegram</StyledLink>
-      <StyledLink href="https://discord.com/invite/jBg5ZAz">Discord</StyledLink>
       <StyledLink href="https://github.com/reBASEcapital">&lt;&gt; Code</StyledLink>
-      <StyledLink href="mailto:relay@rebase.capital">Email</StyledLink>
     </StyledNav>
   )
 }
