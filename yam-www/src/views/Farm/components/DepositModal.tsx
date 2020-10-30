@@ -15,13 +15,14 @@ interface DepositModalProps extends ModalProps {
   max: BigNumber,
   onConfirm: (amount: string) => void,
   tokenName?: string,
-  updateAccounting?: Array<number>, 
+  updateAccounting?: Array<number>,
   unlockRate?: number,
   totalStakingShare?: number,
-  totalStaked?: number
+  totalStaked?: number,
+  userStaked?: number
 }
 
-const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, tokenName = '', updateAccounting, unlockRate, totalStakingShare, totalStaked }) => {
+const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, tokenName = '', updateAccounting, unlockRate, totalStakingShare, totalStaked, userStaked }) => {
   const [val, setVal] = useState('');
   const [pendingTx, setPendingTx] = useState(false)
 
@@ -31,7 +32,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
 
   const estimatedReward = useMemo(() => {
     if(parseFloat(val) && unlockRate){
-      return getEstimatedReward(2592000,parseFloat(val), totalStakingShare, totalStaked, updateAccounting, unlockRate)
+      return getEstimatedReward(2592000,parseFloat(val), totalStakingShare, totalStaked, updateAccounting, unlockRate, userStaked)
     } else {
       return 0;
     }
@@ -69,7 +70,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
         max={fullBalance}
         symbol={tokenName}
       />
-      {estimatedReward && 
+      {estimatedReward &&
       <StyledMaxText>{estimatedReward} Rebase Estimated Monthly Rewards</StyledMaxText>
       }
       <ModalActions>
