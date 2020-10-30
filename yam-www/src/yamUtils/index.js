@@ -295,8 +295,8 @@ export const getUnlockRate = async (rebasePool, seconds) => {
 }
 
 export const getEstimatedReward = (seconds, amount, totalStakingShares,totalStaked, updatedValues, unlockRate, userStaked ) => {
-  let totalStakingShareSeconds = updatedValues[3];
-  let stakingShareSeconds = updatedValues[2];
+  let totalStakingShareSeconds = new BigNumber(updatedValues[3]).toNumber();
+  let stakingShareSeconds = new BigNumber(updatedValues[2]).toNumber();
   let i = userStaked  * totalStakingShares / (totalStaked/1000000000000000000);
   let o = amount  * totalStakingShares / (totalStaked/1000000000000000000),
       a = (stakingShareSeconds + (i + o) * seconds) / (totalStakingShareSeconds + (totalStakingShares + o) * seconds);

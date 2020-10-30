@@ -68,7 +68,7 @@ const Stake: React.FC<StakeProps> = ({
       unlockRate={unlockRate}
       totalStakingShare={totalStakingShare}
       totalStaked={totalStaked}
-      userStaked={stakedBalance}
+      userStaked={stakedBalance.toNumber()}
       onConfirm={async (val: string) =>{
         await onStake(val);
         setTrigger((old) => !old);
