@@ -28,6 +28,10 @@ import { getDisplayBalance, getFullDisplayBalanceBigInt } from '../../../utils/f
 
 import DepositModal from './DepositModal'
 import WithdrawModal from './WithdrawModal'
+import useUpdateAccounting from '../../../hooks/useUpdateAccounting'
+import useUnlockRate from '../../../hooks/useUnlockRate'
+import useTotalStakingShare from '../../../hooks/useTotalStakingShare'
+import useTotalStaked from '../../../hooks/useTotalStaked'
 
 interface StakeProps {
   poolContract: Contract,
@@ -52,10 +56,18 @@ const Stake: React.FC<StakeProps> = ({
   const { onStake } = useStake(poolContract, tokenName);
   const { onUnstake } = useUnstake(poolContract)
   const { onRebaseHarvest } = useRebaseHarvest(poolContract)
+  const updateAccounting = useUpdateAccounting(poolContract);
+  const unlockRate = useUnlockRate(poolContract, 2592000);
+  const totalStakingShare = useTotalStakingShare(poolContract).toNumber();
+  const totalStaked = useTotalStaked(poolContract).toNumber();
 
   const [onPresentDeposit] = useModal(
     <DepositModal
       max={tokenBalance}
+      updateAccounting={updateAccounting}
+      unlockRate={unlockRate}
+      totalStakingShare={totalStakingShare}
+      totalStaked={totalStaked}
       onConfirm={async (val: string) =>{
         await onStake(val);
         setTrigger((old) => !old);

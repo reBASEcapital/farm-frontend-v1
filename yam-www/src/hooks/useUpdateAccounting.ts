@@ -1,6 +1,4 @@
 import { useCallback, useEffect, useState } from 'react'
-
-import BigNumber from 'bignumber.js'
 import { Contract } from "web3-eth-contract"
 
 import { getUpdateAccounting } from '../yamUtils'
