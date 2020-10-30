@@ -272,6 +272,15 @@ export const getUnlockSchedules = async (rebasePool, index) => {
 }
 
 
+export const getTotalStakingShares= async (rebasePool) => {
+  return  await rebasePool.methods.totalStakingShares().call()
+}
+
+export const getUpdateAccounting= async (rebasePool) => {
+  return  await rebasePool.methods.updateAccounting().call()
+}
+
+
 export const getUnlockRate = async (rebasePool, seconds) => {
   const totalLocked = await getTotalLocked(rebasePool);
   const totalLockedShares = await getTotalLockedShares(rebasePool);
@@ -284,6 +293,15 @@ export const getUnlockRate = async (rebasePool, seconds) => {
   return  new BigNumber(p.reduce((t, e) => (t += Math.min(Math.max(e.endAtSec - now, 0), seconds) / e.durationSec * e.initialLockedShares) && t, 0)).div( totalLockedShares).multipliedBy( totalLocked).toNumber();
 
 }
+
+export const getEstimatedReward = async (rebasePool, seconds, address, amount, totalStakingShares,totalStaked, updatedValues, unlockRate ) => {
+  let totalStakingShareSeconds = updatedValues[3];
+  let stakingShareSeconds = updatedValues[2];
+  let o = amount * totalStakingShares / totalStaked,
+      a = (stakingShareSeconds + (o) * seconds) / (totalStakingShareSeconds + (totalStakingShares + o) * seconds);
+  return  unlockRate * a
+}
+
 
 
 
