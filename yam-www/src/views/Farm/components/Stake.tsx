@@ -32,6 +32,8 @@ import useUpdateAccounting from '../../../hooks/useUpdateAccounting'
 import useUnlockRate from '../../../hooks/useUnlockRate'
 import useTotalStakingShare from '../../../hooks/useTotalStakingShare'
 import useTotalStaked from '../../../hooks/useTotalStaked'
+import Spacer from '../../../components/Spacer'
+import useEstimatedRewardBalance from '../../../hooks/useEstimatedRewardBalance'
 
 interface StakeProps {
   poolContract: Contract,
@@ -60,6 +62,7 @@ const Stake: React.FC<StakeProps> = ({
   const unlockRate = useUnlockRate(poolContract, 2592000);
   const totalStakingShare = useTotalStakingShare(poolContract).toNumber();
   const totalStaked = useTotalStaked(poolContract).toNumber();
+  const totalWithdraw = useEstimatedRewardBalance(poolContract, stakedBalance.multipliedBy(1000000000000000000)).div(1000000000);
 
   const [onPresentDeposit] = useModal(
     <DepositModal
@@ -80,6 +83,7 @@ const Stake: React.FC<StakeProps> = ({
   const [onPresentWithdraw] = useModal(
     <WithdrawModal
       max={stakedBalance}
+      poolContract={poolContract}
       onConfirm={async (val: string) =>{
           await onUnstake(val);
           setTrigger((old) => !old);
@@ -146,6 +150,17 @@ const Stake: React.FC<StakeProps> = ({
               </>
             )}
           </StyledCardActions>
+          {!totalWithdraw.isEqualTo(new BigNumber(0)) && 
+          <StyledInfoCard>
+            <StyledInfoCardContent>
+              <InfoCardTitle>
+                  <div>Your Estimated Rewards</div>
+              </InfoCardTitle>
+              <Spacer size="sm"/>
+              <b>{totalWithdraw.toNumber()} REBASE</b>
+            </StyledInfoCardContent>
+          </StyledInfoCard>
+          }
           <StyledActionSpacer/>
         </StyledCardContentInner>
       </CardContent>
@@ -180,5 +195,54 @@ const StyledCardContentInner = styled.div`
   flex-direction: column;
   justify-content: space-between;
 `
+
+const StyledInfoCard = styled.div`
+display: flex;
+align-self: flex-start;
+max-height: 90px;
+width: 100%;
+background-color: ${props => props.theme.color.grey[900]};
+border: 1px solid ${props => props.theme.color.grey[500]};
+border-radius: 12px;
+color: ${props => props.theme.color.grey[500]};
+cursor: pointer;
+flex: 1;
+flex-direction: column;
+justify-content: space-between;
+border-radius: 12px;
+margin: ${props => props.theme.spacing[4]}px 0;
+&:hover {
+    background-color: ${props => props.theme.color.grey[800]};
+  }
+`
+
+const StyledInfoCardContent =  styled.div`
+display: flex;
+flex: 1;
+flex-direction: column;
+color: ${props => props.theme.color.grey[100]};
+padding: ${props => props.theme.spacing[1]}px ${props => props.theme.spacing[2]}px;
+@media (max-width: 768px) {
+    padding: ${props => props.theme.spacing[1]}px ${props => props.theme.spacing[1]}px;
+  }
+`
+
+const InfoCardTitle =  styled.div`
+display: flex;
+flex: 1;
+flex-direction: row;
+justify-content: space-between;
+`
+
+const Info = styled.div`
+display: flex;
+border: 1px solid ${props => props.theme.color.white};
+border-radius: 50%;
+width: 18px;
+height: 18px;
+align-items: center;
+justify-content: center;
+`
+
 
 export default Stake

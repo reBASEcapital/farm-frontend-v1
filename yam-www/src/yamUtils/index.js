@@ -309,7 +309,6 @@ export const getEstimatedReward = (seconds, amount, totalStakingShares,totalStak
 
 
 export const getSubtractEstimatedReward = (seconds, amount, totalStakingShares,totalStaked, updatedValues, unlockRate, userStaked ) => {
-  if (userStaked === n) return 0;
   let totalStakingShareSeconds = new BigNumber(updatedValues[3]).toNumber();
   let stakingShareSeconds = new BigNumber(updatedValues[2]).toNumber();
   let i = userStaked  * totalStakingShares / (totalStaked/1000000000000000000);

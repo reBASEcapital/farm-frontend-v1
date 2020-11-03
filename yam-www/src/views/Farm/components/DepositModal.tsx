@@ -10,6 +10,7 @@ import TokenInput from '../../../components/TokenInput'
 import { default as iziToast } from 'izitoast';
 import { getFullDisplayBalance } from '../../../utils/formatBalance'
 import { getEstimatedReward } from '../../../yamUtils'
+import Spacer from '../../../components/Spacer'
 
 interface DepositModalProps extends ModalProps {
   max: BigNumber,
@@ -71,7 +72,15 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
         symbol={tokenName}
       />
       {estimatedReward &&
-      <StyledMaxText>{estimatedReward} Rebase Estimated Monthly Rewards</StyledMaxText>
+      <StyledInfoCard>
+      <StyledInfoCardContent>
+        <InfoCardTitle>
+            <div>Your Estimated Rewards</div>
+        </InfoCardTitle>
+        <Spacer size="sm"/>
+        <b>{estimatedReward} REBASE / Month</b>
+      </StyledInfoCardContent>
+    </StyledInfoCard>    
       }
       <ModalActions>
         <Button text="Cancel" variant="secondary" onClick={onDismiss} />
@@ -95,6 +104,51 @@ const StyledMaxText = styled.div`
   font-weight: 700;
   height: 44px;
   justify-content: flex-end;
+`
+
+const StyledInfoCard = styled.div`
+display: flex;
+background-color: ${props => props.theme.color.grey[900]};
+border: 1px solid ${props => props.theme.color.grey[500]};
+border-radius: 12px;
+color: ${props => props.theme.color.grey[500]};
+cursor: pointer;
+flex: 1;
+flex-direction: column;
+justify-content: space-between;
+border-radius: 12px;
+margin: ${props => props.theme.spacing[4]}px;
+&:hover {
+    background-color: ${props => props.theme.color.grey[800]};
+  }
+`
+
+const StyledInfoCardContent =  styled.div`
+display: flex;
+flex: 1;
+flex-direction: column;
+color: ${props => props.theme.color.grey[100]};
+padding: ${props => props.theme.spacing[1]}px ${props => props.theme.spacing[2]}px;
+@media (max-width: 768px) {
+    padding: ${props => props.theme.spacing[1]}px ${props => props.theme.spacing[1]}px;
+  }
+`
+
+const InfoCardTitle =  styled.div`
+display: flex;
+flex: 1;
+flex-direction: row;
+justify-content: space-between;
+`
+
+const Info = styled.div`
+display: flex;
+border: 1px solid ${props => props.theme.color.white};
+border-radius: 50%;
+width: 18px;
+height: 18px;
+align-items: center;
+justify-content: center;
 `
 
 export default DepositModal
