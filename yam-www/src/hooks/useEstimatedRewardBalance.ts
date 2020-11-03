@@ -4,22 +4,23 @@ import BigNumber from 'bignumber.js'
 import { Contract } from "web3-eth-contract"
 
 import { getUnstakeQuery } from '../yamUtils'
+import { useWallet } from 'use-wallet'
 
 const useEstimatedRewardBalance = (poolContract: Contract, balance: BigNumber) => {
     const [reward, setReward] = useState(new BigNumber(0))
-
+    const { account }: { account: string } = useWallet()
     const fetchReward = useCallback(async () => {
-        const reward = await getUnstakeQuery(poolContract, balance)
+        const reward = await getUnstakeQuery(poolContract, balance, account)
         setReward(new BigNumber(reward))
-    }, [poolContract, balance, setReward])
+    }, [account, poolContract, balance])
 
     useEffect(() => {
-        if (poolContract) {
+        if (account && poolContract) {
             fetchReward()
             let refreshInterval = setInterval(fetchReward, 10000)
             return () => clearInterval(refreshInterval)
         }
-    }, [poolContract, fetchReward])
+    }, [account, poolContract, balance])
 
     return balance.isEqualTo(new BigNumber(0)) ? new BigNumber(0) : reward;
 }

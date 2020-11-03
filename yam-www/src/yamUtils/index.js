@@ -280,8 +280,8 @@ export const getUpdateAccounting= async (rebasePool) => {
   return  await rebasePool.methods.updateAccounting().call()
 }
 
-export const getUnstakeQuery= async (rebasePool, balance) => {
-  return   await rebasePool.methods.unstakeQuery(balance).call();
+export const getUnstakeQuery= async (rebasePool, balance, account) => {
+  return   await rebasePool.methods.unstakeQuery(balance.toString()).call({from: account});
 }
 
 

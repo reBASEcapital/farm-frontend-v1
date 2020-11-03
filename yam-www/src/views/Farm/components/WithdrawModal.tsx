@@ -33,11 +33,11 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
     return getFullDisplayBalance(max)
   }, [max])
 
-  const withdraw = useEstimatedRewardBalance(poolContract, new BigNumber((parseFloat(val) || 0)).multipliedBy(1000000000000000000)).div(1000000000)
+  const withdraw = useEstimatedRewardBalance(poolContract, valBigN).div(1000000000)
 
   const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     setVal(e.currentTarget.value)
-    setValBigN(new BigNumber((parseFloat(e.currentTarget.value) || 0)).multipliedBy(1000000000000000000).div(1000000000));
+    setValBigN(new BigNumber((parseFloat(e.currentTarget.value) || 0)).multipliedBy(1000000000000000000));
   }, [setVal])
 
   const handleSelectMax = useCallback(() => {

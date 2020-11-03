@@ -62,8 +62,7 @@ const Stake: React.FC<StakeProps> = ({
   const unlockRate = useUnlockRate(poolContract, 2592000);
   const totalStakingShare = useTotalStakingShare(poolContract).toNumber();
   const totalStaked = useTotalStaked(poolContract).toNumber();
-  const totalWithdraw = useEstimatedRewardBalance(poolContract, stakedBalance.multipliedBy(1000000000000000000)).div(1000000000);
-
+  const totalWithdraw = useEstimatedRewardBalance(poolContract, stakedBalance).div(1000000000);
   const [onPresentDeposit] = useModal(
     <DepositModal
       max={tokenBalance}
