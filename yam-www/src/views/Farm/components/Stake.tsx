@@ -20,8 +20,7 @@ import useStake from '../../../hooks/useStake'
 import useStakedBalance from '../../../hooks/useStakedBalance'
 import useTokenBalance from '../../../hooks/useTokenBalance'
 import useUnstake from '../../../hooks/useUnstake'
-import useRebaseHarvest from '../../../hooks/useRebaseHarvest'
-
+import useAPY from '../../../hooks/useAPY'
 
 import { getDisplayBalance, getFullDisplayBalanceBigInt } from '../../../utils/formatBalance'
 
@@ -57,7 +56,7 @@ const Stake: React.FC<StakeProps> = ({
 
   const { onStake } = useStake(poolContract, tokenName);
   const { onUnstake } = useUnstake(poolContract)
-  const { onRebaseHarvest } = useRebaseHarvest(poolContract)
+  const apy = useAPY(poolContract, tokenContract)
   const updateAccounting = useUpdateAccounting(poolContract);
   const unlockRate = useUnlockRate(poolContract, 2592000);
   const totalStakingShare = useTotalStakingShare(poolContract).toNumber();
@@ -91,19 +90,6 @@ const Stake: React.FC<StakeProps> = ({
     />
   )
 
-  const handleRebaseHarvest = useCallback(async ( val: BigNumber) => {
-    try {
-      const newVal = getFullDisplayBalanceBigInt(val)
-      const amount = newVal.toFixed()
-      //const newVal = getFullDisplayBalanceBigInt(val).multipliedBy(.01)
-      //const amount = newVal.toFixed()
-      const txHash = await onRebaseHarvest(amount)
-      setTrigger((old) => !old);
-    } catch (e) {
-      console.log(e)
-    }
-  }, [onRebaseHarvest])
-
   const handleApprove = useCallback(async () => {
     try {
       setRequestedApproval(true)
@@ -125,6 +111,9 @@ const Stake: React.FC<StakeProps> = ({
             <CardIcon>🌱</CardIcon>
             <Value value={getDisplayBalance(stakedBalance)} />
             <Label text={`${tokenName} Staked`} />
+            {!apy && <Value value={`--.--%`} />}
+            {apy && <Value value={`${apy}%`} />}
+            <Label text={`APY`} />
           </StyledCardHeader>
           <StyledCardActions>
             {!allowance.toNumber() ? (
@@ -135,21 +124,21 @@ const Stake: React.FC<StakeProps> = ({
               />
             ) : (
               <>
-                <Button onClick={() => handleRebaseHarvest(stakedBalance)} text="Harvest" disabled={stakedBalance.eq(new BigNumber(0))} />
+                <StyledActionSpacer />
+                <Button
+                    text="Stake"
+                    onClick={onPresentDeposit}
+                />
                 <StyledActionSpacer />
                 <Button
                     disabled={stakedBalance.eq(new BigNumber(0))}
                     text="Unstake"
                     onClick={onPresentWithdraw}
                 />
-                <StyledActionSpacer />
-                  <IconButton onClick={onPresentDeposit}>
-                    <AddIcon />
-                  </IconButton>
               </>
             )}
           </StyledCardActions>
-          {!totalWithdraw.isEqualTo(new BigNumber(0)) && 
+          {!totalWithdraw.isEqualTo(new BigNumber(0)) &&
           <StyledInfoCard>
             <StyledInfoCardContent>
               <InfoCardTitle>
@@ -161,6 +150,8 @@ const Stake: React.FC<StakeProps> = ({
           </StyledInfoCard>
           }
           <StyledActionSpacer/>
+          <StyledDisclaimer>APY is estimated for a new deposit over the next 60 days, and does not account for gains or
+            losses from holding liquidity tokens</StyledDisclaimer>
         </StyledCardContentInner>
       </CardContent>
     </Card>
@@ -227,21 +218,23 @@ padding: ${props => props.theme.spacing[1]}px ${props => props.theme.spacing[2]}
 `
 
 const InfoCardTitle =  styled.div`
-display: flex;
-flex: 1;
-flex-direction: row;
-justify-content: space-between;
-`
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  `
 
 const Info = styled.div`
-display: flex;
-border: 1px solid ${props => props.theme.color.white};
-border-radius: 50%;
-width: 18px;
-height: 18px;
-align-items: center;
-justify-content: center;
+  display: flex;
+  border: 1px solid ${props => props.theme.color.white};
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  align-items: center;
+  justify-content: center;
 `
-
-
+const StyledDisclaimer = styled.div`
+  color: ${props => props.theme.color.grey[100]};
+  font-size: 0.6em;
+`
 export default Stake

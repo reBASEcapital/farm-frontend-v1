@@ -76,7 +76,8 @@ const Farms: React.FC = ({ children }) => {
           earnTokenAddress: Environment.rebase_ropsten,
           icon: ICON_FOR_POOL[poolKey],
           id: tokenKey,
-          sort: SORT_FOR_POOL[poolKey]
+          sort: SORT_FOR_POOL[poolKey],
+          provider: 'Uniswap'
         })
       } catch (e) {
         console.log(e)
