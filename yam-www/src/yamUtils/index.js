@@ -272,6 +272,19 @@ export const getUnlockSchedules = async (rebasePool, index) => {
 }
 
 
+export const getTotalStakingShares= async (rebasePool) => {
+  return  await rebasePool.methods.totalStakingShares().call()
+}
+
+export const getUpdateAccounting= async (rebasePool) => {
+  return  await rebasePool.methods.updateAccounting().call()
+}
+
+export const getUnstakeQuery= async (rebasePool, balance, account) => {
+  return   await rebasePool.methods.unstakeQuery(balance.toString()).call({from: account});
+}
+
+
 export const getUnlockRate = async (rebasePool, seconds) => {
   const totalLocked = await getTotalLocked(rebasePool);
   const totalLockedShares = await getTotalLockedShares(rebasePool);
@@ -284,6 +297,26 @@ export const getUnlockRate = async (rebasePool, seconds) => {
   return  new BigNumber(p.reduce((t, e) => (t += Math.min(Math.max(e.endAtSec - now, 0), seconds) / e.durationSec * e.initialLockedShares) && t, 0)).div( totalLockedShares).multipliedBy( totalLocked).toNumber();
 
 }
+
+export const getEstimatedReward = (seconds, amount, totalStakingShares,totalStaked, updatedValues, unlockRate, userStaked ) => {
+  let totalStakingShareSeconds = new BigNumber(updatedValues[3]).toNumber();
+  let stakingShareSeconds = new BigNumber(updatedValues[2]).toNumber();
+  let i = userStaked  * totalStakingShares / (totalStaked/1000000000000000000);
+  let o = amount  * totalStakingShares / (totalStaked/1000000000000000000),
+      a = (stakingShareSeconds + (i + o) * seconds) / (totalStakingShareSeconds + (totalStakingShares + o) * seconds);
+  return  unlockRate * a
+}
+
+
+export const getSubtractEstimatedReward = (seconds, amount, totalStakingShares,totalStaked, updatedValues, unlockRate, userStaked ) => {
+  let totalStakingShareSeconds = new BigNumber(updatedValues[3]).toNumber();
+  let stakingShareSeconds = new BigNumber(updatedValues[2]).toNumber();
+  let i = userStaked  * totalStakingShares / (totalStaked/1000000000000000000);
+  let o = amount  * totalStakingShares / (totalStaked/1000000000000000000),
+      a = (stakingShareSeconds + (i - o) * seconds) / (totalStakingShareSeconds + (totalStakingShares + o) * seconds);
+  return  unlockRate * a
+}
+
 
 
 

@@ -27,6 +27,12 @@ import { getDisplayBalance, getFullDisplayBalanceBigInt } from '../../../utils/f
 
 import DepositModal from './DepositModal'
 import WithdrawModal from './WithdrawModal'
+import useUpdateAccounting from '../../../hooks/useUpdateAccounting'
+import useUnlockRate from '../../../hooks/useUnlockRate'
+import useTotalStakingShare from '../../../hooks/useTotalStakingShare'
+import useTotalStaked from '../../../hooks/useTotalStaked'
+import Spacer from '../../../components/Spacer'
+import useEstimatedRewardBalance from '../../../hooks/useEstimatedRewardBalance'
 
 interface StakeProps {
   poolContract: Contract,
@@ -51,10 +57,19 @@ const Stake: React.FC<StakeProps> = ({
   const { onStake } = useStake(poolContract, tokenName);
   const { onUnstake } = useUnstake(poolContract)
   const apy = useAPY(poolContract, tokenContract)
-
+  const updateAccounting = useUpdateAccounting(poolContract);
+  const unlockRate = useUnlockRate(poolContract, 2592000);
+  const totalStakingShare = useTotalStakingShare(poolContract).toNumber();
+  const totalStaked = useTotalStaked(poolContract).toNumber();
+  const totalWithdraw = useEstimatedRewardBalance(poolContract, stakedBalance).div(1000000000);
   const [onPresentDeposit] = useModal(
     <DepositModal
       max={tokenBalance}
+      updateAccounting={updateAccounting}
+      unlockRate={unlockRate}
+      totalStakingShare={totalStakingShare}
+      totalStaked={totalStaked}
+      userStaked={stakedBalance.toNumber()}
       onConfirm={async (val: string) =>{
         await onStake(val);
         setTrigger((old) => !old);
@@ -66,6 +81,7 @@ const Stake: React.FC<StakeProps> = ({
   const [onPresentWithdraw] = useModal(
     <WithdrawModal
       max={stakedBalance}
+      poolContract={poolContract}
       onConfirm={async (val: string) =>{
           await onUnstake(val);
           setTrigger((old) => !old);
@@ -73,8 +89,6 @@ const Stake: React.FC<StakeProps> = ({
       tokenName={tokenName}
     />
   )
-
-
 
   const handleApprove = useCallback(async () => {
     try {
@@ -110,10 +124,8 @@ const Stake: React.FC<StakeProps> = ({
               />
             ) : (
               <>
-
                 <StyledActionSpacer />
                 <Button
-                    disabled={stakedBalance.eq(new BigNumber(0))}
                     text="Stake"
                     onClick={onPresentDeposit}
                 />
@@ -126,6 +138,17 @@ const Stake: React.FC<StakeProps> = ({
               </>
             )}
           </StyledCardActions>
+          {!totalWithdraw.isEqualTo(new BigNumber(0)) &&
+          <StyledInfoCard>
+            <StyledInfoCardContent>
+              <InfoCardTitle>
+                  <div>Your Estimated Rewards</div>
+              </InfoCardTitle>
+              <Spacer size="sm"/>
+              <b>{totalWithdraw.toNumber()} REBASE</b>
+            </StyledInfoCardContent>
+          </StyledInfoCard>
+          }
           <StyledActionSpacer/>
           <StyledDisclaimer>APY is estimated for a new deposit over the next 60 days, and does not account for gains or
             losses from holding liquidity tokens</StyledDisclaimer>
@@ -163,10 +186,55 @@ const StyledCardContentInner = styled.div`
   justify-content: space-between;
 `
 
+const StyledInfoCard = styled.div`
+display: flex;
+align-self: flex-start;
+max-height: 90px;
+width: 100%;
+background-color: ${props => props.theme.color.grey[900]};
+border: 1px solid ${props => props.theme.color.grey[500]};
+border-radius: 12px;
+color: ${props => props.theme.color.grey[500]};
+cursor: pointer;
+flex: 1;
+flex-direction: column;
+justify-content: space-between;
+border-radius: 12px;
+margin: ${props => props.theme.spacing[4]}px 0;
+&:hover {
+    background-color: ${props => props.theme.color.grey[800]};
+  }
+`
+
+const StyledInfoCardContent =  styled.div`
+display: flex;
+flex: 1;
+flex-direction: column;
+color: ${props => props.theme.color.grey[100]};
+padding: ${props => props.theme.spacing[1]}px ${props => props.theme.spacing[2]}px;
+@media (max-width: 768px) {
+    padding: ${props => props.theme.spacing[1]}px ${props => props.theme.spacing[1]}px;
+  }
+`
+
+const InfoCardTitle =  styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  `
+
+const Info = styled.div`
+  display: flex;
+  border: 1px solid ${props => props.theme.color.white};
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  align-items: center;
+  justify-content: center;
+`
 const StyledDisclaimer = styled.div`
   color: ${props => props.theme.color.grey[100]};
   font-size: 0.6em;
 `
-
-
 export default Stake
