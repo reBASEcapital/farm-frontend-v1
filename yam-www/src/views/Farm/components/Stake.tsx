@@ -31,8 +31,6 @@ import useUpdateAccounting from '../../../hooks/useUpdateAccounting'
 import useUnlockRate from '../../../hooks/useUnlockRate'
 import useTotalStakingShare from '../../../hooks/useTotalStakingShare'
 import useTotalStaked from '../../../hooks/useTotalStaked'
-import Spacer from '../../../components/Spacer'
-import useEstimatedRewardBalance from '../../../hooks/useEstimatedRewardBalance'
 
 interface StakeProps {
   poolContract: Contract,
@@ -61,7 +59,6 @@ const Stake: React.FC<StakeProps> = ({
   const unlockRate = useUnlockRate(poolContract, 2592000);
   const totalStakingShare = useTotalStakingShare(poolContract).toNumber();
   const totalStaked = useTotalStaked(poolContract).toNumber();
-  const totalWithdraw = useEstimatedRewardBalance(poolContract, stakedBalance).div(1000000000);
   const [onPresentDeposit] = useModal(
     <DepositModal
       max={tokenBalance}
@@ -111,47 +108,37 @@ const Stake: React.FC<StakeProps> = ({
             <CardIcon>🌱</CardIcon>
             <Value value={getDisplayBalance(stakedBalance)} />
             <Label text={`${tokenName} Staked`} />
-            {!apy && <Value value={`--.--%`} />}
-            {apy && <Value value={`${apy}%`} />}
+            {!parseFloat(apy) && <Value value={`--.--%`} />}
+            {!!parseFloat(apy) && <Value value={`${apy}%`} />}
             <Label text={`APY`} />
           </StyledCardHeader>
-          <StyledCardActions>
-            {!allowance.toNumber() ? (
-              <Button
-                disabled={requestedApproval}
-                onClick={handleApprove}
-                text={`Approve ${tokenName}`}
-              />
-            ) : (
-              <>
-                <StyledActionSpacer />
+          <div>
+            <StyledCardActions>
+              {!allowance.toNumber() ? (
                 <Button
-                    text="Stake"
-                    onClick={onPresentDeposit}
+                  disabled={requestedApproval}
+                  onClick={handleApprove}
+                  text={`Approve ${tokenName}`}
                 />
-                <StyledActionSpacer />
-                <Button
-                    disabled={stakedBalance.eq(new BigNumber(0))}
-                    text="Unstake"
-                    onClick={onPresentWithdraw}
-                />
-              </>
-            )}
-          </StyledCardActions>
-          {!totalWithdraw.isEqualTo(new BigNumber(0)) &&
-          <StyledInfoCard>
-            <StyledInfoCardContent>
-              <InfoCardTitle>
-                  <div>Your Estimated Rewards</div>
-              </InfoCardTitle>
-              <Spacer size="sm"/>
-              <b>{totalWithdraw.toNumber()} REBASE</b>
-            </StyledInfoCardContent>
-          </StyledInfoCard>
-          }
-          <StyledActionSpacer/>
-          <StyledDisclaimer>APY is estimated for a new deposit over the next 60 days, and does not account for gains or
-            losses from holding liquidity tokens</StyledDisclaimer>
+              ) : (
+                <>
+                  <StyledActionSpacer />
+                  <Button
+                      text="Stake"
+                      onClick={onPresentDeposit}
+                  />
+                  <StyledActionSpacer />
+                  <Button
+                      disabled={stakedBalance.eq(new BigNumber(0))}
+                      text="Unstake"
+                      onClick={onPresentWithdraw}
+                  />
+                </>
+              )}
+            </StyledCardActions>
+            <StyledDisclaimer>APY is estimated for a new deposit over the next 60 days, and does not account for gains or
+              losses from holding liquidity tokens</StyledDisclaimer>
+          </div>
         </StyledCardContentInner>
       </CardContent>
     </Card>
@@ -234,6 +221,7 @@ const Info = styled.div`
   justify-content: center;
 `
 const StyledDisclaimer = styled.div`
+  margin-top: 25px;
   color: ${props => props.theme.color.grey[100]};
   font-size: 0.6em;
 `

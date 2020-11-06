@@ -30,6 +30,7 @@ import BigNumber from "bignumber.js";
 import Button from "../../../components/Button";
 import useRebaseHarvest from '../../../hooks/useRebaseHarvest'
 import useStakedBalance from '../../../hooks/useStakedBalance'
+import useEstimatedRewardBalance from '../../../hooks/useEstimatedRewardBalance'
 
 interface StakeProps {
   poolContract: Contract,
@@ -71,7 +72,6 @@ const FarmStats: React.FC<StakeProps> = ({
   const totalStakedValue = getTotalStakedValue( totalValueLP, uniswapTotalSupply, geyserTotalSupply)
   //const rebaseGeyserBalance = useTokenBalanceLP(Environment.yamv2, tokenContract)
   //const usdcUniswapPairBalance = useTokenBalanceLP(Environment.usdc_ropsten, tokenContract)
-
   // Get the unlock rate
 
   const apy = useAPY(poolContract, tokenContract);
@@ -90,6 +90,7 @@ const FarmStats: React.FC<StakeProps> = ({
     }, [onRebaseHarvest]);
   const [trigger, setTrigger] = useState(true);
   const stakedBalance = useStakedBalance(poolContract, trigger)
+  const totalWithdraw = useEstimatedRewardBalance(poolContract, stakedBalance).div(1000000000);
 
 
   return (
@@ -100,6 +101,8 @@ const FarmStats: React.FC<StakeProps> = ({
                 <CardIcon><span><img src={farm} height="42" style={{ marginTop: -4 }} /></span></CardIcon>
                 <Value value={getDisplayBalance(rebaseBalance,9)} />
                 <Label text="REBASE Balance" />
+                <Value value={totalWithdraw.toNumber()} />
+                <Label text="REBASE to Harvest" />
                 {/*<Value value={rebasePriceDisplay && "$ " + rebasePriceDisplay} />
                 <Label text="REBASE Price" />*/}
                 {/*<Value value={totalStakedValue && `$ ${totalStakedValue}`} />
