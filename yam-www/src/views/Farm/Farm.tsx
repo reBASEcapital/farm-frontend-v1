@@ -100,7 +100,7 @@ const StyledFarm = styled.div`
 
 const StyledCardsWrapper = styled.div`
   display: flex;
-  width: 70vw;
+  max-width: 70vw;
   @media (max-width: 768px) {
     width: 90vw;
     align-items: flex-start;

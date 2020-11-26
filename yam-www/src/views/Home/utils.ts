@@ -55,3 +55,43 @@ export const getStats = async (yam: typeof Yam) => {
     totalSupply
   }
 }
+
+export const addHours = function(date, h) {
+  date.setTime(date.getTime() + (h*60*60*1000));
+  return date;
+}
+
+export function getCountDownInterval(date) {
+  let x = setInterval(function() {
+    const now = new Date().getTime();
+    const distance = date.getTime() - now;
+    // Time calculations for days, hours, minutes and seconds
+    const hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    // If the count down is finished, write some text
+    const element = document.getElementById("dashboard_countdown");
+    if (distance < 0 && element) {
+      clearInterval(x);
+      element.innerHTML = 'Expired';
+    } else {
+      if (!document.getElementById("dashboard_countdown")) {
+        clearInterval(x);
+      } else {
+        if (
+          element &&
+          !isNaN(hours) &&
+          !isNaN(minutes) &&
+          !isNaN(seconds)
+        ) {
+          element.innerHTML =
+            `${hours}:${minutes}:${seconds}`;
+        }
+      }
+    }
+  }, 1000);
+
+  return x;
+}

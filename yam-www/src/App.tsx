@@ -21,9 +21,11 @@ import useModal from './hooks/useModal'
 import FAQ from './views/FAQ'
 import Farms from './views/Farms'
 import Home from './views/Home'
+import Dashboard from './views/Dashboard'
 
 import theme from './theme'
 import Environment from './Environment'
+
 
 const App: React.FC = () => {
   const [mobileMenu, setMobileMenu] = useState(false)
@@ -48,9 +50,12 @@ const App: React.FC = () => {
           <Route path="/farms">
             <Farms />
           </Route>
-          <Route path="/faq">
-            <FAQ />
+          <Route path="/dashboard">
+            <Dashboard/>
           </Route>
+          {/* <Route path="/faq">
+            <FAQ />
+          </Route> */}
         </Switch>
       </Router>
       <Tutorial />

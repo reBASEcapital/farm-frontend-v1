@@ -32,6 +32,13 @@ const Home: React.FC = () => {
             to="/farms"
             variant="secondary"
            />
+           <Spacer size="sm"/>
+           <Button
+            size="sm"
+            text="Dashboard"
+            to="/dashboard"
+            variant="secondary"
+           />
         </div>
     </Page>
   )
