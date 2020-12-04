@@ -1,7 +1,8 @@
 import Axios from 'axios';
+import Environment from '../Environment';
 
 const http = Axios.create({
-    baseURL: 'http://52.33.23.161:3000/api',
+    baseURL: Environment.dashboardEndpoint,
     headers: {
         'Access-Control-Allow-Origin': '*'
     }

@@ -5,6 +5,7 @@ interface EnvironmentModel {
 const DEV: EnvironmentModel = {
   accountUrl: "https://ropsten.etherscan.io/address/",
   rpcUrl: "https://ropsten.infura.io/v3/442d79a8a4a9491e90ae8b324a366c2b",
+  dashboardEndpoint: "http://52.33.23.161:3000/api",
   chainId: 3,
   UNIRebase: "0x1d9967FA5D1F54a547afAec3B0362046F67a3493",
   yam: "0x0e2298e3b3390e3b945a5456fbf59ecc3f55da16",
@@ -18,6 +19,7 @@ const DEV: EnvironmentModel = {
 const PROD: EnvironmentModel = {
   accountUrl: "https://etherscan.io/address/",
   rpcUrl: "https://mainnet.eth.aragon.network/",
+  dashboardEndpoint: "http://54.159.171.107/api",
   chainId: 1,
   UNIRebase: "0x373483108f1f0aeaf1b56a73796f9dfa9824963c",
   yam: "0x0e2298e3b3390e3b945a5456fbf59ecc3f55da16",
