@@ -19,7 +19,7 @@ const DEV: EnvironmentModel = {
 const PROD: EnvironmentModel = {
   accountUrl: "https://etherscan.io/address/",
   rpcUrl: "https://mainnet.eth.aragon.network/",
-  dashboardEndpoint: "https://api.rebase.capital/api",
+  dashboardEndpoint: "http://api.rebase.capital/api",
   chainId: 1,
   UNIRebase: "0x373483108f1f0aeaf1b56a73796f9dfa9824963c",
   yam: "0x0e2298e3b3390e3b945a5456fbf59ecc3f55da16",
