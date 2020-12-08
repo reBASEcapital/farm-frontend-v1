@@ -41,7 +41,7 @@ const Dashboard: React.FC = () => {
   return (
     <Page>
       <StyledDashboard>
-        <p>REBASE on ROPSTEN</p>
+        <p>&nbsp;</p>
         <StyledCardsWrapper>
           <StyledCardWrapper>
             <DashboardInfoCard title="Oracle Rate" info={data?.length ? data[0].price : ""}/>
@@ -64,9 +64,9 @@ const Dashboard: React.FC = () => {
         <Spacer size="lg" />
         <StyledCardsWrapper>
         <StyledCardWrapper>
-            <DashboardChartCard title="Rate History">
+            <DashboardChartCard title="Supply History">
               <Chart
-                chartKey="rate_history"
+                chartKey="supply_history"
                 data={data.reduce((total, current) => {
                   total.push({x: new Date(current.time), y: current.totalsupply_after})
                   return total
@@ -91,9 +91,9 @@ const Dashboard: React.FC = () => {
         <Spacer size="lg" />
         <StyledCardsWrapper>
           <StyledCardWrapper>
-            <DashboardChartCard title="Supply History">
+            <DashboardChartCard title="Rate History">
               <Chart
-                chartKey="supply_history"
+                chartKey="rate_history"
                 data={data.reduce((total, current) => {
                   total.push({x: new Date(current.time), y: current.price})
                   return total
