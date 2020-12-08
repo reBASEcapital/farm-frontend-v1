@@ -31,8 +31,8 @@ const Dashboard: React.FC = () => {
       const lastRebase = data.find(i => i.rebase_hash)
       if(lastRebase){
         const lastRebaseDate = new Date(lastRebase.time)
-        const hours = Math.abs(lastRebaseDate.valueOf() - new Date().valueOf()) / 36e5;
-        getCountDownInterval((addHours(lastRebaseDate, Math.ceil(hours))));
+        const days = Math.abs(lastRebaseDate.valueOf() - new Date().valueOf()) / (36e5*24);
+        getCountDownInterval((addHours(lastRebaseDate, Math.ceil(days)*24)));
       }
 
     }
@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
         <p>&nbsp;</p>
         <StyledCardsWrapper>
           <StyledCardWrapper>
-            <DashboardInfoCard title="Oracle Rate" info={data?.length ? data[0].price : ""}/>
+            <DashboardInfoCard title="Oracle Rate" info={data?.length ? '$'+ data[0].price.toFixed(6) : ""}/>
           </StyledCardWrapper>
             <Spacer />
           <StyledCardWrapper>
