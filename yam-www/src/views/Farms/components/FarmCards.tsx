@@ -31,7 +31,7 @@ const FarmCards: React.FC = () => {
     if(farms){
       setRows(farms.reduce<Farm[][]>((farmRows, farm) => {
         const newFarmRows = [...farmRows]
-        if (newFarmRows[newFarmRows.length - 1].length === 2) {
+        if (newFarmRows[newFarmRows.length - 1].length === 3) {
           newFarmRows.push([farm])
         } else {
           newFarmRows[newFarmRows.length - 1].push(farm)
@@ -163,7 +163,6 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, ethereum }) => {
                   text={poolActive ? 'TRADE' : undefined}
                   href={`https://uniswap.info/pair/${farm.depositTokenAddress}`}
               >
-                {console.log(farm)}
                 {!poolActive && <Countdown date={new Date(startTime * 1000)} renderer={renderer} />}
               </Button>
           }

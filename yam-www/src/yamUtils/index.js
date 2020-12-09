@@ -120,14 +120,7 @@ export const approve = async (tokenContract, poolContract, account) => {
 }
 
 export const getPoolContracts = async (yam) => {
-  const pools = Object.keys(yam.contracts)
-    .filter(c => c.indexOf('_pool') !== -1)
-    .reduce((acc, cur) => {
-      const newAcc = { ...acc }
-      newAcc[cur] = yam.contracts[cur]
-      return newAcc
-    }, {})
-  return pools
+  return yam.contracts.pools
 }
 
 export const getEarned = async (yam, pool, account) => {

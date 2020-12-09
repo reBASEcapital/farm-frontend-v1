@@ -25,7 +25,6 @@ import Value from '../../../components/Value'
 import Label from '../../../components/Label'
 import { getUnlockRate } from '../../../yamUtils'
 import ReactTooltip from 'react-tooltip'
-import { currencyMap } from '../../../utils'
 import BigNumber from "bignumber.js";
 import Button from "../../../components/Button";
 import useRebaseHarvest from '../../../hooks/useRebaseHarvest'
@@ -35,11 +34,13 @@ import useEstimatedRewardBalance from '../../../hooks/useEstimatedRewardBalance'
 interface StakeProps {
   poolContract: Contract,
   tokenContract: Contract,
+  tokenAddress: string,
 }
 
 const FarmStats: React.FC<StakeProps> = ({
   poolContract,
   tokenContract,
+  tokenAddress
 }) => {
 
   const rebaseBalance = useTokenBalance(Environment.yamv2)
@@ -48,7 +49,7 @@ const FarmStats: React.FC<StakeProps> = ({
   const rebaseUniswapPairBalance = useTokenBalanceLP(Environment.yamv2, tokenContract)
 
   //acquiring the total amount of usdc in a the uniswap liquidity pool on UniSwap. This is not the Geyser.
-  const usdcUniswapPairBalance = useTokenBalanceLP(Environment.usdc_ropsten, tokenContract)
+  const usdcUniswapPairBalance = useTokenBalanceLP(tokenAddress, tokenContract)
 
   //values obtained from the rebase uniswap pool is not formatted correctly. use 9 decimails
   const rebaseUniswapPairBalanceDisplay= getDisplayBalance( rebaseUniswapPairBalance, 9)
@@ -71,7 +72,7 @@ const FarmStats: React.FC<StakeProps> = ({
   //get the total staked value by taking the total value and multiplying by the ratio of geyser over uniwsap total
   const totalStakedValue = getTotalStakedValue( totalValueLP, uniswapTotalSupply, geyserTotalSupply)
   //const rebaseGeyserBalance = useTokenBalanceLP(Environment.yamv2, tokenContract)
-  //const usdcUniswapPairBalance = useTokenBalanceLP(Environment.usdc_ropsten, tokenContract)
+  //const usdcUniswapPairBalance = useTokenBalanceLP(Environment.usdc, tokenContract)
   // Get the unlock rate
 
   const apy = useAPY(poolContract, tokenContract);

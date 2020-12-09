@@ -5,6 +5,7 @@ export interface Farm {
   name: string,
   depositToken: string,
   depositTokenAddress: string,
+  tokenAddress: string,
   earnToken: string,
   earnTokenAddress: string,
   icon: React.ReactNode,

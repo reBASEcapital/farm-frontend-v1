@@ -4,33 +4,14 @@ import * as Types from "./types.js";
 import { SUBTRACT_GAS_LIMIT, addressMap } from './constants.js';
 
 import ERC20Json from '../clean_build/contracts/IERC20.json';
-import YAMv2Json from '../clean_build/contracts/YAMv2.json';
 import RebaseJson from '../clean_build/contracts/Rebase.json';
-import YAMv2MigrationJson from '../clean_build/contracts/YAMv2Migration.json';
-import YAMJson from '../clean_build/contracts/YAMDelegator.json';
-import YAMRebaserJson from '../clean_build/contracts/YAMRebaser.json';
-import YAMReservesJson from '../clean_build/contracts/YAMReserves.json';
-import YAMGovJson from '../clean_build/contracts/GovernorAlpha.json';
-import YAMTimelockJson from '../clean_build/contracts/Timelock.json';
-import WETHJson from './weth.json';
-import SNXJson from './snx.json';
 import UNIFactJson from './unifact2.json';
 import UNIPairJson from './uni2.json';
 import UNIRouterJson from './uniR.json';
 import Environment from '../../Environment';
 
 //TODO:Hacking out all of the pools except for AMPL
-import AMPLPoolJson from '../clean_build/contracts/YAMAMPLPool.json';
 import RebasePoolJson from '../clean_build/contracts/TokenGeyser.json';
-/*
-import WETHPoolJson from '../clean_build/contracts/YAMETHPool.json';
-import YFIPoolJson from '../clean_build/contracts/YAMYFIPool.json';
-import MKRPoolJson from '../clean_build/contracts/YAMMKRPool.json';
-import LENDPoolJson from '../clean_build/contracts/YAMLENDPool.json';
-import COMPPoolJson from '../clean_build/contracts/YAMCOMPPool.json';
-import SNXPoolJson from '../clean_build/contracts/YAMSNXPool.json';
-import LINKPoolJson from '../clean_build/contracts/YAMLINKPool.json';
-*/
 
 import IncJson from '../clean_build/contracts/YAMIncentivizer.json';
 
@@ -51,50 +32,19 @@ export class Contracts {
     this.uni_pair = new this.web3.eth.Contract(UNIPairJson);
     this.uni_router = new this.web3.eth.Contract(UNIRouterJson);
     this.uni_fact = new this.web3.eth.Contract(UNIFactJson);
-    this.yfi = new this.web3.eth.Contract(ERC20Json.abi);
-    this.UNIAmpl = new this.web3.eth.Contract(ERC20Json.abi);
-    this.UNIRebase = new this.web3.eth.Contract(ERC20Json.abi);
-    this.ycrv = new this.web3.eth.Contract(ERC20Json.abi);
-    this.yam = new this.web3.eth.Contract(YAMJson.abi);
 
   //TODO:Hacking out all of the pools except for AMPL
-    //this.ampl_pool = new this.web3.eth.Contract(AMPLPoolJson.abi);
-    this.rebase_pool = new this.web3.eth.Contract(RebasePoolJson.abi, Environment.tokengeyser_ropsten);
-    /*
-      this.yfi_pool = new this.web3.eth.Contract(YFIPoolJson.abi);
-      this.eth_pool = new this.web3.eth.Contract(WETHPoolJson.abi);
-      this.ycrv_pool = new this.web3.eth.Contract(IncJson.abi);
-
-      this.comp_pool = new this.web3.eth.Contract(COMPPoolJson.abi);
-      this.link_pool = new this.web3.eth.Contract(LINKPoolJson.abi);
-      this.lend_pool = new this.web3.eth.Contract(LENDPoolJson.abi);
-      this.snx_pool = new this.web3.eth.Contract(SNXPoolJson.abi);
-      this.mkr_pool = new this.web3.eth.Contract(MKRPoolJson.abi);
-  */
-    this.comp = new this.web3.eth.Contract(ERC20Json.abi);
-    this.link = new this.web3.eth.Contract(ERC20Json.abi);
-    this.lend = new this.web3.eth.Contract(ERC20Json.abi);
-    this.snx = new this.web3.eth.Contract(ERC20Json.abi);
-    this.mkr = new this.web3.eth.Contract(ERC20Json.abi);
-    this.yam_ycrv_uni_lp = new this.web3.eth.Contract(ERC20Json.abi);
-
+    this.rebase_usd_pool = new this.web3.eth.Contract(RebasePoolJson.abi, Environment.tokengeyser_rebase_usd);
+    this.rebase_eth_pool = new this.web3.eth.Contract(RebasePoolJson.abi, Environment.tokengeyser_rebase_eth);
+    this.rebase_dai_pool = new this.web3.eth.Contract(RebasePoolJson.abi, Environment.tokengeyser_rebase_dai);
+   
     this.erc20 = new this.web3.eth.Contract(ERC20Json.abi);
 
     //TODO:Hacking out all of the pools except for AMPL
-    //this.pool = new this.web3.eth.Contract(LENDPoolJson.abi);
 
-    this.rebase = new this.web3.eth.Contract(RebaseJson.abi, Environment.rebase_ropsten);
+    this.rebase = new this.web3.eth.Contract(RebaseJson.abi, Environment.rebase);
 
-    this.yamV2 = new this.web3.eth.Contract(YAMv2Json.abi);
-    this.yamV2migration = new this.web3.eth.Contract(YAMv2MigrationJson.abi);
-
-    this.rebaser = new this.web3.eth.Contract(YAMRebaserJson.abi);
-    this.reserves = new this.web3.eth.Contract(YAMReservesJson.abi);
-    this.gov = new this.web3.eth.Contract(YAMGovJson.abi);
-    this.timelock = new this.web3.eth.Contract(YAMTimelockJson.abi);
-    this.weth = new this.web3.eth.Contract(WETHJson);
     this.setProvider(provider, networkId);
-    this.setDefaultAccount(this.web3.eth.defaultAccount);
   }
 
 
@@ -102,32 +52,11 @@ export class Contracts {
     provider,
     networkId
   ) {
-    this.yam.setProvider(provider);
-    this.rebaser.setProvider(provider);
-    this.reserves.setProvider(provider);
-    this.gov.setProvider(provider);
-    this.timelock.setProvider(provider);
     const contracts = [
-      { contract: this.yam, json: YAMJson },
-      { contract: this.rebaser, json: YAMRebaserJson },
-      { contract: this.reserves, json: YAMReservesJson },
-      { contract: this.gov, json: YAMGovJson },
-      { contract: this.timelock, json: YAMTimelockJson },
-     //{ contract: this.ampl_pool, json: AMPLPoolJson },
-      { contract: this.rebase_pool, json: RebasePoolJson },
-  /*
-      { contract: this.ycrv_pool, json: IncJson },
-      { contract: this.eth_pool, json: WETHPoolJson },
-      { contract: this.yfi_pool, json: YFIPoolJson },
-      { contract: this.snx_pool, json: SNXPoolJson },
-      { contract: this.mkr_pool, json: MKRPoolJson },
-      { contract: this.lend_pool, json: LENDPoolJson },
-      { contract: this.link_pool, json: LINKPoolJson },
-      { contract: this.comp_pool, json: COMPPoolJson },
-   */
-      { contract: this.yamV2, json: YAMv2Json },
+      { contract: this.rebase_usd_pool, json: RebasePoolJson },
+      { contract: this.rebase_eth_pool, json: RebasePoolJson },
+      { contract: this.rebase_dai_pool, json: RebasePoolJson },
       { contract: this.rebase, json: RebaseJson },
-      { contract: this.yamV2migration, json: YAMv2MigrationJson },
     ]
 
     contracts.forEach(contract => this.setContractProvider(
@@ -137,44 +66,16 @@ export class Contracts {
         networkId,
       ),
     );
-    this.yfi.options.address = addressMap["YFI"];
-    this.ycrv.options.address = addressMap["YCRV"];
-    this.weth.options.address = addressMap["WETH"];
-    this.snx.options.address = addressMap["SNX"];
-    this.comp.options.address = addressMap["COMP"];
-    this.link.options.address = addressMap["LINK"];
-    this.lend.options.address = addressMap["LEND"];
-    this.mkr.options.address = addressMap["MKR"];
-    this.UNIAmpl.options.address = addressMap["UNIAmpl"];
-    this.UNIRebase.options.address = addressMap["UNIRebase"];
     this.uni_fact.options.address = addressMap["uniswapFactoryV2"];
     this.uni_router.options.address = addressMap["UNIRouter"];
-    this.yam_ycrv_uni_lp.options.address = addressMap["YAMYCRV"];
 
     this.pools = [
-    /*
-      {"tokenAddr": this.yfi.options.address, "poolAddr": this.yfi_pool.options.address},
-      {"tokenAddr": this.snx.options.address, "poolAddr": this.snx_pool.options.address},
-      {"tokenAddr": this.weth.options.address, "poolAddr": this.eth_pool.options.address},
-      {"tokenAddr": this.comp.options.address, "poolAddr": this.comp_pool.options.address},
-      {"tokenAddr": this.link.options.address, "poolAddr": this.link_pool.options.address},
-      {"tokenAddr": this.lend.options.address, "poolAddr": this.lend_pool.options.address},
-      {"tokenAddr": this.mkr.options.address, "poolAddr": this.mkr_pool.options.address},
-     */
-     //Todo: Hacking out all of the pools except for AMPL
-     // {"tokenAddr": this.UNIAmpl.options.address, "poolAddr": this.ampl_pool.options.address},
-      {"tokenAddr": this.UNIRebase.options.address, "poolAddr": this.rebase_pool.options.address},
+      {"tokenContract": this.rebase_usd_pool, "poolAddr": this.rebase_usd_pool.options.address, "uniAddr": addressMap.UNIUSDRebase, "uniToken": "rebase_usdc_uni_v2_lp", "tokenAddr": Environment.usdc},
+      {"tokenContract": this.rebase_eth_pool, "poolAddr": this.rebase_eth_pool.options.address, "uniAddr": addressMap.UNIETHRebase, "uniToken": "rebase_eth_uni_v2_lp", "tokenAddr": Environment.eth},
+      {"tokenContract": this.rebase_dai_pool, "poolAddr": this.rebase_dai_pool.options.address, "uniAddr": addressMap.UNIDAIRebase, "uniToken": "rebase_dai_uni_v2_lp", "tokenAddr": Environment.dai},
     ]
   }
 
-  setDefaultAccount(
-    account
-  ) {
-    this.yfi.options.from = account;
-    this.ycrv.options.from = account;
-    this.yam.options.from = account;
-    this.weth.options.from = account;
-  }
 
   async callContractFunction(
     method,

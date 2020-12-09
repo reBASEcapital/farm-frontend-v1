@@ -19,7 +19,7 @@ const useAPY = (poolContract: Contract, tokenContract: Contract) => {
     const rebaseUniswapPairBalance = useTokenBalanceLP(Environment.yamv2, tokenContract)
 
     //acquiring the total amount of usdc in a the uniswap liquidity pool on UniSwap. This is not the Geyser.
-    const usdcUniswapPairBalance = useTokenBalanceLP(Environment.usdc_ropsten, tokenContract)
+    const usdcUniswapPairBalance = useTokenBalanceLP(Environment.usdc, tokenContract)
 
     //values obtained from the rebase uniswap pool is not formatted correctly. use 9 decimails
     const rebaseUniswapPairBalanceDisplay= getDisplayBalance( rebaseUniswapPairBalance, 9)
