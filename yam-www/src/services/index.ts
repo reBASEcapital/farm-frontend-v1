@@ -18,3 +18,13 @@ const http = Axios.create({
           return res;
       });
     }
+    
+  export function getTimeNextRebase() {
+    return http
+      .get(
+        '/get_times'
+      )
+      .then((res) => {
+          return res;
+      });
+    }

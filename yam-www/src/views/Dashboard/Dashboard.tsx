@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Page from '../../components/Page'
 import Spacer from '../../components/Spacer'
-import { getLogs } from '../../services'
+import { getLogs, getTimeNextRebase } from '../../services'
 import { addHours, getCountDownInterval } from '../Home/utils'
 import Chart from './components/Chart'
 import DashboardChartCard from './components/DashboardChartCard'
@@ -30,9 +30,11 @@ const Dashboard: React.FC = () => {
     if(data.length) {
       const lastRebase = data.find(i => i.rebase_hash)
       if(lastRebase){
-        const lastRebaseDate = new Date(lastRebase.time)
-        const days = Math.abs(lastRebaseDate.valueOf() - new Date().valueOf()) / (36e5*24);
-        getCountDownInterval((addHours(lastRebaseDate, Math.ceil(days)*24)));
+        getTimeNextRebase().then(response => {
+          const lastRebaseDate = new Date(response.data.rebase)
+          const days = Math.abs(lastRebaseDate.valueOf() - new Date().valueOf()) / (36e5*24);
+          getCountDownInterval((addHours(lastRebaseDate, Math.ceil(days)*24)));
+        });
       }
 
     }
