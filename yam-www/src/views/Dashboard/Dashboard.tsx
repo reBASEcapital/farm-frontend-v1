@@ -28,15 +28,11 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     if(data.length) {
-      const lastRebase = data.find(i => i.rebase_hash)
-      if(lastRebase){
-        getTimeNextRebase().then(response => {
-          const lastRebaseDate = new Date(response.data.rebase)
-          const days = Math.abs(lastRebaseDate.valueOf() - new Date().valueOf()) / (36e5*24);
-          getCountDownInterval((addHours(lastRebaseDate, Math.ceil(days)*24)));
-        });
-      }
-
+      getTimeNextRebase().then(response => {
+        const lastRebaseDate = new Date(response.data.rebase)
+        const days = Math.abs(lastRebaseDate.valueOf() - new Date().valueOf()) / (36e5*24);
+        getCountDownInterval((addHours(lastRebaseDate, Math.ceil(days)*24)));
+      });
     }
   },[data]);
 
