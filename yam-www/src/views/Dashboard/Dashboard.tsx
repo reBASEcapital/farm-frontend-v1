@@ -46,7 +46,7 @@ const Dashboard: React.FC = () => {
           </StyledCardWrapper>
             <Spacer />
           <StyledCardWrapper>
-            <DashboardInfoCard title="Price Target" info="$1.00"/>
+            <DashboardInfoCard title="Price Target" info={data?.length ? "$" + data[0].target : ""}/>
           </StyledCardWrapper>
             <Spacer />
           <StyledCardWrapper>
