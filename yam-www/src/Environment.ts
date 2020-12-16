@@ -33,11 +33,11 @@ const PROD: EnvironmentModel = {
   eth: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
   dai: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
   tokengeyser_rebase_usd: "0x8b32227FAF96e80aE917f7e961cFc2F72Ed6b463",
-  tokengeyser_rebase_eth: "0x8b32227FAF96e80aE917f7e961cFc2F72Ed6b463",
-  tokengeyser_rebase_dai: "0x8b32227FAF96e80aE917f7e961cFc2F72Ed6b463",
+  tokengeyser_rebase_eth: "0x3Bc331875F585b6C9059b61f22704d50c932616B",
+  //tokengeyser_rebase_dai: "0xa0ac0ce7cd592fd9df7ceb10da773d0dd0525164"
   rebase_usd_lp_pair: "0x373483108F1f0AEAf1B56A73796f9dFa9824963c",
-  rebase_eth_lp_pair: "0x373483108F1f0AEAf1B56A73796f9dFa9824963c",
-  rebase_dai_lp_pair: "0x373483108F1f0AEAf1B56A73796f9dFa9824963c"
+  rebase_eth_lp_pair: "0x885752b533e06eab14699ffcc91bc850db7aa5ad"
+  //rebase_dai_lp_pair: "0xf7ef59bfc46f3870da994373f5fb32654b9518dd"
 };
 
 let Environment: any;

@@ -38,17 +38,17 @@ const FarmCards: React.FC = () => {
         }
         return newFarmRows
       }, [[]]));
-      setRows((prev)=> {
+      /*setRows((prev)=> {
         while(!prev[prev.length-1][prev[prev.length-1].length -1]?.dummy || 
           prev[prev.length-1][prev[prev.length-1].length -1].dummy < 2){
-          if(prev[prev.length-1].length < 3){
+          if(prev[prev.length-1].length < 2){
             prev[prev.length-1].push({dummy: prev[prev.length-1][prev[prev.length-1].length -1]?.dummy + 1 || 1});
           } else {
-            prev.push([{dummy: prev[prev.length-1][prev[prev.length-1].length -1].dummy + 1 || 1}]);
+
           }
         }
         return prev
-      });
+      });*/
     }
   }, [farms]);
 

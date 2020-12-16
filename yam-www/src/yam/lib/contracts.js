@@ -33,10 +33,9 @@ export class Contracts {
     this.uni_router = new this.web3.eth.Contract(UNIRouterJson);
     this.uni_fact = new this.web3.eth.Contract(UNIFactJson);
 
-  //TODO:Hacking out all of the pools except for AMPL
     this.rebase_usd_pool = new this.web3.eth.Contract(RebasePoolJson.abi, Environment.tokengeyser_rebase_usd);
     this.rebase_eth_pool = new this.web3.eth.Contract(RebasePoolJson.abi, Environment.tokengeyser_rebase_eth);
-    this.rebase_dai_pool = new this.web3.eth.Contract(RebasePoolJson.abi, Environment.tokengeyser_rebase_dai);
+    //this.rebase_dai_pool = new this.web3.eth.Contract(RebasePoolJson.abi, Environment.tokengeyser_rebase_dai);
    
     this.erc20 = new this.web3.eth.Contract(ERC20Json.abi);
 
@@ -55,7 +54,7 @@ export class Contracts {
     const contracts = [
       { contract: this.rebase_usd_pool, json: RebasePoolJson },
       { contract: this.rebase_eth_pool, json: RebasePoolJson },
-      { contract: this.rebase_dai_pool, json: RebasePoolJson },
+      //{ contract: this.rebase_dai_pool, json: RebasePoolJson },
       { contract: this.rebase, json: RebaseJson },
     ]
 
@@ -71,8 +70,8 @@ export class Contracts {
 
     this.pools = [
       {"tokenContract": this.rebase_usd_pool, "poolAddr": this.rebase_usd_pool.options.address, "uniAddr": addressMap.UNIUSDRebase, "uniToken": "rebase_usdc_uni_v2_lp", "tokenAddr": Environment.usdc},
-      {"tokenContract": this.rebase_eth_pool, "poolAddr": this.rebase_eth_pool.options.address, "uniAddr": addressMap.UNIETHRebase, "uniToken": "rebase_eth_uni_v2_lp", "tokenAddr": Environment.eth},
-      {"tokenContract": this.rebase_dai_pool, "poolAddr": this.rebase_dai_pool.options.address, "uniAddr": addressMap.UNIDAIRebase, "uniToken": "rebase_dai_uni_v2_lp", "tokenAddr": Environment.dai},
+      {"tokenContract": this.rebase_eth_pool, "poolAddr": this.rebase_eth_pool.options.address, "uniAddr": addressMap.UNIETHRebase, "uniToken": "rebase_eth_uni_v2_lp", "tokenAddr": Environment.eth}
+      //{"tokenContract": this.rebase_dai_pool, "poolAddr": this.rebase_dai_pool.options.address, "uniAddr": addressMap.UNIDAIRebase, "uniToken": "rebase_dai_uni_v2_lp", "tokenAddr": Environment.dai},
     ]
   }
 

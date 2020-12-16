@@ -13,23 +13,22 @@ import { getPoolContracts, getEarned } from '../../yamUtils'
 import Context from './context'
 import { Farm } from './types'
 
-//TODO:Super Hack got rid of all pools except for Ampl. We will use Ampl for Rebase
 const NAME_FOR_POOL: { [key: string]: string } = {
-  "rebase_usdc_uni_v2_lp": "USDC",
-  "rebase_eth_uni_v2_lp": "ETH",
-  "rebase_dai_uni_v2_lp": "DAI"
+  "rebase_usdc_uni_v2_lp": "REBASE-USDC",
+  "rebase_eth_uni_v2_lp": "REBASE-ETH"
+  //"rebase_dai_uni_v2_lp": "DAI"
 }
 
 const ICON_FOR_POOL: { [key: string]: string } = {
   rebase_usdc_uni_v2_lp: '🌱',
-  rebase_eth_uni_v2_lp: '🌾',
-  rebase_dai_uni_v2_lp: '🌻'
+  rebase_eth_uni_v2_lp: '🌾'
+  //rebase_dai_uni_v2_lp: '🌻'
 }
 
 const SORT_FOR_POOL: { [key: string]: number } = {
-  rebase_usdc_uni_v2_lp: 1,
-  rebase_eth_uni_v2_lp: 2,
-  rebase_dai_uni_v2_lp: 3
+  rebase_usdc_uni_v2_lp: 2,
+  rebase_eth_uni_v2_lp: 1
+  //rebase_dai_uni_v2_lp: 3
 }
 
 const Farms: React.FC = ({ children }) => {
