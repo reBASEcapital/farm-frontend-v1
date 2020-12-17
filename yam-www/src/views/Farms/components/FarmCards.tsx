@@ -31,24 +31,24 @@ const FarmCards: React.FC = () => {
     if(farms){
       setRows(farms.reduce<Farm[][]>((farmRows, farm) => {
         const newFarmRows = [...farmRows]
-        if (newFarmRows[newFarmRows.length - 1].length === 2) {
+        if (newFarmRows[newFarmRows.length - 1].length === 3) {
           newFarmRows.push([farm])
         } else {
           newFarmRows[newFarmRows.length - 1].push(farm)
         }
         return newFarmRows
       }, [[]]));
-      setRows((prev)=> {
+      /*setRows((prev)=> {
         while(!prev[prev.length-1][prev[prev.length-1].length -1]?.dummy || 
           prev[prev.length-1][prev[prev.length-1].length -1].dummy < 2){
-          if(prev[prev.length-1].length < 3){
+          if(prev[prev.length-1].length < 2){
             prev[prev.length-1].push({dummy: prev[prev.length-1][prev[prev.length-1].length -1]?.dummy + 1 || 1});
           } else {
-            prev.push([{dummy: prev[prev.length-1][prev[prev.length-1].length -1].dummy + 1 || 1}]);
+
           }
         }
         return prev
-      });
+      });*/
     }
   }, [farms]);
 
@@ -86,7 +86,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, ethereum }) => {
   const tokenContract = useMemo(() => {
     return getContract(ethereum as provider, farm?.depositTokenAddress)
   }, [ethereum, farm.depositTokenAddress]);
-  const apy = useAPY(farm?.contract, tokenContract)
+  const apy = useAPY(farm?.contract, tokenContract, farm?.tokenAddress)
   const getStartTime = useCallback(async () => {
     const startTime = await getPoolStartTime(farm.contract)
     setStartTime(startTime)
@@ -163,7 +163,6 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, ethereum }) => {
                   text={poolActive ? 'TRADE' : undefined}
                   href={`https://uniswap.info/pair/${farm.depositTokenAddress}`}
               >
-                {console.log(farm)}
                 {!poolActive && <Countdown date={new Date(startTime * 1000)} renderer={renderer} />}
               </Button>
           }

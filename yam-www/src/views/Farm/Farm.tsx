@@ -30,12 +30,14 @@ const Farm: React.FC = () => {
     earnToken,
     name,
     icon,
+    tokenAddress,
   } = useFarm(farmId) || {
     depositToken: '',
     depositTokenAddress: '',
     earnToken: '',
     name: '',
-    icon: ''
+    icon: '',
+    tokenAddress: ''
   }
 
   useEffect(() => {
@@ -71,6 +73,7 @@ const Farm: React.FC = () => {
             <FarmStats
               poolContract={contract}
               tokenContract={tokenContract}
+              tokenAddress={tokenAddress}
             />
           </StyledCardWrapper>
             <Spacer />
@@ -78,6 +81,7 @@ const Farm: React.FC = () => {
             <Stake
               poolContract={contract}
               tokenContract={tokenContract}
+              tokenCoinAddress={tokenAddress}
               tokenName={depositToken.toUpperCase()}
             />
           </StyledCardWrapper>
