@@ -12,14 +12,14 @@ import { getDisplayBalance } from '../utils/formatBalance'
 import {getPrice, getTotalStakedValue} from  '../utils/formatPrice'
 import {getTotalValue} from  '../utils/formatTotalValue'
 
-const useAPY = (poolContract: Contract, tokenContract: Contract) => {
+const useAPY = (poolContract: Contract, tokenContract: Contract, tokenCoinAddress: string) => {
     const [apy, setApy] = useState<string>("");
 
     //acquiring the total amount of rebase in a the uniswap liquidity pool on UniSwap. This is not the Geyser.
-    const rebaseUniswapPairBalance = useTokenBalanceLP(Environment.yamv2, tokenContract)
+    const rebaseUniswapPairBalance = useTokenBalanceLP(Environment.rebase, tokenContract)
 
     //acquiring the total amount of usdc in a the uniswap liquidity pool on UniSwap. This is not the Geyser.
-    const usdcUniswapPairBalance = useTokenBalanceLP(Environment.usdc, tokenContract)
+    const usdcUniswapPairBalance = useTokenBalanceLP(tokenCoinAddress, tokenContract)
 
     //values obtained from the rebase uniswap pool is not formatted correctly. use 9 decimails
     const rebaseUniswapPairBalanceDisplay= getDisplayBalance( rebaseUniswapPairBalance, 9)

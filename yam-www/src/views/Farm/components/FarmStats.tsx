@@ -75,7 +75,7 @@ const FarmStats: React.FC<StakeProps> = ({
   //const usdcUniswapPairBalance = useTokenBalanceLP(Environment.usdc, tokenContract)
   // Get the unlock rate
 
-  const apy = useAPY(poolContract, tokenContract);
+  const apy = useAPY(poolContract, tokenContract, tokenAddress);
   const { onRebaseHarvest } = useRebaseHarvest(poolContract)
   const handleRebaseHarvest = useCallback(async ( val: BigNumber) => {
         try {

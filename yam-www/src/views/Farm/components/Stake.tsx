@@ -35,12 +35,14 @@ import useTotalStaked from '../../../hooks/useTotalStaked'
 interface StakeProps {
   poolContract: Contract,
   tokenContract: Contract,
+  tokenCoinAddress: string,
   tokenName: string
 }
 
 const Stake: React.FC<StakeProps> = ({
   poolContract,
   tokenContract,
+  tokenCoinAddress,
   tokenName,
 }) => {
 
@@ -54,7 +56,7 @@ const Stake: React.FC<StakeProps> = ({
 
   const { onStake } = useStake(poolContract, tokenName);
   const { onUnstake } = useUnstake(poolContract)
-  const apy = useAPY(poolContract, tokenContract)
+  const apy = useAPY(poolContract, tokenContract,tokenCoinAddress)
   const updateAccounting = useUpdateAccounting(poolContract);
   const unlockRate = useUnlockRate(poolContract, 2592000);
   const totalStakingShare = useTotalStakingShare(poolContract).toNumber();

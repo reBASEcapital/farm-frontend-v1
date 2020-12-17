@@ -81,6 +81,7 @@ const Farm: React.FC = () => {
             <Stake
               poolContract={contract}
               tokenContract={tokenContract}
+              tokenCoinAddress={tokenAddress}
               tokenName={depositToken.toUpperCase()}
             />
           </StyledCardWrapper>
