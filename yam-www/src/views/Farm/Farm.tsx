@@ -31,13 +31,15 @@ const Farm: React.FC = () => {
     name,
     icon,
     tokenAddress,
+    tokenDecimals,
   } = useFarm(farmId) || {
     depositToken: '',
     depositTokenAddress: '',
     earnToken: '',
     name: '',
     icon: '',
-    tokenAddress: ''
+    tokenAddress: '',
+    tokenDecimals: ''
   }
 
   useEffect(() => {
@@ -74,6 +76,7 @@ const Farm: React.FC = () => {
               poolContract={contract}
               tokenContract={tokenContract}
               tokenAddress={tokenAddress}
+              tokenDecimals={tokenDecimals}
             />
           </StyledCardWrapper>
             <Spacer />
@@ -82,6 +85,7 @@ const Farm: React.FC = () => {
               poolContract={contract}
               tokenContract={tokenContract}
               tokenCoinAddress={tokenAddress}
+              tokenDecimals={tokenDecimals}
               tokenName={depositToken.toUpperCase()}
             />
           </StyledCardWrapper>

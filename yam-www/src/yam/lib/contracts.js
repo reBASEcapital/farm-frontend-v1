@@ -69,8 +69,8 @@ export class Contracts {
     this.uni_router.options.address = addressMap["UNIRouter"];
 
     this.pools = [
-      {"tokenContract": this.rebase_usd_pool, "poolAddr": this.rebase_usd_pool.options.address, "uniAddr": addressMap.UNIUSDRebase, "uniToken": "rebase_usdc_uni_v2_lp", "tokenAddr": Environment.usdc},
-      {"tokenContract": this.rebase_eth_pool, "poolAddr": this.rebase_eth_pool.options.address, "uniAddr": addressMap.UNIETHRebase, "uniToken": "rebase_eth_uni_v2_lp", "tokenAddr": Environment.eth}
+      {"tokenContract": this.rebase_usd_pool, "poolAddr": this.rebase_usd_pool.options.address, "uniAddr": addressMap.UNIUSDRebase, "uniToken": "rebase_usdc_uni_v2_lp", "tokenAddr": Environment.usdc, "tokenDecimals": Environment.usdc_decimals},
+      {"tokenContract": this.rebase_eth_pool, "poolAddr": this.rebase_eth_pool.options.address, "uniAddr": addressMap.UNIETHRebase, "uniToken": "rebase_eth_uni_v2_lp", "tokenAddr": Environment.eth, "tokenDecimals": Environment.eth_decimals}
       //{"tokenContract": this.rebase_dai_pool, "poolAddr": this.rebase_dai_pool.options.address, "uniAddr": addressMap.UNIDAIRebase, "uniToken": "rebase_dai_uni_v2_lp", "tokenAddr": Environment.dai},
     ]
   }

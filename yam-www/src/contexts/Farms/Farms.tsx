@@ -53,6 +53,7 @@ const Farms: React.FC = ({ children }) => {
           depositTokenAddress: pool.uniAddr as string,
           earnToken: 'REBASE',
           tokenAddress: pool.tokenAddr as string,
+          tokenDecimals: pool.tokenDecimals as string,
           earnTokenAddress: Environment.rebase,
           icon: ICON_FOR_POOL[pool.uniToken as string],
           id: pool.uniToken as string,

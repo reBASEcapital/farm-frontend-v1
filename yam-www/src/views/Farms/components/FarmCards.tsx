@@ -86,7 +86,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, ethereum }) => {
   const tokenContract = useMemo(() => {
     return getContract(ethereum as provider, farm?.depositTokenAddress)
   }, [ethereum, farm.depositTokenAddress]);
-  const apy = useAPY(farm?.contract, tokenContract, farm?.tokenAddress)
+  const apy = useAPY(farm?.contract, tokenContract, farm?.tokenAddress, farm?.tokenDecimals)
   const getStartTime = useCallback(async () => {
     const startTime = await getPoolStartTime(farm.contract)
     setStartTime(startTime)

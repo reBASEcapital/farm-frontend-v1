@@ -36,6 +36,7 @@ interface StakeProps {
   poolContract: Contract,
   tokenContract: Contract,
   tokenCoinAddress: string,
+  tokenDecimals: string,
   tokenName: string
 }
 
@@ -43,6 +44,7 @@ const Stake: React.FC<StakeProps> = ({
   poolContract,
   tokenContract,
   tokenCoinAddress,
+  tokenDecimals,
   tokenName,
 }) => {
 
@@ -56,7 +58,7 @@ const Stake: React.FC<StakeProps> = ({
 
   const { onStake } = useStake(poolContract, tokenName);
   const { onUnstake } = useUnstake(poolContract)
-  const apy = useAPY(poolContract, tokenContract,tokenCoinAddress)
+  const apy = useAPY(poolContract, tokenContract,tokenCoinAddress, tokenDecimals)
   const updateAccounting = useUpdateAccounting(poolContract);
   const unlockRate = useUnlockRate(poolContract, 2592000);
   const totalStakingShare = useTotalStakingShare(poolContract).toNumber();

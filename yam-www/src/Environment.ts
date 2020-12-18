@@ -13,6 +13,8 @@ const DEV: EnvironmentModel = {
   usdc:"0x08889E6127BFD9496967d90110ECA238E224d5c0",
   eth:"0x08889E6127BFD9496967d90110ECA238E224d5c0",
   dai:"0x08889E6127BFD9496967d90110ECA238E224d5c0",
+  usdc_decimals:"6",
+  eth_decimals:"18",
   tokengeyser_rebase_usd:"0xBaF33566575EE7f19C55E6D26f60A563Beaba5c0",
   tokengeyser_rebase_eth: "0xBaF33566575EE7f19C55E6D26f60A563Beaba5c0",
   tokengeyser_rebase_dai: "0xBaF33566575EE7f19C55E6D26f60A563Beaba5c0",
@@ -32,6 +34,8 @@ const PROD: EnvironmentModel = {
   usdc: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
   eth: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
   dai: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+  usdc_decimals:"6",
+  eth_decimals:"18",
   tokengeyser_rebase_usd: "0x8b32227FAF96e80aE917f7e961cFc2F72Ed6b463",
   tokengeyser_rebase_eth: "0x3Bc331875F585b6C9059b61f22704d50c932616B",
   //tokengeyser_rebase_dai: "0xa0ac0ce7cd592fd9df7ceb10da773d0dd0525164"

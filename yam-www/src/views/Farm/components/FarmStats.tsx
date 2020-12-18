@@ -35,11 +35,13 @@ interface StakeProps {
   poolContract: Contract,
   tokenContract: Contract,
   tokenAddress: string,
+  tokenDecimals: string
 }
 
 const FarmStats: React.FC<StakeProps> = ({
   poolContract,
   tokenContract,
+  tokenDecimals,
   tokenAddress
 }) => {
 
@@ -55,7 +57,7 @@ const FarmStats: React.FC<StakeProps> = ({
   const rebaseUniswapPairBalanceDisplay= getDisplayBalance( rebaseUniswapPairBalance, 9)
 
   //values obtained from the usdc uniswap pool is not formatted correctly. use 6 decimails
-  const usdcUniswapPairBalanceDisplay= getDisplayBalance( usdcUniswapPairBalance, 6)
+  const usdcUniswapPairBalanceDisplay= getDisplayBalance( usdcUniswapPairBalance, parseInt(tokenDecimals))
 
   //generate the price from Uniswap.
   const rebasePriceDisplay = getPrice (usdcUniswapPairBalanceDisplay,rebaseUniswapPairBalanceDisplay )
@@ -75,7 +77,7 @@ const FarmStats: React.FC<StakeProps> = ({
   //const usdcUniswapPairBalance = useTokenBalanceLP(Environment.usdc, tokenContract)
   // Get the unlock rate
 
-  const apy = useAPY(poolContract, tokenContract, tokenAddress);
+  const apy = useAPY(poolContract, tokenContract, tokenAddress, tokenDecimals);
   const { onRebaseHarvest } = useRebaseHarvest(poolContract)
   const handleRebaseHarvest = useCallback(async ( val: BigNumber) => {
         try {
