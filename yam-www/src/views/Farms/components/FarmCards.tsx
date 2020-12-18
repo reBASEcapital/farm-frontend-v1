@@ -2,7 +2,6 @@ import React, { useMemo, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Countdown, { CountdownRenderProps} from 'react-countdown'
 import { useWallet } from 'use-wallet'
-import numeral from 'numeral'
 import { provider } from 'web3-core'
 import Button from '../../../components/Button'
 import Card from '../../../components/Card'
@@ -10,18 +9,12 @@ import CardContent from '../../../components/CardContent'
 import CardIcon from '../../../components/CardIcon'
 import Loader from '../../../components/Loader'
 import Spacer from '../../../components/Spacer'
-
 import useFarms from '../../../hooks/useFarms'
 import useYam from '../../../hooks/useYam'
-
 import { Farm } from '../../../contexts/Farms'
-
-import { bnToDec } from '../../../utils'
-import { getEarned, getPoolStartTime } from '../../../yamUtils'
-import { KECCAK256_NULL_S } from 'ethereumjs-util'
+import { getPoolStartTime } from '../../../yamUtils'
 import useAPY from '../../../hooks/useAPY'
 import { getContract } from '../../../utils/erc20'
-import ReactTooltip from 'react-tooltip'
 
 const FarmCards: React.FC = () => {
   const [farms] = useFarms()
@@ -38,17 +31,17 @@ const FarmCards: React.FC = () => {
         }
         return newFarmRows
       }, [[]]));
-      /*setRows((prev)=> {
+      setRows((prev)=> {
         while(!prev[prev.length-1][prev[prev.length-1].length -1]?.dummy || 
-          prev[prev.length-1][prev[prev.length-1].length -1].dummy < 2){
-          if(prev[prev.length-1].length < 2){
+          prev[prev.length-1][prev[prev.length-1].length -1].dummy < 1){
+          if(prev[prev.length-1].length < 3){
             prev[prev.length-1].push({dummy: prev[prev.length-1][prev[prev.length-1].length -1]?.dummy + 1 || 1});
           } else {
-
+            prev.push([{dummy: prev[prev.length-1][prev[prev.length-1].length -1].dummy + 1 || 1}]);
           }
         }
         return prev
-      });*/
+      });
     }
   }, [farms]);
 
@@ -120,7 +113,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, ethereum }) => {
   }, [yam, contract, account, setHarvestable])
 */
   const poolActive = startTime * 1000 - Date.now() <= 0
-  const dummyEmojis = ["🌱","🌾","🌻"]
+  const dummyEmojis = ["🌱","🌻","🌾"]
   return (
     <StyledCardWrapper>
       {farm?.id && farm.id === 'ycrv_yam_uni_lp' && (
