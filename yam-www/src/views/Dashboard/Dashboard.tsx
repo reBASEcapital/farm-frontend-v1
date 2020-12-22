@@ -12,12 +12,32 @@ const Dashboard: React.FC = () => {
 
   const [data, setData] = useState([]);
   const [lastTx, setLastTx] = useState(null);
+  const [supplyHistoryData, setSupplyHistoryData] = useState([]);
+  const [marketCapData, setMarketCapData] = useState([]);
+  const [rateHistoryData, setRateHistoryData] = useState([]);
   useEffect(() => {
     const fetch = () => {
       getLogs().then(res => {
-        if(res?.data){
-          setData(res.data);
-          const last = res.data.find(item => item.rebase_hash)
+        if(res?.logs){
+          setData(res.logs);
+          setSupplyHistoryData(res.logs.reduce((total, current) => {
+            total.push({x: new Date(current.time), y: current.totalsupply_after})
+            return total
+          },[]));
+          
+          setMarketCapData(res.logs.reduce((total, current) => {
+            if(res.bikiPrices[current.time.slice(0,16)] && res.uniswapPrices[current.time.slice(0,16)]) {
+              total.push({x: new Date(current.time), y: ((res.bikiPrices[current.time.slice(0,16)] + res.uniswapPrices[current.time.slice(0,16)])/2) * current.totalsupply_after})
+            }
+            return total
+          },[]));
+
+          setRateHistoryData(res.logs.reduce((total, current) => {
+            total.push({x: new Date(current.time), y: current.price})
+            return total
+          },[]));
+
+          const last = res.logs.find(item => item.rebase_hash)
           if(last) {
             setLastTx(last.rebase_hash);
           }
@@ -71,10 +91,7 @@ const Dashboard: React.FC = () => {
             <DashboardChartCard title="Supply History">
               <Chart
                 chartKey="supply_history"
-                data={data.reduce((total, current) => {
-                  total.push({x: new Date(current.time), y: current.totalsupply_after})
-                  return total
-                },[])}
+                data={supplyHistoryData}
               />
 
             </DashboardChartCard>
@@ -84,10 +101,7 @@ const Dashboard: React.FC = () => {
             <DashboardChartCard title="Market Cap">
               <Chart
                 chartKey="market_cap"
-                data={data.reduce((total, current) => {
-                  total.push({x: new Date(current.time), y: current.price * current.totalsupply_after})
-                  return total
-                },[])}
+                data={marketCapData}
               />
             </DashboardChartCard>
           </StyledCardWrapper>
@@ -98,10 +112,7 @@ const Dashboard: React.FC = () => {
             <DashboardChartCard title="Rate History">
               <Chart
                 chartKey="rate_history"
-                data={data.reduce((total, current) => {
-                  total.push({x: new Date(current.time), y: current.price})
-                  return total
-                },[])}/>
+                data={rateHistoryData}/>
             </DashboardChartCard>
           </StyledCardWrapper>
           <Spacer />
