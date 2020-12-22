@@ -32,7 +32,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
   }, [max])
 
   const estimatedReward = useMemo(() => {
-    if(parseFloat(val) && unlockRate){
+    if(parseFloat(val) && unlockRate && totalStakingShare && unlockRate && updateAccounting){
       return getEstimatedReward(2592000,parseFloat(val), totalStakingShare, totalStaked, updateAccounting, unlockRate, userStaked)
     } else {
       return 0;
