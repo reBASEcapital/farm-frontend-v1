@@ -105,16 +105,16 @@ const Dashboard: React.FC = () => {
             </DashboardChartCard>
           </StyledCardWrapper>
           <Spacer />
-          <StyledCardWrapper>
+          <StyledLinkCardWrapper>
             <DashboardChartCard >
               <StyledList>
-                <StyledListItem><StyledLink href={Environment.transactionsUrl+lastTx} target="_blank">Latest Rebase transaction</StyledLink></StyledListItem>
-                <StyledListItem><StyledLink href={Environment.accountUrl + Environment.market_oracle_address} target="_blank">Market Policy</StyledLink></StyledListItem>
-                <StyledListItem><StyledLink href={Environment.accountUrl + Environment.cpi_oracle_address} target="_blank">CPI oracle</StyledLink></StyledListItem>
-                <StyledListItem><StyledLink href={Environment.accountUrl + Environment.orchestrator_address} target="_blank">Orchestrator</StyledLink></StyledListItem>
+                <StyledListItem>Latest Rebase transaction: <StyledLink href={Environment.transactionsUrl+lastTx} target="_blank">{lastTx}</StyledLink></StyledListItem>
+                <StyledListItem>Market Policy: <StyledLink href={Environment.accountUrl + Environment.market_oracle_address} target="_blank">{Environment.market_oracle_address}</StyledLink></StyledListItem>
+                <StyledListItem>CPI oracle: <StyledLink href={Environment.accountUrl + Environment.cpi_oracle_address} target="_blank">{Environment.cpi_oracle_address}</StyledLink></StyledListItem>
+                <StyledListItem>Orchestrator: <StyledLink href={Environment.accountUrl + Environment.orchestrator_address} target="_blank">{Environment.orchestrator_address}</StyledLink></StyledListItem>
               </StyledList>
             </DashboardChartCard>
-          </StyledCardWrapper>
+          </StyledLinkCardWrapper>
         </StyledCardsWrapper>
       </StyledDashboard>
     </Page>
@@ -147,9 +147,19 @@ const StyledCardWrapper = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
+  max-height: 260px;
   @media (max-width: 768px) {
     width: 100%;
   }
+`
+
+const StyledLinkCardWrapper = styled.div`
+display: flex;
+flex: 1;
+flex-direction: row;
+@media (max-width: 768px) {
+  width: 100%;
+}
 `
 
 const StyledList = styled.ul`
@@ -164,10 +174,9 @@ const StyledListItem = styled.li`
 `
 
 const StyledLink = styled.a`
+  overflow-wrap: break-word;
   color: ${props => props.theme.color.white};
-  padding-left: ${props => props.theme.spacing[3]}px;
-  padding-right: ${props => props.theme.spacing[3]}px;
-  text-decoration: none;
+  text-decoration: underline;
   &:hover {
     color: ${props => props.theme.color.blue[500]};
     text-shadow: 0px 0px;
