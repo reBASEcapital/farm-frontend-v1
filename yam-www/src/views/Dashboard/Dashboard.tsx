@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import Button from '../../components/Button'
 import Page from '../../components/Page'
 import Spacer from '../../components/Spacer'
 import Environment from '../../Environment'
@@ -77,7 +78,9 @@ const Dashboard: React.FC = () => {
             <Spacer />
           <StyledCardWrapper>
             <DashboardInfoCard title="Next Rebase" info="">
-              <span id="dashboard_countdown"></span>
+            <Button disabled={document.getElementById("dashboard_countdown")?.innerHTML !== "REBASE"}>
+              <StyledCountdown id="dashboard_countdown"></StyledCountdown>
+            </Button>
             </DashboardInfoCard>
           </StyledCardWrapper>
             <Spacer />
@@ -193,6 +196,9 @@ const StyledLink = styled.a`
     color: ${props => props.theme.color.blue[500]};
     text-shadow: 0px 0px;
   }
+`
+const StyledCountdown = styled.span`
+  color: ${props => props.theme.color.white};
 `
 
 export default Dashboard
