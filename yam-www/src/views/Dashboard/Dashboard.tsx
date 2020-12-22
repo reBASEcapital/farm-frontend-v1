@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Page from '../../components/Page'
 import Spacer from '../../components/Spacer'
+import Environment from '../../Environment'
 import { getLogs, getTimeNextRebase } from '../../services'
 import { addHours, getCountDownInterval } from '../Home/utils'
 import Chart from './components/Chart'
@@ -10,11 +11,16 @@ import DashboardInfoCard from './components/DashboardInfoCard'
 const Dashboard: React.FC = () => {
 
   const [data, setData] = useState([]);
+  const [lastTx, setLastTx] = useState(null);
   useEffect(() => {
     const fetch = () => {
       getLogs().then(res => {
         if(res?.data){
           setData(res.data);
+          const last = res.data.find(item => item.rebase_hash)
+          if(last) {
+            setLastTx(last.rebase_hash);
+          }
         }
       })
     }
@@ -98,6 +104,17 @@ const Dashboard: React.FC = () => {
                 },[])}/>
             </DashboardChartCard>
           </StyledCardWrapper>
+          <Spacer />
+          <StyledCardWrapper>
+            <DashboardChartCard >
+              <StyledList>
+                <StyledListItem><StyledLink href={Environment.transactionsUrl+lastTx} target="_blank">Latest Rebase transaction</StyledLink></StyledListItem>
+                <StyledListItem><StyledLink href={Environment.accountUrl + Environment.market_oracle_address} target="_blank">Market Policy</StyledLink></StyledListItem>
+                <StyledListItem><StyledLink href={Environment.accountUrl + Environment.cpi_oracle_address} target="_blank">CPI oracle</StyledLink></StyledListItem>
+                <StyledListItem><StyledLink href={Environment.accountUrl + Environment.orchestrator_address} target="_blank">Orchestrator</StyledLink></StyledListItem>
+              </StyledList>
+            </DashboardChartCard>
+          </StyledCardWrapper>
         </StyledCardsWrapper>
       </StyledDashboard>
     </Page>
@@ -132,6 +149,28 @@ const StyledCardWrapper = styled.div`
   flex-direction: row;
   @media (max-width: 768px) {
     width: 100%;
+  }
+`
+
+const StyledList = styled.ul`
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  margin-top: ${props => props.theme.spacing[4]}px;
+  list-style-type: none;
+`
+const StyledListItem = styled.li`
+  margin-top: ${props => props.theme.spacing[3]}px;
+`
+
+const StyledLink = styled.a`
+  color: ${props => props.theme.color.white};
+  padding-left: ${props => props.theme.spacing[3]}px;
+  padding-right: ${props => props.theme.spacing[3]}px;
+  text-decoration: none;
+  &:hover {
+    color: ${props => props.theme.color.blue[500]};
+    text-shadow: 0px 0px;
   }
 `
 
