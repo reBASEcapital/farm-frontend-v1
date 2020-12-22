@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Page from '../../components/Page'
 import Spacer from '../../components/Spacer'
+import Environment from '../../Environment'
 import { getLogs, getTimeNextRebase } from '../../services'
 import { addHours, getCountDownInterval } from '../Home/utils'
 import Chart from './components/Chart'
@@ -10,11 +11,36 @@ import DashboardInfoCard from './components/DashboardInfoCard'
 const Dashboard: React.FC = () => {
 
   const [data, setData] = useState([]);
+  const [lastTx, setLastTx] = useState(null);
+  const [supplyHistoryData, setSupplyHistoryData] = useState([]);
+  const [marketCapData, setMarketCapData] = useState([]);
+  const [rateHistoryData, setRateHistoryData] = useState([]);
   useEffect(() => {
     const fetch = () => {
       getLogs().then(res => {
-        if(res?.data){
-          setData(res.data);
+        if(res?.logs){
+          setData(res.logs);
+          setSupplyHistoryData(res.logs.reduce((total, current) => {
+            total.push({x: new Date(current.time), y: current.totalsupply_after})
+            return total
+          },[]));
+          
+          setMarketCapData(res.logs.reduce((total, current) => {
+            if(res.bikiPrices[current.time.slice(0,16)] && res.uniswapPrices[current.time.slice(0,16)]) {
+              total.push({x: new Date(current.time), y: ((res.bikiPrices[current.time.slice(0,16)] + res.uniswapPrices[current.time.slice(0,16)])/2) * current.totalsupply_after})
+            }
+            return total
+          },[]));
+
+          setRateHistoryData(res.logs.reduce((total, current) => {
+            total.push({x: new Date(current.time), y: current.price})
+            return total
+          },[]));
+
+          const last = res.logs.find(item => item.rebase_hash)
+          if(last) {
+            setLastTx(last.rebase_hash);
+          }
         }
       })
     }
@@ -65,10 +91,7 @@ const Dashboard: React.FC = () => {
             <DashboardChartCard title="Supply History">
               <Chart
                 chartKey="supply_history"
-                data={data.reduce((total, current) => {
-                  total.push({x: new Date(current.time), y: current.totalsupply_after})
-                  return total
-                },[])}
+                data={supplyHistoryData}
               />
 
             </DashboardChartCard>
@@ -78,10 +101,7 @@ const Dashboard: React.FC = () => {
             <DashboardChartCard title="Market Cap">
               <Chart
                 chartKey="market_cap"
-                data={data.reduce((total, current) => {
-                  total.push({x: new Date(current.time), y: current.price * current.totalsupply_after})
-                  return total
-                },[])}
+                data={marketCapData}
               />
             </DashboardChartCard>
           </StyledCardWrapper>
@@ -92,12 +112,20 @@ const Dashboard: React.FC = () => {
             <DashboardChartCard title="Rate History">
               <Chart
                 chartKey="rate_history"
-                data={data.reduce((total, current) => {
-                  total.push({x: new Date(current.time), y: current.price})
-                  return total
-                },[])}/>
+                data={rateHistoryData}/>
             </DashboardChartCard>
           </StyledCardWrapper>
+          <Spacer />
+          <StyledLinkCardWrapper>
+            <DashboardChartCard title="Verification 🛡">
+              <StyledList>
+                <StyledListItem>✅ Latest rebase transaction ID:<br/><StyledLink href={Environment.transactionsUrl+lastTx} target="_blank">{lastTx}</StyledLink></StyledListItem>
+                <StyledListItem>✅ Market Policy:<br/><StyledLink href={Environment.accountUrl + Environment.market_oracle_address} target="_blank">{Environment.market_oracle_address}</StyledLink></StyledListItem>
+                <StyledListItem>✅ CPI Oracle:<br/><StyledLink href={Environment.accountUrl + Environment.cpi_oracle_address} target="_blank">{Environment.cpi_oracle_address}</StyledLink></StyledListItem>
+                <StyledListItem>✅ Orchestrator:<br/><StyledLink href={Environment.accountUrl + Environment.orchestrator_address} target="_blank">{Environment.orchestrator_address}</StyledLink></StyledListItem>
+              </StyledList>
+            </DashboardChartCard>
+          </StyledLinkCardWrapper>
         </StyledCardsWrapper>
       </StyledDashboard>
     </Page>
@@ -130,8 +158,40 @@ const StyledCardWrapper = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
+  max-height: 260px;
   @media (max-width: 768px) {
     width: 100%;
+  }
+`
+
+const StyledLinkCardWrapper = styled.div`
+display: flex;
+flex: 1;
+flex-direction: row;
+@media (max-width: 768px) {
+  width: 100%;
+}
+`
+
+const StyledList = styled.ul`
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  margin-top: ${props => props.theme.spacing[1]}px;
+  list-style-type: none;
+`
+const StyledListItem = styled.li`
+  margin-top: ${props => props.theme.spacing[1]}px;
+  font-size: 0.8em;
+`
+
+const StyledLink = styled.a`
+  overflow-wrap: break-word;
+  color: ${props => props.theme.color.white};
+  text-decoration: underline;
+  &:hover {
+    color: ${props => props.theme.color.blue[500]};
+    text-shadow: 0px 0px;
   }
 `
 

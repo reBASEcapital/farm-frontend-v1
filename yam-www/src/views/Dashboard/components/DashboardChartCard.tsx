@@ -5,7 +5,7 @@ import Card from '../../../components/Card';
 import CardContent from '../../../components/CardContent';
 
 interface Props {
-    title: string,
+    title?: string,
   }
 
 const DashboardChartCard: React.FC<Props> = ({
@@ -17,9 +17,10 @@ const DashboardChartCard: React.FC<Props> = ({
     <InfoCard>
         <InfoCardContent>
             <StyledCardContentInner>
+              {title &&
                 <StyledCardHeader>
-                    {title}
-                </StyledCardHeader>
+                        {title}
+                </StyledCardHeader>}
                 <StyledCardActions>
                   {children}
                 </StyledCardActions>
@@ -64,7 +65,7 @@ const StyledCardActions = styled.div`
   display: flex;
   justify-content: center;
   color: ${props => props.theme.color.blue[100]};
-  margin-top: ${props => props.theme.spacing[6]}px;
+  margin-top: ${props => props.title ? props.theme.spacing[6] : 0}px;
   width: 100%;
   @media (max-width: 768px) {
     padding: ${props => props.theme.spacing[2]}px;
