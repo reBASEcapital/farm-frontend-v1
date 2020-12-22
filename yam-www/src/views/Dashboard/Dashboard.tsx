@@ -106,12 +106,12 @@ const Dashboard: React.FC = () => {
           </StyledCardWrapper>
           <Spacer />
           <StyledLinkCardWrapper>
-            <DashboardChartCard >
+            <DashboardChartCard title="Verification 🛡">
               <StyledList>
-                <StyledListItem>Latest Rebase transaction: <StyledLink href={Environment.transactionsUrl+lastTx} target="_blank">{lastTx}</StyledLink></StyledListItem>
-                <StyledListItem>Market Policy: <StyledLink href={Environment.accountUrl + Environment.market_oracle_address} target="_blank">{Environment.market_oracle_address}</StyledLink></StyledListItem>
-                <StyledListItem>CPI oracle: <StyledLink href={Environment.accountUrl + Environment.cpi_oracle_address} target="_blank">{Environment.cpi_oracle_address}</StyledLink></StyledListItem>
-                <StyledListItem>Orchestrator: <StyledLink href={Environment.accountUrl + Environment.orchestrator_address} target="_blank">{Environment.orchestrator_address}</StyledLink></StyledListItem>
+                <StyledListItem>✅ Latest rebase transaction ID:<br/><StyledLink href={Environment.transactionsUrl+lastTx} target="_blank">{lastTx}</StyledLink></StyledListItem>
+                <StyledListItem>✅ Market Policy:<br/><StyledLink href={Environment.accountUrl + Environment.market_oracle_address} target="_blank">{Environment.market_oracle_address}</StyledLink></StyledListItem>
+                <StyledListItem>✅ CPI Oracle:<br/><StyledLink href={Environment.accountUrl + Environment.cpi_oracle_address} target="_blank">{Environment.cpi_oracle_address}</StyledLink></StyledListItem>
+                <StyledListItem>✅ Orchestrator:<br/><StyledLink href={Environment.accountUrl + Environment.orchestrator_address} target="_blank">{Environment.orchestrator_address}</StyledLink></StyledListItem>
               </StyledList>
             </DashboardChartCard>
           </StyledLinkCardWrapper>
@@ -166,11 +166,12 @@ const StyledList = styled.ul`
   margin: 0;
   padding: 0;
   width: 100%;
-  margin-top: ${props => props.theme.spacing[4]}px;
+  margin-top: ${props => props.theme.spacing[1]}px;
   list-style-type: none;
 `
 const StyledListItem = styled.li`
-  margin-top: ${props => props.theme.spacing[3]}px;
+  margin-top: ${props => props.theme.spacing[1]}px;
+  font-size: 0.8em;
 `
 
 const StyledLink = styled.a`
