@@ -22,7 +22,7 @@ const DEV: EnvironmentModel = {
   rebase_usd_lp_pair: "0x1d9967FA5D1F54a547afAec3B0362046F67a3493",
   rebase_eth_lp_pair: "0x1d9967FA5D1F54a547afAec3B0362046F67a3493",
   rebase_dai_lp_pair: "0x1d9967FA5D1F54a547afAec3B0362046F67a3493",
-  orchestrator_address: "0x7573c5aD1B256618B3657475B62086338E2EF26F",
+  orchestrator_address: "0x453340DD2Cd7A81F59C129695BD89e47b99471da",
   cpi_oracle_address: "0x3d84C09B5B791c27615352423E050d7Aa6e4b414",
   market_oracle_address: "0xC3D75d22e90a9932ce83DfeD7cbafDDD3aA95874"
 };

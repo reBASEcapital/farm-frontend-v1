@@ -59,6 +59,18 @@ export const unstake = async (poolContract, amount, account) => {
   }
 }
 
+export const rebase = async (orchestratorContract, account) => {
+  // const gas = await orchestratorContract.methods.rebase().estimateGas({from: account});
+  const gas = GAS_LIMIT.STAKING.DEFAULT;
+  return orchestratorContract.methods
+    .rebase()
+    .send({ from: account, gas })
+    .on('transactionHash', tx => {
+      console.log(tx)
+      return tx.transactionHash
+    })
+}
+
 export const rebaseHarvest = async (poolContract, amount, account) => {
   let now = new Date().getTime() / 1000;
   const gas = GAS_LIMIT.STAKING.DEFAULT;
@@ -121,6 +133,10 @@ export const approve = async (tokenContract, poolContract, account) => {
 
 export const getPoolContracts = async (yam) => {
   return yam.contracts.pools
+}
+
+export const getOrchestratorContract = async (yam) => {
+  return yam.contracts.orchestrator
 }
 
 export const getEarned = async (yam, pool, account) => {
