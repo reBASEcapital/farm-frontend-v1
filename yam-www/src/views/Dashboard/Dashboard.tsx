@@ -27,8 +27,10 @@ const Dashboard: React.FC = () => {
           },[]));
           
           setMarketCapData(res.logs.reduce((total, current) => {
-            if(res.bikiPrices[current.time.slice(0,16)] && res.uniswapPrices[current.time.slice(0,16)]) {
-              total.push({x: new Date(current.time), y: ((res.bikiPrices[current.time.slice(0,16)] + res.uniswapPrices[current.time.slice(0,16)])/2) * current.totalsupply_after})
+            const bikiPrice = res.bikiPrices[current.time.slice(0,16)] | 0;
+            const uniswapPrice = res.uniswapPrices[current.time.slice(0,16)] | 0;
+            if(bikiPrice || uniswapPrice) {
+              total.push({x: new Date(current.time), y: ((bikiPrice + uniswapPrice) / ( bikiPrice && uniswapPrice ? 2 : 1)) * current.totalsupply_after});
             }
             return total
           },[]));
