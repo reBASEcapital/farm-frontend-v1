@@ -292,12 +292,17 @@ export const getUnlockRate = async (rebasePool, seconds) => {
 }
 
 export const getEstimatedReward = (seconds, amount, totalStakingShares,totalStaked, updatedValues, unlockRate, userStaked ) => {
-  let totalStakingShareSeconds = new BigNumber(updatedValues[3]).toNumber();
-  let stakingShareSeconds = new BigNumber(updatedValues[2]).toNumber();
-  let i = userStaked  * totalStakingShares / (totalStaked/1000000000000000000);
-  let o = amount  * totalStakingShares / (totalStaked/1000000000000000000),
-      a = (stakingShareSeconds + (i + o) * seconds) / (totalStakingShareSeconds + (totalStakingShares + o) * seconds);
-  return  unlockRate * a
+  let totalStakingShareSeconds = new BigNumber(updatedValues[3]);
+  let stakingShareSeconds = new BigNumber(updatedValues[2]);
+  let bTotalStakingShares = new BigNumber(totalStakingShares)
+  let bUserStaked = new BigNumber(userStaked)
+  let bSeconds = new BigNumber(seconds)
+  let bTotalStaked = new BigNumber(totalStaked)
+  let bAmount = new BigNumber(amount)
+  let i = bUserStaked.multipliedBy(bTotalStakingShares).dividedBy( (bTotalStaked.dividedBy(1000000000000000000)));
+  let o = bAmount.multipliedBy(bTotalStakingShares).dividedBy( (bTotalStaked.dividedBy(1000000000000000000)));
+  let a = stakingShareSeconds.plus( (i.plus( o)).multipliedBy( bSeconds)).dividedBy( totalStakingShareSeconds.plus( (bTotalStakingShares.plus(o).multipliedBy( bSeconds))));
+  return  unlockRate * a.toNumber()
 }
 
 
