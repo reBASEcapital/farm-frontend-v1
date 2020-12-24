@@ -19,6 +19,8 @@ const Dashboard: React.FC = () => {
   const [supplyHistoryData, setSupplyHistoryData] = useState([]);
   const [marketCapData, setMarketCapData] = useState([]);
   const [rateHistoryData, setRateHistoryData] = useState([]);
+  const [lastRebaseDate, setLastRebaseDate] = useState(0);
+  const [nextRebaseDate, setNextRebaseDate] = useState(0);
   const { account } = useWallet();
   const yam = useYam();
   useEffect(() => {
@@ -63,11 +65,11 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     if(data.length) {
       getTimeNextRebase().then(response => {
-        const lastRebaseDate = new Date(response.data.rebase)
-        const last23h = new Date(new Date().getTime() - 3600 * 1000 * 23)
-        const hasTx = data.find(i=> new Date(i.time) < last23h && i.rebase_hash);
+        setNextRebaseDate(response.data.rebase)
+        setLastRebaseDate(response.data.prev_rebase)
+        const hasTx = data.find(i=> new Date(i.time) < new Date(response.data.rebase) && new Date(i.time) > new Date(response.data.prev_rebase) && i.rebase_hash);
         if(hasTx){
-          getCountDownInterval(lastRebaseDate);
+          getCountDownInterval(new Date(response.data.rebase));
         } else {
             document.getElementById("dashboard_countdown").innerHTML = "REBASE"   
         }
@@ -79,8 +81,7 @@ const Dashboard: React.FC = () => {
     if(document.getElementById("dashboard_countdown")?.innerHTML !== "REBASE" || !account){
       return true;
     } else {
-      const last23h = new Date(new Date().getTime() - 3600 * 1000 * 23)
-      const hasTx = data.find(i=> new Date(i.time) < last23h && i.rebase_hash);
+      const hasTx = data.find(i=> new Date(i.time) < new Date(nextRebaseDate) && new Date(i.time) > new Date(lastRebaseDate) && i.rebase_hash);
       return !!hasTx;
     }
   }
