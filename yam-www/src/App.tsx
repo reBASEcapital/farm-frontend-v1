@@ -18,7 +18,6 @@ import TransactionProvider from './contexts/Transactions'
 
 import useModal from './hooks/useModal'
 
-import FAQ from './views/FAQ'
 import Farms from './views/Farms'
 import Home from './views/Home'
 import Dashboard from './views/Dashboard'
@@ -98,6 +97,9 @@ const Tutorial: React.FC = () => {
     const seenDisclaimer = localStorage.getItem('tutorial')
     if (!seenDisclaimer) {
       onPresentTutorialModal()
+    }
+    if(window.location.href.indexOf("#!") !== -1) {
+      window.location.href = window.location.href.replace("#!/","")
     }
   }, [])
 
