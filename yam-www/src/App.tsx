@@ -98,9 +98,6 @@ const Tutorial: React.FC = () => {
     if (!seenDisclaimer) {
       onPresentTutorialModal()
     }
-    if(window.location.href.indexOf("#!") !== -1) {
-      window.location.href = window.location.href.replace("#!/","")
-    }
   }, [])
 
   return (
