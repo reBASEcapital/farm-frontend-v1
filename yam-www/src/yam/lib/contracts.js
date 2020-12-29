@@ -12,6 +12,7 @@ import Environment from '../../Environment';
 
 //TODO:Hacking out all of the pools except for AMPL
 import RebasePoolJson from '../clean_build/contracts/TokenGeyser.json';
+import OrchestratorJson from '../clean_build/contracts/Orchestrator.json';
 
 import IncJson from '../clean_build/contracts/YAMIncentivizer.json';
 
@@ -35,6 +36,7 @@ export class Contracts {
 
     this.rebase_usd_pool = new this.web3.eth.Contract(RebasePoolJson.abi, Environment.tokengeyser_rebase_usd);
     this.rebase_eth_pool = new this.web3.eth.Contract(RebasePoolJson.abi, Environment.tokengeyser_rebase_eth);
+    this.orchestrator = new this.web3.eth.Contract(OrchestratorJson.abi, Environment.orchestrator_address);
     //this.rebase_dai_pool = new this.web3.eth.Contract(RebasePoolJson.abi, Environment.tokengeyser_rebase_dai);
    
     this.erc20 = new this.web3.eth.Contract(ERC20Json.abi);
@@ -54,6 +56,7 @@ export class Contracts {
     const contracts = [
       { contract: this.rebase_usd_pool, json: RebasePoolJson },
       { contract: this.rebase_eth_pool, json: RebasePoolJson },
+      { contract: this.orchestrator, json: OrchestratorJson },
       //{ contract: this.rebase_dai_pool, json: RebasePoolJson },
       { contract: this.rebase, json: RebaseJson },
     ]

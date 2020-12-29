@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { useWallet } from 'use-wallet'
+import Button from '../../components/Button'
 import Page from '../../components/Page'
 import Spacer from '../../components/Spacer'
 import Environment from '../../Environment'
+import useYam from '../../hooks/useYam'
 import { getLogs, getTimeNextRebase } from '../../services'
+import { getOrchestratorContract, rebase } from '../../yamUtils'
 import { addHours, getCountDownInterval } from '../Home/utils'
 import Chart from './components/Chart'
 import DashboardChartCard from './components/DashboardChartCard'
@@ -15,6 +19,10 @@ const Dashboard: React.FC = () => {
   const [supplyHistoryData, setSupplyHistoryData] = useState([]);
   const [marketCapData, setMarketCapData] = useState([]);
   const [rateHistoryData, setRateHistoryData] = useState([]);
+  const [lastRebaseDate, setLastRebaseDate] = useState(0);
+  const [nextRebaseDate, setNextRebaseDate] = useState(0);
+  const { account } = useWallet();
+  const yam = useYam();
   useEffect(() => {
     const fetch = () => {
       getLogs().then(res => {
@@ -50,19 +58,46 @@ const Dashboard: React.FC = () => {
     fetch()
     const intervalId = setInterval(() => {
       fetch()
-    }, 300000);
+    }, 120000);
     return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
     if(data.length) {
       getTimeNextRebase().then(response => {
-        const lastRebaseDate = new Date(response.data.rebase)
-        const days = Math.abs(lastRebaseDate.valueOf() - new Date().valueOf()) / (36e5*24);
-        getCountDownInterval((addHours(lastRebaseDate, Math.ceil(days)*24)));
+        setNextRebaseDate(response.data.rebase)
+        setLastRebaseDate(response.data.prev_rebase)
+        const hasTx = data.find(i=> new Date(i.time) < new Date(response.data.rebase) && new Date(i.time) > new Date(response.data.prev_rebase) && i.rebase_hash);
+        if(hasTx){
+          getCountDownInterval(new Date(response.data.rebase));
+        } else {
+            document.getElementById("dashboard_countdown").innerHTML = "REBASE"   
+        }
       });
     }
   },[data]);
+
+  const isButtonDisabled = (): boolean => {
+    if(document.getElementById("dashboard_countdown")?.innerHTML !== "REBASE" || !account){
+      return true;
+    } else {
+      const hasTx = data.find(i=> new Date(i.time) < new Date(nextRebaseDate) && new Date(i.time) > new Date(lastRebaseDate) && i.rebase_hash);
+      return !!hasTx;
+    }
+  }
+
+  const doRebase = async () => {
+    if(account){
+      const orchestrator = await getOrchestratorContract(yam);
+      const response = await rebase(orchestrator, account);
+      if(response) {
+        getTimeNextRebase().then(timeResponse => {
+          const lastRebaseDate = new Date(timeResponse.data.rebase);
+          getCountDownInterval(lastRebaseDate);
+        });
+      }
+    }
+  }
 
   return (
     <Page>
@@ -79,7 +114,9 @@ const Dashboard: React.FC = () => {
             <Spacer />
           <StyledCardWrapper>
             <DashboardInfoCard title="Next Rebase" info="">
-              <span id="dashboard_countdown"></span>
+            <Button disabled={isButtonDisabled()} onClick={doRebase}>
+              <StyledCountdown id="dashboard_countdown"></StyledCountdown>
+            </Button>
             </DashboardInfoCard>
           </StyledCardWrapper>
             <Spacer />
@@ -195,6 +232,9 @@ const StyledLink = styled.a`
     color: ${props => props.theme.color.blue[500]};
     text-shadow: 0px 0px;
   }
+`
+const StyledCountdown = styled.span`
+  color: ${props => props.theme.color.white};
 `
 
 export default Dashboard

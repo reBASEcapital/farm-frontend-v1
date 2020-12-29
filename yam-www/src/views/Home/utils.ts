@@ -75,7 +75,7 @@ export function getCountDownInterval(date) {
     const element = document.getElementById("dashboard_countdown");
     if (distance < 0 && element) {
       clearInterval(x);
-      element.innerHTML = 'Expired';
+      element.innerHTML = 'REBASE';
     } else {
       if (!document.getElementById("dashboard_countdown")) {
         clearInterval(x);
