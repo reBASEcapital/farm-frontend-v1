@@ -15,7 +15,6 @@ import Spacer from '../../../components/Spacer'
 import styled from 'styled-components'
 import useEstimatedRewardBalance from '../../../hooks/useEstimatedRewardBalance'
 import { Contract } from 'web3-eth-contract'
-import { bigNumberify } from 'ethers/utils'
 
 interface WithdrawModalProps extends ModalProps {
   max: BigNumber,

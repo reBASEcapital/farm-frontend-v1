@@ -1,7 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import TutorialModal from '../../TutorialModal'
-import useModal from '../../../hooks/useModal'
 
 const Nav: React.FC = () => {
   return (

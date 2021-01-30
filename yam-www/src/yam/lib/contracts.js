@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js/bignumber';
 import Web3 from 'web3';
+import abiDecoder from 'abi-decoder'
 import * as Types from "./types.js";
 import { SUBTRACT_GAS_LIMIT, addressMap } from './constants.js';
 
@@ -44,7 +45,8 @@ export class Contracts {
     //TODO:Hacking out all of the pools except for AMPL
 
     this.rebase = new this.web3.eth.Contract(RebaseJson.abi, Environment.rebase);
-
+    abiDecoder.addABI(RebaseJson.abi);
+    this.abiDecoder = abiDecoder;
     this.setProvider(provider, networkId);
   }
 

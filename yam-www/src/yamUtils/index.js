@@ -125,6 +125,42 @@ export const redeem = async (poolContract, account) => {
   }
 }
 
+export const currentBlockWinner = async (rebaseContract, account) => {
+  return rebaseContract.methods
+    .currentBlockWinner()
+    .call({ from: account })
+}
+
+export const alreadyRewarded = async (rebaseContract, account) => {
+  return rebaseContract.methods
+    .alreadyRewarded()
+    .call({ from: account })
+}
+
+export const claimReward = async (orchestratorContract, account) => {
+  // const gas = await orchestratorContract.methods.rebase().estimateGas({from: account});
+  const gas = GAS_LIMIT.STAKING.DEFAULT;
+  return orchestratorContract.methods
+    .claimReward()
+    .send({ from: account, gas })
+    .on('transactionHash', tx => {
+      console.log(tx)
+      return tx.transactionHash
+    })
+}
+
+export const runStimulus = async (orchestratorContract, account) => {
+  // const gas = await orchestratorContract.methods.rebase().estimateGas({from: account});
+  const gas = GAS_LIMIT.STAKING.DEFAULT;
+  return orchestratorContract.methods
+    .runStimulus()
+    .send({ from: account, gas })
+    .on('transactionHash', tx => {
+      console.log(tx)
+      return tx.transactionHash
+    })
+}
+
 export const approve = async (tokenContract, poolContract, account) => {
   return tokenContract.methods
     .approve(poolContract.options.address, ethers.constants.MaxUint256)
@@ -137,6 +173,13 @@ export const getPoolContracts = async (yam) => {
 
 export const getOrchestratorContract = async (yam) => {
   return yam.contracts.orchestrator
+}
+
+export const getRebaseContract = async (yam) => {
+  return yam.contracts.rebase
+}
+export const getAbiDecoder = async (yam) => {
+  return yam.contracts.abiDecoder
 }
 
 export const getEarned = async (yam, pool, account) => {

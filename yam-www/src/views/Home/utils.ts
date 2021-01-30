@@ -61,7 +61,7 @@ export const addHours = function(date, h) {
   return date;
 }
 
-export function getCountDownInterval(date) {
+export function getCountDownInterval(date, id) {
   let x = setInterval(function() {
     const now = new Date().getTime();
     const distance = date.getTime() - now;
@@ -72,12 +72,12 @@ export function getCountDownInterval(date) {
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
     // If the count down is finished, write some text
-    const element = document.getElementById("dashboard_countdown");
+    const element = document.getElementById(id);
     if (distance < 0 && element) {
       clearInterval(x);
       element.innerHTML = 'REBASE';
     } else {
-      if (!document.getElementById("dashboard_countdown")) {
+      if (!document.getElementById(id)) {
         clearInterval(x);
       } else {
         if (

@@ -10,8 +10,8 @@ const http = Axios.create({
   
 
   export function getLogs() {
-    return Axios.all([http.get( '/get_logs'), http.get( '/get_prices')])
-    .then(Axios.spread((logsRes, pricesRes) => {
+    return Axios.all([http.get( '/get_logs'), http.get( '/get_prices'), http.get( '/get_stimulus')])
+    .then(Axios.spread((logsRes, pricesRes, stimulusRes) => {
       const uniswapPrices = pricesRes?.data.reduce((total, item) => {
         if(item.type === "UniswapPrice"){
           total[item.time.slice(0,16)] = item.price
@@ -24,7 +24,7 @@ const http = Axios.create({
         }
         return total
       },{});
-      return {logs: logsRes.data, uniswapPrices, bikiPrices};
+      return {logs: logsRes.data, uniswapPrices, bikiPrices, stimulus: stimulusRes.data};
     }));
   }
 
@@ -38,7 +38,7 @@ const http = Axios.create({
       });
     }
     
-  export function getTimeNextRebase() {
+  export function getTimes() {
     return http
       .get(
         '/get_times'
