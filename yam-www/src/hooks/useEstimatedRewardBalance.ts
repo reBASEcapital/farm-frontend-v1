@@ -11,19 +11,20 @@ const useEstimatedRewardBalance = (poolContract: Contract, balance: BigNumber) =
     const { account }: { account: string } = useWallet()
     const fetchReward = useCallback(async () => {
         try{
-            const reward = await getUnstakeQuery(poolContract, balance, account)
-            setReward(new BigNumber(reward))
-        }catch (e){
+            if(balance.isEqualTo(new BigNumber(0))){
+                setReward(new BigNumber(0))    
+            } else {
+                const reward = await getUnstakeQuery(poolContract, balance, account)
+                setReward(new BigNumber(reward))
+            }
+        } catch (e){
             console.log(e)
         }
-
     }, [account, poolContract, balance])
 
     useEffect(() => {
         if (account && poolContract) {
             fetchReward()
-            let refreshInterval = setInterval(fetchReward, 10000)
-            return () => clearInterval(refreshInterval)
         }
     }, [account, poolContract, balance])
 

@@ -1,5 +1,5 @@
 
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useCallback} from 'react'
 import styled from 'styled-components'
 
 import { Contract } from 'web3-eth-contract'
@@ -20,15 +20,11 @@ import {getTotalValue} from  '../../../utils/formatTotalValue'
 
 import farm from "../../../assets/img/rebase-icon.png";
 import Environment from "../../../Environment";
-import Spacer from '../../../components/Spacer'
 import Value from '../../../components/Value'
 import Label from '../../../components/Label'
-import { getUnlockRate } from '../../../yamUtils'
-import ReactTooltip from 'react-tooltip'
 import BigNumber from "bignumber.js";
 import Button from "../../../components/Button";
 import useRebaseHarvest from '../../../hooks/useRebaseHarvest'
-import useStakedBalance from '../../../hooks/useStakedBalance'
 import useEstimatedRewardBalance from '../../../hooks/useEstimatedRewardBalance'
 
 interface StakeProps {
@@ -36,13 +32,17 @@ interface StakeProps {
   tokenContract: Contract,
   tokenAddress: string,
   tokenDecimals: string
+  triggerBalance: () => void;
+  stakedBalance: BigNumber
 }
 
 const FarmStats: React.FC<StakeProps> = ({
   poolContract,
   tokenContract,
   tokenDecimals,
-  tokenAddress
+  tokenAddress,
+  triggerBalance,
+  stakedBalance
 }) => {
 
   const rebaseBalance = useTokenBalance(Environment.yamv2)
@@ -86,13 +86,11 @@ const FarmStats: React.FC<StakeProps> = ({
             //const newVal = getFullDisplayBalanceBigInt(val).multipliedBy(.01)
             //const amount = newVal.toFixed()
             const txHash = await onRebaseHarvest(amount)
-            setTrigger((old) => !old);
+            triggerBalance();
         } catch (e) {
             console.log(e)
         }
     }, [onRebaseHarvest]);
-  const [trigger, setTrigger] = useState(true);
-  const stakedBalance = useStakedBalance(poolContract, trigger)
   const totalWithdraw = useEstimatedRewardBalance(poolContract, stakedBalance).div(1000000000);
 
 

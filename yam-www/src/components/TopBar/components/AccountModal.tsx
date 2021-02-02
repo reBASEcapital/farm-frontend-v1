@@ -11,7 +11,6 @@ import Modal, { ModalProps } from '../../Modal'
 import ModalActions from '../../ModalActions'
 import ModalContent from '../../ModalContent'
 import ModalTitle from '../../ModalTitle'
-import Separator from '../../Separator'
 import Spacer from '../../Spacer'
 import Value from '../../Value'
 import farm from "../../../assets/img/rebase-icon.png";
@@ -26,7 +25,6 @@ const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
     reset()
   }, [onDismiss, reset])
 
-  const yamBalance = useTokenBalance(Environment.yam)
   const yamV2Balance = useTokenBalance(Environment.yamv2)
 
   return (

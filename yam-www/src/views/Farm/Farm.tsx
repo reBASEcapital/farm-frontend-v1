@@ -1,11 +1,10 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { useParams } from 'react-router-dom'
 import { useWallet } from 'use-wallet'
 import { provider } from 'web3-core'
 
-import Button from '../../components/Button'
 import PageHeader from '../../components/PageHeader'
 import Spacer from '../../components/Spacer'
 
@@ -13,10 +12,9 @@ import useFarm from '../../hooks/useFarm'
 import useRedeem from '../../hooks/useRedeem'
 import { getContract } from '../../utils/erc20'
 
-import Harvest from './components/Harvest'
 import Stake from './components/Stake'
-import Stats from '../Home/components/Stats'
 import FarmStats from './components/FarmStats'
+import useStakedBalance from '../../hooks/useStakedBalance'
 
 const Farm: React.FC = () => {
   interface ParamTypes {
@@ -54,6 +52,12 @@ const Farm: React.FC = () => {
 
   const { onRedeem } = useRedeem(contract)
 
+  const [trigger, setTrigger] = useState(true);
+  const stakedBalance = useStakedBalance(contract, trigger)
+
+  const triggerBalance = () => {
+    setTrigger((old) => !old);
+  }
   const depositTokenName = useMemo(() => {
     return depositToken.toUpperCase()
   }, [depositToken])
@@ -77,6 +81,8 @@ const Farm: React.FC = () => {
               tokenContract={tokenContract}
               tokenAddress={tokenAddress}
               tokenDecimals={tokenDecimals}
+              stakedBalance={stakedBalance}
+              triggerBalance={triggerBalance}
             />
           </StyledCardWrapper>
             <Spacer />
@@ -87,6 +93,8 @@ const Farm: React.FC = () => {
               tokenCoinAddress={tokenAddress}
               tokenDecimals={tokenDecimals}
               tokenName={depositToken.toUpperCase()}
+              stakedBalance={stakedBalance}
+              triggerBalance={triggerBalance}
             />
           </StyledCardWrapper>
         </StyledCardsWrapper>

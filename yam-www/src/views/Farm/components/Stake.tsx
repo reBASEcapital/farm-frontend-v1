@@ -8,8 +8,6 @@ import Button from '../../../components/Button'
 import Card from '../../../components/Card'
 import CardContent from '../../../components/CardContent'
 import CardIcon from '../../../components/CardIcon'
-import { AddIcon } from '../../../components/icons'
-import IconButton from '../../../components/IconButton'
 import Label from '../../../components/Label'
 import Value from '../../../components/Value'
 
@@ -38,6 +36,8 @@ interface StakeProps {
   tokenCoinAddress: string,
   tokenDecimals: string,
   tokenName: string
+  triggerBalance: () => void;
+  stakedBalance: BigNumber
 }
 
 const Stake: React.FC<StakeProps> = ({
@@ -46,15 +46,15 @@ const Stake: React.FC<StakeProps> = ({
   tokenCoinAddress,
   tokenDecimals,
   tokenName,
+  triggerBalance,
+  stakedBalance
 }) => {
 
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const [trigger, setTrigger] = useState(true);
   const allowance = useAllowance(tokenContract, poolContract)
   const { onApprove } = useApprove(tokenContract, poolContract)
 
-  const tokenBalance = useTokenBalance(tokenContract.options.address)
-  const stakedBalance = useStakedBalance(poolContract, trigger)
+  const tokenBalance = useTokenBalance(tokenContract.options.address, stakedBalance)
 
   const { onStake } = useStake(poolContract, tokenName);
   const { onUnstake } = useUnstake(poolContract)
@@ -73,7 +73,7 @@ const Stake: React.FC<StakeProps> = ({
       userStaked={stakedBalance.toNumber()}
       onConfirm={async (val: string) =>{
         await onStake(val);
-        setTrigger((old) => !old);
+        triggerBalance();
       }}
       tokenName={tokenName}
     />
@@ -85,7 +85,7 @@ const Stake: React.FC<StakeProps> = ({
       poolContract={poolContract}
       onConfirm={async (val: string) =>{
           await onUnstake(val);
-          setTrigger((old) => !old);
+          triggerBalance();
         }}
       tokenName={tokenName}
     />
