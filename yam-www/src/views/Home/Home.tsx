@@ -26,13 +26,13 @@ const Home: React.FC = () => {
         <div style={{
           margin: '0 auto'
         }}>
-          <Button
+          {/* <Button
             size="sm"
             text="View V1 Farms"
             to="/farms"
             variant="secondary"
            />
-           <Spacer size="sm"/>
+           <Spacer size="sm"/> */}
            <Button
             size="sm"
             text="Dashboard"

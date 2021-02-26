@@ -34,8 +34,8 @@ const PROD: EnvironmentModel = {
   dashboardEndpoint: "https://api.rebase.capital/api",
   chainId: 1,
   yam: "0x0e2298e3b3390e3b945a5456fbf59ecc3f55da16",
-  yamv2: "0x4208D8d500B1643DcA98dD27bA6C0060BcA311c5",
-  rebase: "0x4208D8d500B1643DcA98dD27bA6C0060BcA311c5",
+  yamv2: "0xab7e91a32F4fE4c6b8BE7603D4Cc10c8D6FdF3F4",
+  rebase: "0xab7e91a32F4fE4c6b8BE7603D4Cc10c8D6FdF3F4",
   usdc: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
   eth: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
   dai: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -47,9 +47,9 @@ const PROD: EnvironmentModel = {
   rebase_usd_lp_pair: "0x373483108F1f0AEAf1B56A73796f9dFa9824963c",
   rebase_eth_lp_pair: "0x885752b533e06eab14699ffcc91bc850db7aa5ad",
   //rebase_dai_lp_pair: "0xf7ef59bfc46f3870da994373f5fb32654b9518dd"
-  orchestrator_address: "0x7573c5aD1B256618B3657475B62086338E2EF26F",
-  cpi_oracle_address: "0x3d84C09B5B791c27615352423E050d7Aa6e4b414",
-  market_oracle_address: "0xC3D75d22e90a9932ce83DfeD7cbafDDD3aA95874"
+  orchestrator_address: "0xD429a707c81bAFd44e3648c606AF3D061F5EE19C",
+  cpi_oracle_address: "0x1F5e752BC3Cab5e0773712675faC1433dd181088",
+  market_oracle_address: "0x49A46815BC73592438917f6eda1a436cD6ec3C66"
 };
 
 let Environment: any;
