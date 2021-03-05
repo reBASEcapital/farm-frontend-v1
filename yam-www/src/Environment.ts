@@ -28,7 +28,7 @@ const DEV: EnvironmentModel = {
 };
 
 const PROD: EnvironmentModel = {
-  accountUrl: "https://etherscan.io/address/",
+  accountUrl: "https://bscscan.com/address/",
   transactionsUrl: "https://bscscan.com/",
   rpcUrl: "https://bsc-dataseed.binance.org/",
   dashboardEndpoint: "https://api.rebase.capital/api",
