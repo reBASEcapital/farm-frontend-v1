@@ -84,7 +84,7 @@ const Dashboard: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if(data.length && stimulusData.length) {
+    if(data.length || stimulusData.length) {
       getTimes().then(response => {
         setNextRebaseDate(response.data.rebase)
         setLastRebaseDate(response.data.prev_rebase)
@@ -100,7 +100,7 @@ const Dashboard: React.FC = () => {
         if(hasStim){
           getCountDownInterval(new Date(response.data.stimulus),"stimulus_dashboard_countdown");
         } else {
-            document.getElementById("stimulus_dashboard_countdown").innerHTML = "STIMULUS"
+          document.getElementById("stimulus_dashboard_countdown").innerHTML = "STIMULUS"
         }
       });
     }

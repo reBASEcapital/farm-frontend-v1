@@ -29,10 +29,10 @@ const DEV: EnvironmentModel = {
 
 const PROD: EnvironmentModel = {
   accountUrl: "https://etherscan.io/address/",
-  transactionsUrl: "https://etherscan.io/tx/",
-  rpcUrl: "https://mainnet.eth.aragon.network/",
+  transactionsUrl: "https://bscscan.com/",
+  rpcUrl: "https://bsc-dataseed.binance.org/",
   dashboardEndpoint: "https://api.rebase.capital/api",
-  chainId: 1,
+  chainId: 56,
   yam: "0x0e2298e3b3390e3b945a5456fbf59ecc3f55da16",
   yamv2: "0x4208D8d500B1643DcA98dD27bA6C0060BcA311c5",
   rebase: "0x4208D8d500B1643DcA98dD27bA6C0060BcA311c5",
@@ -47,9 +47,9 @@ const PROD: EnvironmentModel = {
   rebase_usd_lp_pair: "0x373483108F1f0AEAf1B56A73796f9dFa9824963c",
   rebase_eth_lp_pair: "0x885752b533e06eab14699ffcc91bc850db7aa5ad",
   //rebase_dai_lp_pair: "0xf7ef59bfc46f3870da994373f5fb32654b9518dd"
-  orchestrator_address: "0x7573c5aD1B256618B3657475B62086338E2EF26F",
-  cpi_oracle_address: "0x3d84C09B5B791c27615352423E050d7Aa6e4b414",
-  market_oracle_address: "0xC3D75d22e90a9932ce83DfeD7cbafDDD3aA95874"
+  orchestrator_address: "0x81f59Ff580f5133eeEE304DA0842Cc8443F4c552",
+  cpi_oracle_address: "0x8c1E2b1827e893b58835e4b357b2D1E1646EDB9E",
+  market_oracle_address: "0x8b32227FAF96e80aE917f7e961cFc2F72Ed6b463"
 };
 
 let Environment: any;

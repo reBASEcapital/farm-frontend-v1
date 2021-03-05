@@ -24,7 +24,7 @@ const TutorialModal: React.FC<TutorialModal> = ({ onConfirm, onDismiss }) => {
       return (
         <div>
           <p>Yield farming basics!</p>
-          <p>"Add liquidity" to a supported pool, such as the REBASE-USDC pool on Uniswap. This action creates a special
+          <p>"Add liquidity" to a supported pool, such as the REBASE-BNB pool on Pancakeswap. This action creates a special
           token called a liquidity pool (LP) share. Once you have an LP share, come back to the farm and you can stake it in
           the associated plot and watch your earnings grow!</p>
             <p>👨🏽‍🌾 This makes you a farmer! Farmers earn additional REBASE that goes straight to their account.</p>
