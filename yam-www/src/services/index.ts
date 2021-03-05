@@ -13,7 +13,7 @@ const http = Axios.create({
     return Axios.all([http.get( '/get_logs'), http.get( '/get_prices'), http.get( '/get_stimulus')])
     .then(Axios.spread((logsRes, pricesRes, stimulusRes) => {
       const uniswapPrices = pricesRes?.data.reduce((total, item) => {
-        if(item.type === "UniswapPrice"){
+        if(item.type === "UniswapPrice" || item.type === "PancakePrice"){
           total[item.time.slice(0,16)] = item.price
         }
         return total
