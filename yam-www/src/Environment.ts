@@ -29,7 +29,7 @@ const DEV: EnvironmentModel = {
 
 const PROD: EnvironmentModel = {
   accountUrl: "https://bscscan.com/address/",
-  transactionsUrl: "https://bscscan.com/",
+  transactionsUrl: "https://bscscan.com/tx/",
   rpcUrl: "https://bsc-dataseed.binance.org/",
   dashboardEndpoint: "https://api.rebase.capital/api",
   chainId: 56,
