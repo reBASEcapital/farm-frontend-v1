@@ -1,11 +1,10 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { useParams } from 'react-router-dom'
 import { useWallet } from 'use-wallet'
 import { provider } from 'web3-core'
 
-import Button from '../../components/Button'
 import PageHeader from '../../components/PageHeader'
 import Spacer from '../../components/Spacer'
 
@@ -13,8 +12,9 @@ import useFarm from '../../hooks/useFarm'
 import useRedeem from '../../hooks/useRedeem'
 import { getContract } from '../../utils/erc20'
 
-import Harvest from './components/Harvest'
 import Stake from './components/Stake'
+import FarmStats from './components/FarmStats'
+import useStakedBalance from '../../hooks/useStakedBalance'
 
 const Farm: React.FC = () => {
   interface ParamTypes {
@@ -28,12 +28,16 @@ const Farm: React.FC = () => {
     earnToken,
     name,
     icon,
+    tokenAddress,
+    tokenDecimals,
   } = useFarm(farmId) || {
     depositToken: '',
     depositTokenAddress: '',
     earnToken: '',
     name: '',
-    icon: ''
+    icon: '',
+    tokenAddress: '',
+    tokenDecimals: ''
   }
 
   useEffect(() => {
@@ -48,6 +52,12 @@ const Farm: React.FC = () => {
 
   const { onRedeem } = useRedeem(contract)
 
+  const [trigger, setTrigger] = useState(true);
+  const stakedBalance = useStakedBalance(contract, trigger)
+
+  const triggerBalance = () => {
+    setTrigger((old) => !old);
+  }
   const depositTokenName = useMemo(() => {
     return depositToken.toUpperCase()
   }, [depositToken])
@@ -65,16 +75,29 @@ const Farm: React.FC = () => {
       />
       <StyledFarm>
         <StyledCardsWrapper>
-          <Spacer />
+          <StyledCardWrapper>
+            <FarmStats
+              poolContract={contract}
+              tokenContract={tokenContract}
+              tokenAddress={tokenAddress}
+              tokenDecimals={tokenDecimals}
+              stakedBalance={stakedBalance}
+              triggerBalance={triggerBalance}
+            />
+          </StyledCardWrapper>
+            <Spacer />
           <StyledCardWrapper>
             <Stake
               poolContract={contract}
               tokenContract={tokenContract}
+              tokenCoinAddress={tokenAddress}
+              tokenDecimals={tokenDecimals}
               tokenName={depositToken.toUpperCase()}
+              stakedBalance={stakedBalance}
+              triggerBalance={triggerBalance}
             />
           </StyledCardWrapper>
         </StyledCardsWrapper>
-        <Spacer size="lg" />
         <Spacer size="lg" />
       </StyledFarm>
     </>
@@ -86,26 +109,26 @@ const StyledFarm = styled.div`
   display: flex;
   flex-direction: column;
   @media (max-width: 768px) {
-    width: 100%;
+    width: 98vw;
+    align-items: center;
   }
 `
 
 const StyledCardsWrapper = styled.div`
   display: flex;
-  width: 600px;
+  max-width: 70vw;
   @media (max-width: 768px) {
-    width: 100%;
-    flex-flow: column nowrap;
-    align-items: center;
+    width: 90vw;
+    align-items: flex-start;
   }
 `
 
 const StyledCardWrapper = styled.div`
   display: flex;
   flex: 1;
-  flex-direction: column;
+  flex-direction: row;
   @media (max-width: 768px) {
-    width: 80%;
+    width: 50vw;
   }
 `
 

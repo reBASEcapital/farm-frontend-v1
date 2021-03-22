@@ -9,7 +9,7 @@ BigNumber.config({
 
 const GAS_LIMIT = {
   STAKING: {
-    DEFAULT: 3000000,
+    DEFAULT: 425000,
     SNX: 850000,
   }
 };
@@ -33,19 +33,63 @@ export const stake = async (poolContract, amount, account, tokenName) => {
     alert("pool not active");
   }
 }
+export const totalStaked = async( poolContract ) => {
+
+  let obj = await poolContract.methods.totalStaked().call()
+  let totalStaked = new BigNumber( obj );
+  return totalStaked;
+}
+
 
 export const unstake = async (poolContract, amount, account) => {
   let now = new Date().getTime() / 1000;
   const gas = GAS_LIMIT.STAKING.DEFAULT;
 
   if (now >= 1597172400) {
+    const newAmount = (new BigNumber(amount).times(new BigNumber(10).pow(18))).toFixed(0)
     return poolContract.methods
-      .unstake((new BigNumber(amount).times(new BigNumber(10).pow(18))).toString(), [])
+      .unstake( newAmount, [])
       .send({ from: account, gas })
       .on('transactionHash', tx => {
         console.log(tx)
         return tx.transactionHash
       })
+  } else {
+    alert("pool not active");
+  }
+}
+
+export const rebase = async (orchestratorContract, account) => {
+  // const gas = await orchestratorContract.methods.rebase().estimateGas({from: account});
+  const gas = GAS_LIMIT.STAKING.DEFAULT;
+  return orchestratorContract.methods
+    .rebase()
+    .send({ from: account, gas })
+    .on('transactionHash', tx => {
+      console.log(tx)
+      return tx.transactionHash
+    })
+}
+
+export const rebaseHarvest = async (poolContract, amount, account) => {
+  let now = new Date().getTime() / 1000;
+  const gas = GAS_LIMIT.STAKING.DEFAULT;
+
+  if (now >= 1597172400) {
+    const newAmount = (new BigNumber(amount).times(new BigNumber(10).pow(18))).toFixed(0)
+    return poolContract.methods
+        .unstake( newAmount, [])
+        .send({ from: account, gas })
+        .on('transactionHash', tx => {
+          console.log(tx)
+          poolContract.methods
+              .stake( newAmount, [])
+              .send({ from: account, gas })
+              .on('transactionHash', tx => {
+                console.log(tx)
+                return tx.transactionHash
+              })
+        })
   } else {
     alert("pool not active");
   }
@@ -81,6 +125,42 @@ export const redeem = async (poolContract, account) => {
   }
 }
 
+export const currentBlockWinner = async (rebaseContract, account) => {
+  return rebaseContract.methods
+    .currentBlockWinner()
+    .call({ from: account })
+}
+
+export const alreadyRewarded = async (rebaseContract, account) => {
+  return rebaseContract.methods
+    .alreadyRewarded()
+    .call({ from: account })
+}
+
+export const claimReward = async (orchestratorContract, account) => {
+  // const gas = await orchestratorContract.methods.rebase().estimateGas({from: account});
+  const gas = GAS_LIMIT.STAKING.DEFAULT;
+  return orchestratorContract.methods
+    .claimReward()
+    .send({ from: account, gas })
+    .on('transactionHash', tx => {
+      console.log(tx)
+      return tx.transactionHash
+    })
+}
+
+export const runStimulus = async (orchestratorContract, account) => {
+  // const gas = await orchestratorContract.methods.rebase().estimateGas({from: account});
+  const gas = GAS_LIMIT.STAKING.DEFAULT;
+  return orchestratorContract.methods
+    .runStimulus()
+    .send({ from: account, gas })
+    .on('transactionHash', tx => {
+      console.log(tx)
+      return tx.transactionHash
+    })
+}
+
 export const approve = async (tokenContract, poolContract, account) => {
   return tokenContract.methods
     .approve(poolContract.options.address, ethers.constants.MaxUint256)
@@ -88,14 +168,18 @@ export const approve = async (tokenContract, poolContract, account) => {
 }
 
 export const getPoolContracts = async (yam) => {
-  const pools = Object.keys(yam.contracts)
-    .filter(c => c.indexOf('_pool') !== -1)
-    .reduce((acc, cur) => {
-      const newAcc = { ...acc }
-      newAcc[cur] = yam.contracts[cur]
-      return newAcc
-    }, {})
-  return pools
+  return yam.contracts.pools
+}
+
+export const getOrchestratorContract = async (yam) => {
+  return yam.contracts.orchestrator
+}
+
+export const getRebaseContract = async (yam) => {
+  return yam.contracts.rebase
+}
+export const getAbiDecoder = async (yam) => {
+  return yam.contracts.abiDecoder
 }
 
 export const getEarned = async (yam, pool, account) => {
@@ -221,3 +305,76 @@ export const getMigrationEndTime = async (yam) => {
 export const getV2Supply = async (yam) => {
   return new BigNumber(await yam.contracts.rebase.methods.totalSupply().call())
 }
+
+
+export const getTotalLocked = async (rebasePool) => {
+  return new BigNumber(await rebasePool.methods.totalLocked().call()).div(10**9)
+}
+
+export const getTotalLockedShares = async (rebasePool) => {
+  return new BigNumber(await rebasePool.methods.totalLockedShares().call())
+}
+
+export const getUnlockSchedulesCount = async (rebasePool) => {
+  return  await rebasePool.methods.unlockScheduleCount().call()
+}
+
+export const getUnlockSchedules = async (rebasePool, index) => {
+  return  await rebasePool.methods.unlockSchedules(index).call()
+}
+
+
+export const getTotalStakingShares= async (rebasePool) => {
+  return  await rebasePool.methods.totalStakingShares().call()
+}
+
+export const getUpdateAccounting= async (rebasePool) => {
+  return  await rebasePool.methods.updateAccounting().call()
+}
+
+export const getUnstakeQuery= async (rebasePool, balance, account) => {
+  return   await rebasePool.methods.unstakeQuery(balance.toString()).call({from: account});
+}
+
+
+export const getUnlockRate = async (rebasePool, seconds) => {
+  const totalLocked = await getTotalLocked(rebasePool);
+  const totalLockedShares = await getTotalLockedShares(rebasePool);
+  const unlockScheduleCount = await getUnlockSchedulesCount(rebasePool);
+  const now = parseInt(Date.now() /1000);
+  const p = [];
+  for (let i=0;i<unlockScheduleCount;i++){
+    p.push(await getUnlockSchedules(rebasePool,i))
+  }
+  return  new BigNumber(p.reduce((t, e) => (t += Math.min(Math.max(e.endAtSec - now, 0), seconds) / e.durationSec * e.initialLockedShares) && t, 0)).div( totalLockedShares).multipliedBy( totalLocked).toNumber();
+
+}
+
+export const getEstimatedReward = (seconds, amount, totalStakingShares,totalStaked, updatedValues, unlockRate, userStaked ) => {
+  let totalStakingShareSeconds = new BigNumber(updatedValues[3]);
+  let stakingShareSeconds = new BigNumber(updatedValues[2]);
+  let bTotalStakingShares = new BigNumber(totalStakingShares)
+  let bUserStaked = new BigNumber(userStaked)
+  let bSeconds = new BigNumber(seconds)
+  let bTotalStaked = new BigNumber(totalStaked)
+  let bAmount = new BigNumber(amount)
+  let i = bUserStaked.multipliedBy(bTotalStakingShares).dividedBy( (bTotalStaked.dividedBy(1000000000000000000)));
+  let o = bAmount.multipliedBy(bTotalStakingShares).dividedBy( (bTotalStaked.dividedBy(1000000000000000000)));
+  let a = stakingShareSeconds.plus( (i.plus( o)).multipliedBy( bSeconds)).dividedBy( totalStakingShareSeconds.plus( (bTotalStakingShares.plus(o).multipliedBy( bSeconds))));
+  return  unlockRate * a.toNumber()
+}
+
+
+export const getSubtractEstimatedReward = (seconds, amount, totalStakingShares,totalStaked, updatedValues, unlockRate, userStaked ) => {
+  let totalStakingShareSeconds = new BigNumber(updatedValues[3]).toNumber();
+  let stakingShareSeconds = new BigNumber(updatedValues[2]).toNumber();
+  let i = userStaked  * totalStakingShares / (totalStaked/1000000000000000000);
+  let o = amount  * totalStakingShares / (totalStaked/1000000000000000000),
+      a = (stakingShareSeconds + (i - o) * seconds) / (totalStakingShareSeconds + (totalStakingShares + o) * seconds);
+  return  unlockRate * a
+}
+
+
+
+
+

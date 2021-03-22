@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js'
+import Environment from '../Environment'
 
 export { default as formatAddress } from './formatAddress'
 

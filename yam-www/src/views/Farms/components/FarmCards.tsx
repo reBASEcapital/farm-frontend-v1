@@ -1,45 +1,58 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useMemo, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Countdown, { CountdownRenderProps} from 'react-countdown'
 import { useWallet } from 'use-wallet'
-import numeral from 'numeral'
-
+import { provider } from 'web3-core'
 import Button from '../../../components/Button'
 import Card from '../../../components/Card'
 import CardContent from '../../../components/CardContent'
 import CardIcon from '../../../components/CardIcon'
 import Loader from '../../../components/Loader'
 import Spacer from '../../../components/Spacer'
-
 import useFarms from '../../../hooks/useFarms'
 import useYam from '../../../hooks/useYam'
-
 import { Farm } from '../../../contexts/Farms'
-
-import { bnToDec } from '../../../utils'
-import { getEarned, getPoolStartTime } from '../../../yamUtils'
+import { getPoolStartTime } from '../../../yamUtils'
+import useAPY from '../../../hooks/useAPY'
+import { getContract } from '../../../utils/erc20'
 
 const FarmCards: React.FC = () => {
   const [farms] = useFarms()
-  const { account } = useWallet()
-  const rows = farms.reduce<Farm[][]>((farmRows, farm) => {
-    const newFarmRows = [...farmRows]
-    if (newFarmRows[newFarmRows.length - 1].length === 3) {
-      newFarmRows.push([farm])
-    } else {
-      newFarmRows[newFarmRows.length - 1].push(farm)
+  const { account, ethereum } = useWallet()
+  const [rows, setRows] = useState<Array<Array<Farm|any>>>([[]]);
+  useEffect(() => {
+    if(farms){
+      setRows(farms.reduce<Farm[][]>((farmRows, farm) => {
+        const newFarmRows = [...farmRows]
+        if (newFarmRows[newFarmRows.length - 1].length === 3) {
+          newFarmRows.push([farm])
+        } else {
+          newFarmRows[newFarmRows.length - 1].push(farm)
+        }
+        return newFarmRows
+      }, [[]]));
+      setRows((prev)=> {
+        while(!prev[prev.length-1][prev[prev.length-1].length -1]?.dummy || 
+          prev[prev.length-1][prev[prev.length-1].length -1].dummy < 1){
+          if(prev[prev.length-1].length < 3){
+            prev[prev.length-1].push({dummy: prev[prev.length-1][prev[prev.length-1].length -1]?.dummy + 1 || 1});
+          } else {
+            prev.push([{dummy: prev[prev.length-1][prev[prev.length-1].length -1].dummy + 1 || 1}]);
+          }
+        }
+        return prev
+      });
     }
-    return newFarmRows
-  }, [[]])
+  }, [farms]);
 
   return (
     <StyledCards>
-      {!!rows[0].length ? rows.map((farmRow, i) => (
+      {!!rows[0]?.length ? rows.map((farmRow, i) => (
         <StyledRow key={i}>
           {farmRow.map((farm, j) => (
             <React.Fragment key={j}>
-              <FarmCard farm={farm} />
-              {(j === 0 || j === 1) && <StyledSpacer />}
+              <FarmCard farm={farm} ethereum={ethereum as provider}/>
+              {<StyledSpacer />}
             </React.Fragment>
           ))}
         </StyledRow>
@@ -53,17 +66,20 @@ const FarmCards: React.FC = () => {
 }
 
 interface FarmCardProps {
-  farm: Farm,
+  farm: Farm|any,
+  ethereum: provider
 }
 
-const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
+const FarmCard: React.FC<FarmCardProps> = ({ farm, ethereum }) => {
   const [startTime, setStartTime] = useState(0)
   const [harvestable, setHarvestable] = useState(0)
 
-  const { contract } = farm
   const { account } = useWallet()
   const yam = useYam()
-
+  const tokenContract = useMemo(() => {
+    return getContract(ethereum as provider, farm?.depositTokenAddress)
+  }, [ethereum, farm.depositTokenAddress]);
+  const apy = useAPY(farm?.contract, tokenContract, farm?.tokenAddress, farm?.tokenDecimals)
   const getStartTime = useCallback(async () => {
     const startTime = await getPoolStartTime(farm.contract)
     setStartTime(startTime)
@@ -97,31 +113,52 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
   }, [yam, contract, account, setHarvestable])
 */
   const poolActive = startTime * 1000 - Date.now() <= 0
+  const dummyEmojis = ["🌱","🌻","🌾"]
   return (
     <StyledCardWrapper>
-      {farm.id === 'ycrv_yam_uni_lp' && (
+      {farm?.id && farm.id === 'ycrv_yam_uni_lp' && (
         <StyledCardAccent />
       )}
       <Card>
         <CardContent>
           <StyledContent>
-            <CardIcon>{farm.icon}</CardIcon>
-            <StyledTitle>{farm.name}</StyledTitle>
+            <CardIcon>{farm?.icon || dummyEmojis[farm?.dummy]}</CardIcon>
+            <StyledTitle>{farm?.name || "COMING SOON"}</StyledTitle>
+            {/*{farm &&
             <StyledDetails>
-              <StyledDetail>Deposit {farm.depositToken.toUpperCase()}</StyledDetail>
-              <StyledDetail>Earn {farm.earnToken.toUpperCase()}</StyledDetail>
+              <StyledDetail>{`Deposit`}</StyledDetail>
+              <StyledDetail>{farm?.depositToken && `${farm.depositToken.toUpperCase()}`}</StyledDetail>
+              <StyledDetail>{`and earn`}</StyledDetail>
+              <StyledDetail>{farm?.earnToken && `${farm.earnToken.toUpperCase()}`}</StyledDetail>
             </StyledDetails>
+            }*/}
             <Spacer />
-            <StyledHarvestable>
+            <StyledApy>{farm?.depositToken && !apy && `APY: --.--%`}</StyledApy>
+            <StyledApy>{farm && apy && `APY: ${apy}%`}</StyledApy>
+            <StyledDetail>{farm?.earnToken && `Earn ${farm.earnToken.toUpperCase()}`}</StyledDetail>
+            <Spacer />
+            {/*<StyledHarvestable>
               {harvestable ? `${numeral(harvestable).format('0.00a')} YAMs ready to harvest.` : undefined}
-            </StyledHarvestable>
-            <Button
-              disabled={!poolActive}
-              text={poolActive ? 'Select' : undefined}
-              to={`/farms/${farm.id}`}
-            >
-              {!poolActive && <Countdown date={new Date(startTime * 1000)} renderer={renderer} />}
-            </Button>
+            </StyledHarvestable>*/}
+            {farm?.id &&
+              <Button
+                disabled={!poolActive}
+                text={poolActive ? 'FARM' : undefined}
+                to={`/farms/${farm.id}`}
+              >
+                {!poolActive && <Countdown date={new Date(startTime * 1000)} renderer={renderer} />}
+              </Button>
+            }
+            <Spacer />
+            {farm?.id &&
+              <Button
+                  disabled={!poolActive}
+                  text={poolActive ? 'TRADE' : undefined}
+                  href={`https://uniswap.info/pair/${farm.depositTokenAddress}`}
+              >
+                {!poolActive && <Countdown date={new Date(startTime * 1000)} renderer={renderer} />}
+              </Button>
+          }
           </StyledContent>
         </CardContent>
       </Card>
@@ -207,7 +244,13 @@ const StyledDetails = styled.div`
 `
 
 const StyledDetail = styled.div`
-  color: ${props => props.theme.color.grey[500]};
+  color: ${props => props.theme.color.grey[300]};
+`
+
+const StyledApy = styled.div`
+  color: ${props => props.theme.color.grey[100]};
+  font-size: 1.5em;
+  font-weight: 600;
 `
 
 const StyledHarvestable = styled.div`
@@ -215,6 +258,16 @@ const StyledHarvestable = styled.div`
   font-size: 16px;
   height: 48px;
   text-align: center;
+`
+
+const Info = styled.div`
+display: flex;
+border: 1px solid ${props => props.theme.color.white};
+border-radius: 50%;
+width: 18px;
+height: 18px;
+align-items: center;
+justify-content: center;
 `
 
 export default FarmCards

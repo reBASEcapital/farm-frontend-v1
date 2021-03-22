@@ -7,7 +7,7 @@ import {
 import { ThemeProvider } from 'styled-components'
 import { UseWalletProvider } from 'use-wallet'
 
-import DisclaimerModal from './components/DisclaimerModal'
+import TutorialModal from './components/TutorialModal'
 import MobileMenu from './components/MobileMenu'
 import TopBar from './components/TopBar'
 
@@ -18,11 +18,13 @@ import TransactionProvider from './contexts/Transactions'
 
 import useModal from './hooks/useModal'
 
-import FAQ from './views/FAQ'
 import Farms from './views/Farms'
 import Home from './views/Home'
+import Dashboard from './views/Dashboard'
 
 import theme from './theme'
+import Environment from './Environment'
+
 
 const App: React.FC = () => {
   const [mobileMenu, setMobileMenu] = useState(false)
@@ -44,15 +46,18 @@ const App: React.FC = () => {
           <Route path="/" exact>
             <Home />
           </Route>
-          <Route path="/farms">
+          {/* <Route path="/farms">
             <Farms />
+          </Route> */}
+          <Route path="/dashboard">
+            <Dashboard/>
           </Route>
-          <Route path="/faq">
+          {/* <Route path="/faq">
             <FAQ />
-          </Route>
+          </Route> */}
         </Switch>
       </Router>
-      <Disclaimer />
+      <Tutorial />
     </Providers>
   )
 }
@@ -61,9 +66,9 @@ const Providers: React.FC = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <UseWalletProvider
-        chainId={1}
+        chainId={Environment.chainId}
         connectors={{
-          walletconnect: { rpcUrl: 'https://mainnet.eth.aragon.network/' },
+          walletconnect: { rpcUrl: Environment.rpcUrl },
         }}
       >
         <YamProvider>
@@ -80,18 +85,18 @@ const Providers: React.FC = ({ children }) => {
   )
 }
 
-const Disclaimer: React.FC = () => {
+const Tutorial: React.FC = () => {
 
   const markSeen = useCallback(() => {
-    localStorage.setItem('disclaimer', 'seen')
+    localStorage.setItem('tutorial', 'seen')
   }, [])
 
-  const [onPresentDisclaimerModal] = useModal(<DisclaimerModal onConfirm={markSeen} />)
+  const [onPresentTutorialModal] = useModal(<TutorialModal onConfirm={markSeen} />)
 
   useEffect(() => {
-    const seenDisclaimer = localStorage.getItem('disclaimer')
+    const seenDisclaimer = localStorage.getItem('tutorial')
     if (!seenDisclaimer) {
-      onPresentDisclaimerModal()
+      onPresentTutorialModal()
     }
   }, [])
 

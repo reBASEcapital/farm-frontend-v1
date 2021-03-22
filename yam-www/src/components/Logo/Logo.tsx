@@ -2,13 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
-import rebase from '../../assets/img/rebase.png'
+import farm from '../../assets/img/farm-icon.png'
 
 const Logo: React.FC = () => {
   return (
     <StyledLogo to="/">
-      <img src={rebase} height="32" style={{ marginTop: -4 }} />
-      <StyledText>reB∆SE Farm</StyledText>
+      <img src={farm} height="32" style={{ marginTop: -4 }} />
+      <StyledText>reB∆SE f∆RM</StyledText>
     </StyledLogo>
   )
 }

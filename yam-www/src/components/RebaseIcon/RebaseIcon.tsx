@@ -1,5 +1,5 @@
 import React from 'react'
-import farm from "../../assets/img/farm-icon.png";
+import farm from "../../assets/img/rebase-icon.png";
 
 interface RebaseIconProps {
   size?: number,

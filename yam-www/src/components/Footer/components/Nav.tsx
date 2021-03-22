@@ -4,10 +4,10 @@ import styled from 'styled-components'
 const Nav: React.FC = () => {
   return (
     <StyledNav>
-      <StyledLink href="https://t.me/rebaseofficial">Telegram</StyledLink>
-      <StyledLink href="https://discord.com/invite/jBg5ZAz">Discord</StyledLink>
-      <StyledLink href="https://github.com/reBASEcapital">Github</StyledLink>
-      <StyledLink href="mailto:relay@rebase.capital">Email</StyledLink>
+      <StyledLink href="https://www.rebase.capital">About</StyledLink>
+      <StyledLink href="https://medium.com/rebase-capital">Newsroom</StyledLink>
+      <StyledLink href="https://t.me/rebasechat">Telegram</StyledLink>
+      <StyledLink href="https://github.com/reBASEcapital">&lt;&gt; Code</StyledLink>
     </StyledNav>
   )
 }
@@ -15,11 +15,14 @@ const Nav: React.FC = () => {
 const StyledNav = styled.nav`
   align-items: center;
   display: flex;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 `
 
 const StyledLink = styled.a`
-  color: ${props => props.theme.color.white};
-  text-shadow: 1px 1px ${props => props.theme.color.black};
+  color: ${props => props.theme.color.black};
   padding-left: ${props => props.theme.spacing[3]}px;
   padding-right: ${props => props.theme.spacing[3]}px;
   text-decoration: none;

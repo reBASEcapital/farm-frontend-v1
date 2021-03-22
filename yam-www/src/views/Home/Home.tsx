@@ -16,8 +16,8 @@ const Home: React.FC = () => {
       <Triangle/>
       <PageHeader
         icon=""
-        subtitle="Check out our farms."
-        title="reB∆SE is live."
+        subtitle="The farm for the reB∆SE protocol is live!"
+        title="f∆RM"
       />
       <Container>
         <Balances />
@@ -26,10 +26,17 @@ const Home: React.FC = () => {
         <div style={{
           margin: '0 auto'
         }}>
-          <Button
+          {/* <Button
             size="sm"
             text="View V1 Farms"
             to="/farms"
+            variant="secondary"
+           />
+           <Spacer size="sm"/> */}
+           <Button
+            size="sm"
+            text="Dashboard"
+            to="/dashboard"
             variant="secondary"
            />
         </div>

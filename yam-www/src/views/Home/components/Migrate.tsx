@@ -14,8 +14,6 @@ import Separator from '../../../components/Separator'
 import Spacer from '../../../components/Spacer'
 import Value from '../../../components/Value'
 
-import { yam as yamAddress } from '../../../constants/tokenAddresses'
-
 import useAllowance from '../../../hooks/useAllowance'
 import useApprove from '../../../hooks/useApprove'
 import useScalingFactor from '../../../hooks/useScalingFactor'
@@ -25,6 +23,7 @@ import useYam from '../../../hooks/useYam'
 import { bnToDec } from '../../../utils'
 import { getContract } from '../../../utils/erc20'
 import { getMigrationEndTime, migrate } from '../../../yamUtils'
+import Environment from '../../../Environment'
 
 const Migrate: React.FC = () => {
 
@@ -36,11 +35,11 @@ const Migrate: React.FC = () => {
   const scalingFactor = useScalingFactor()
   const yam = useYam()
 
-  const yamV1Balance = bnToDec(useTokenBalance(yamAddress))
+  const yamV1Balance = bnToDec(useTokenBalance(Environment.yam))
   const yamV2ReceiveAmount = yamV1Balance / scalingFactor
 
   const yamV1Token = useMemo(() => {
-    return getContract(ethereum as provider, yamAddress)
+    return getContract(ethereum as provider, Environment.yam)
   }, [ethereum])
 
   const migrationContract = yam ? (yam as any).contracts.yamV2migration : undefined

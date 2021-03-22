@@ -37,6 +37,7 @@ const getTotalSupply = async (yam: typeof Yam): Promise<string> => {
   return gTS(yam)
 }
 
+
 export const getStats = async (yam: typeof Yam) => {
   const curPrice = await getCurrentPrice(yam)
   const circSupply = '' // await getCirculatingSupply(yam)
@@ -53,4 +54,44 @@ export const getStats = async (yam: typeof Yam) => {
     targetPrice,
     totalSupply
   }
+}
+
+export const addHours = function(date, h) {
+  date.setTime(date.getTime() + (h*60*60*1000));
+  return date;
+}
+
+export function getCountDownInterval(date, id) {
+  let x = setInterval(function() {
+    const now = new Date().getTime();
+    const distance = date.getTime() - now;
+    // Time calculations for days, hours, minutes and seconds
+    const hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    // If the count down is finished, write some text
+    const element = document.getElementById(id);
+    if (distance < 0 && element) {
+      clearInterval(x);
+      element.innerHTML = 'REBASE';
+    } else {
+      if (!document.getElementById(id)) {
+        clearInterval(x);
+      } else {
+        if (
+          element &&
+          !isNaN(hours) &&
+          !isNaN(minutes) &&
+          !isNaN(seconds)
+        ) {
+          element.innerHTML =
+            `${hours < 10 ? "0" + hours : hours}:${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+        }
+      }
+    }
+  }, 1000);
+
+  return x;
 }

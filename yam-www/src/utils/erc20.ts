@@ -1,7 +1,6 @@
 import Web3 from 'web3'
 import { provider } from 'web3-core'
 import { AbiItem } from 'web3-utils'
-
 import ERC20ABI from '../constants/abi/ERC20.json'
 import { Contract } from "web3-eth-contract"
 
@@ -25,6 +24,16 @@ export const getBalance = async (provider: provider, tokenAddress: string, userA
   try {
     const balance: string = await tokenContract.methods.balanceOf(userAddress).call()
     return balance
+  } catch (e) {
+    return '0'
+  }
+}
+
+export const getTotalSupply = async (provider: provider, tokenAddress: string): Promise<string> => {
+  const tokenContract = getContract(provider, tokenAddress)
+  try {
+    const totalSupply: string = await tokenContract.methods.totalSupply().call()
+    return totalSupply
   } catch (e) {
     return '0'
   }

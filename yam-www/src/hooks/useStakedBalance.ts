@@ -21,6 +21,8 @@ const useStakedBalance = (pool: Contract, trigger: boolean) => {
     if (account && pool && yam) {
       fetchBalance()
     }
+    let refreshInterval = setInterval(fetchBalance, 10000)
+    return () => clearInterval(refreshInterval)
   }, [account, pool, setBalance, yam, trigger])
 
   return balance

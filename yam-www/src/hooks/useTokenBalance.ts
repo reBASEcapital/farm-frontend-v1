@@ -6,7 +6,7 @@ import { provider } from 'web3-core'
 
 import { getBalance } from '../utils/erc20'
 
-const useTokenBalance = (tokenAddress: string) => {
+const useTokenBalance = (tokenAddress: string, stakedBalance: BigNumber= new BigNumber(0)) => {
   const [balance, setBalance] = useState(new BigNumber(0))
   const { account, ethereum }: { account: string, ethereum: provider } = useWallet()
 
@@ -18,10 +18,10 @@ const useTokenBalance = (tokenAddress: string) => {
   useEffect(() => {
     if (account && ethereum) {
       fetchBalance()
-      let refreshInterval = setInterval(fetchBalance, 10000)
+      let refreshInterval = setInterval(fetchBalance, 10000000)
       return () => clearInterval(refreshInterval)
     }
-  }, [account, ethereum, setBalance, tokenAddress])
+  }, [account, ethereum, setBalance, tokenAddress, stakedBalance])
 
   return balance
 }

@@ -2,13 +2,41 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="For the reB∆SE farming community."
+      content="The f∆RM for reB∆SE (&#34;Rebase&#34;) which is a social capital system with an elastic supply and yield farming. Use the reB∆SE token in the DeFi ecosystem to f∆RM, stake and rebase daily."
     />
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <meta name="description" content="The f∆RM for reB∆SE (&#34;Rebase&#34;) which is a social capital system with an elastic supply and yield farming. Use the reB∆SE token in the DeFi ecosystem to f∆RM, stake and rebase daily.">
+    <meta name="keywords" content="digital asset, cryptoasset, cryptocurrency, quantitative easing, oracle, yield farming
+    decentralized finance, defi, DeFi, smart contract, smart contracts, dapp, erc20, ethereum, token, erc20 token, erc777
+    farming, rebase, rebasing, git, monetary base, m0, m1, m2, money supply, uniswap, geyser, ampleforth, bitcoin, wallet, staking, reB∆SE,
+    f∆RM, farming, dex, finance, decentralized exchange, cex, idex, evm, central banking, decentralized banking, bank the unbanked,
+    chainlink, layer 2, layer2, layer-2, greeks, options, sumerian, egyptian, ancient egyptian, judea, CBDC, cbdc, central bank digital currency, digital dollar,
+    bonding curve, bonding, curve, bonded, bonded curve, ancient greek, ancient sumerian, persia, protectorate, orollup, optomistic rollup, zkrollup,
+    transaction mining, ethereum wallet, argent, zapper">
+    <meta name="author" content="reBASE">
+
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -16,16 +44,29 @@
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/react-vis/dist/style.css">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
-    <meta name="twitter:image" content="https://optimistic-shannon-25adef.netlify.app/hero.png" />
-    <meta name="twitter:description" content="For the reBASE farming community." />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Farm reBASE tokens." />
+
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="https://www.rebase.capital">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="reB∆SE f∆RM 🌾 plant shares, earn REBASE">
+    <meta property="og:description" content="For the reB∆SE farming community. reB∆SE (&#34;Rebase&#34;) is a social capital system with an elastic supply and yield farming. Use the reB∆SE token in the DeFi ecosystem to f∆RM, st∆KE and rebase daily.">
+    <meta property="og:image" content="https://www.rebase.farm/hero.png">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:site" content="@rebasecapital" />
+    <meta property="twitter:url" content="https://www.rebase.farm">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="reB∆SE f∆RM 🌾 plant shares, earn REBASE">
+    <meta name="twitter:description" content="For the reB∆SE farming community. reB∆SE (&#34;Rebase&#34;) is a social capital system with an elastic supply and yield farming. Use the reB∆SE token in the DeFi ecosystem to f∆RM, st∆KE and rebase daily.">
+    <meta name="twitter:image" content="https://www.rebase.farm/hero.png">
+
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -35,7 +76,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>reB∆SE Farmer</title>
+    <title>reB∆SE f∆RM</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

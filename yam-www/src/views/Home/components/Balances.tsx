@@ -10,8 +10,6 @@ import Spacer from '../../../components/Spacer'
 import Value from '../../../components/Value'
 import RebaseIcon from '../../../components/RebaseIcon'
 
-import { yam as yamAddress, yamv2 as yamV2Address } from '../../../constants/tokenAddresses'
-
 import useFarms from '../../../hooks/useFarms'
 import useTokenBalance from '../../../hooks/useTokenBalance'
 import useUnharvested from '../../../hooks/useUnharvested'
@@ -19,10 +17,11 @@ import useYam from '../../../hooks/useYam'
 
 import { bnToDec } from '../../../utils'
 import { getV2Supply } from '../../../yamUtils'
+import Environment from '../../../Environment'
 
 const Balances: React.FC = () => {
   const [totalSupply, setTotalSupply] = useState<number>()
-  const v2Balance = useTokenBalance(yamV2Address)
+  const v2Balance = useTokenBalance(Environment.yamv2)
   const yam = useYam()
   const { account } = useWallet()
 
@@ -46,7 +45,7 @@ const Balances: React.FC = () => {
               <Spacer />
               <div style={{ flex: 1 }}>
                 <Value value={!!account ? numeral(bnToDec(v2Balance, 9)).format('0.00a') : '--'} />
-                <Label text="reB∆SE Balance" />
+                <Label text="REBASE Balance" />
               </div>
             </StyledBalance>
           </StyledBalances>
